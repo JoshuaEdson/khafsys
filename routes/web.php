@@ -18,7 +18,8 @@ Route::get('/signup', 'LoginController@signup');
 Route::get('/myaccount', 'LoginController@myaccount');
 Route::get('/acct_dept', 'LoginController@acct_dept');
 Route::get('/invoice', 'LoginController@invoice');
-Route::get('/dashboard', 'LoginController@dashboard');
+Route::get('/admin_dashboard', 'LoginController@admin_dashboard');
+Route::get('/staff_dashboard', 'LoginController@staff_dashboard');
 
 
 

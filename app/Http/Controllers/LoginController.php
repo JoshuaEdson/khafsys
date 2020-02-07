@@ -21,9 +21,19 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public function dashboard()
+     public function admin_dashboard()
     {
-        return view('dashboard');
+        return view('admn_dshbrd');
+    }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+       public function staff_dashboard()
+    {
+        return view('staff_dshbrd');
     }
 
      /**
