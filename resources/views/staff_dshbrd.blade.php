@@ -3,7 +3,7 @@
 <!-- Header for the dashboard. -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <h1 style="font-weight: bold;text-align: center; color: rgb(0,0,150);">DASHBOARD</h1>
-
+<br><br>
 <!-- Project -->
 <div class="container-fluid text-center">
 	<br>   
@@ -37,7 +37,7 @@
 <!-- end of graph -->
 </div>
 <div class="col-sm-4">
-	<h2 style="font-weight: bold;text-align: center; color: rgb(0,0,150);">EMPLOYEE DAILY PERFORMANCE</h2>
+	<h2 style="font-weight: bold;text-align: center; color: rgb(0,0,150);">WEEKLY SALES</h2>
 	<!-- graph  -->
 	<canvas id="myChart2"></canvas>
 	<script>
@@ -45,7 +45,7 @@
 		var ctx = document.getElementById('myChart2').getContext('2d');
 		var chart = new Chart(ctx, {
     // The type of chart we want to create
-    type: 'bar',
+    type: 'pie',
 
     // The data for our dataset
     data: {
@@ -65,7 +65,7 @@
 <!-- end of graph -->
 </div>
 <div class="col-sm-4">
-	<h2 style="font-weight: bold;text-align: center; color: rgb(0,0,150);">WEEKLY SALES</h2>
+	<h2 style="font-weight: bold;text-align: center; color: rgb(0,0,150);">MONTHLY SALES</h2>
 	<!-- graph  -->
 	<canvas id="myChart3"></canvas>
 	<script>
@@ -95,6 +95,6 @@
 
 </div>
 </div>
-
+<br><br><br><br><br><br><br><br><br><br>
 
 @endsection
