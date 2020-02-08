@@ -13,7 +13,7 @@
 		<div class="col-sm-6">
 			<h2 style="font-weight: bold;text-align: center; color: rgb(0,0,150);">DAILY SALES</h2>
 			<!-- graph  -->
-			<canvas id="myChart"></canvas>
+			<canvas id="myChart" style="margin-bottom: 10%;"></canvas>
 			<script>
 
 				var ctx = document.getElementById('myChart').getContext('2d');
@@ -69,7 +69,7 @@
 <div class="col-sm-6">
 	<h2 style="font-weight: bold;text-align: center; color: rgb(0,0,150);">WEEKLY SALES</h2>
 				<!-- graph  -->
-			<canvas id="myChart3"></canvas>
+			<canvas id="myChart3" style="margin-bottom: 10%;"></canvas>
 			<script>
 
 				var ctx = document.getElementById('myChart3').getContext('2d');

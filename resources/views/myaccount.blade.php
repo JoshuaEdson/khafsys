@@ -19,7 +19,7 @@ $branch = array
 
 ?>
 
-<title>My Account</title>
+<title>Khaf Beaute Legacy: My Account</title>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
 	h1	{

@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<h3>
+
+<h3 style="margin-left: 3%; padding-top: 3%;">
 	Invoice Number
 	<!-- Large modal -->	
 	<div>
@@ -52,9 +53,9 @@
 </script>
 
 <div class="form-row mb-4">
-	<div class="col">
+	<div class="col" style="margin-left: 3%; padding-top: 3%;">
 		<!-- Reports for Daily, Weekly,Monthly and Annual For View and Print -->
-		<h1>REPORTS</h1>
+		<h1><strong>REPORTS</strong></h1>
 		<table border="1" cellpadding="10">
 			<div class="w2-second w2-section">
 				<div class="w3-card-4" id="reportcard">
@@ -76,8 +77,8 @@
 			</div>
 		</table>
 	</div>
-	<div class="col">
-		<h1>COSTING</h1>
+	<div class="col" style="margin-left: 3%; padding-top: 3%;">
+		<h1><strong>COSTING</strong></h1>
 		<!-- Reports Costing  -->
 		<table border="1" cellpadding="10">
 			<div class="w2-second w2-section">

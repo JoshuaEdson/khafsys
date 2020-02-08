@@ -33,7 +33,7 @@
         <a class="nav-link" href="/khafbeautelegacy/khafsys/acct_dept">ACCOUNTING</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">SALES</a>
+        <a class="nav-link" href="/khafbeautelegacy/khafsys/sales">SALES</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">LEADS</a>
