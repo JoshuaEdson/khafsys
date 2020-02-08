@@ -22,7 +22,7 @@ class LoginController extends Controller
      * @return \Illuminate\Http\Response
      */
      public function admin_dashboard()
-    {
+     {
         return view('admn_dshbrd');
     }
 
@@ -31,8 +31,8 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-       public function staff_dashboard()
-    {
+     public function staff_dashboard()
+     {
         return view('staff_dshbrd');
     }
 
@@ -41,8 +41,18 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function myaccount()
-    {
+     public function sales()
+     {
+        return view('sales');
+    }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+     public function myaccount()
+     {
         return view('myaccount');
     }
 
@@ -63,7 +73,7 @@ class LoginController extends Controller
      */
 
      public function acct_dept()
-    {
+     {
         return view('account_dept');
     }
 
@@ -73,9 +83,19 @@ class LoginController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+     public function acct_dept_ori()
+     {
+        return view('account_dept_ori');
+    }
 
-    public function signup()
-    {
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+     public function signup()
+     {
         return view('signup');
     }
 

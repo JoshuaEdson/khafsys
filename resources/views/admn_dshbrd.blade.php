@@ -1,5 +1,7 @@
 @extends('layouts.main')
 @section('content')
+<title>Khaf Beaute Legacy: Dashboard</title>
+
 <!-- Header for the dashboard. -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <h1 style="font-weight: bold;text-align: center; color: rgb(0,0,150);">DASHBOARD</h1>

@@ -53,7 +53,7 @@
 			<br><br>
 			<!-- Register -->
 			<p>Not a member?
-				<a href="/signup">Register</a>
+				<a href="/khafbeautelegacy/khafsys/signup">Register</a>
 			</p>
 			<br>
 		</form>

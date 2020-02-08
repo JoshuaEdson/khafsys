@@ -26,18 +26,22 @@
     <!-- Links -->
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="#">DASHBOARD
+        <a class="nav-link" href="/khafbeautelegacy/khafsys/admin_dashboard">DASHBOARD
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/khafbeautelegacy/khafsys/acct_dept">ACCOUNTING</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">CHECK-IN SALES</a>
+        <a class="nav-link" href="#">SALES</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">LEADS</a>
       </li>
        <li class="nav-item">
         <a class="nav-link" href="/khafbeautelegacy/khafsys/myaccount">MY ACCOUNT</a>
       </li>
+
       <!-- Dropdown -->
       <!-- <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"

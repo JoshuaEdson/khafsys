@@ -46,7 +46,7 @@
 
       <!-- Register -->
       <p>Not a member?
-        <a href="">Register</a>
+        <a href="/khafbeautelegacy/khafsys/signup">Register</a>
       </p>
 
       <!-- Social login -->
