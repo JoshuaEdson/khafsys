@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 <h3 style="margin-left: 3%; padding-top: 3%;">
@@ -70,14 +71,14 @@
 						<input type="date" name="dob" style="width: 50%;">
 						<button type="submit" id="monthlyagg" name="monthlyagg" >Check</button>
 						<h4>Yearly<br></h4>
-						<input type="date" name="dob" style="width: 50%;">
+						<input type="date" name="dob" style="width: 50%; margin-bottom: 3%;">
 						<button type="submit" id="yearlyagg" name="yearlyagg" >Check</button>
 					</div>
 				</div>
 			</div>
 		</table>
 	</div>
-	<div class="col" style="margin-left: 3%; padding-top: 3%;">
+	<div class="col" style="margin-left: 3%; padding-top: 3%; margin-right: 5%;">
 		<h1><strong>COSTING</strong></h1>
 		<!-- Reports Costing  -->
 		<table border="1" cellpadding="10">
@@ -94,7 +95,7 @@
 						<input type="text" id="ls" name="ls" style="width: 70%;">
 						<h4>Advertisement Cost (RM)<br></h4>
 						<input type="text" id="ac" name="ac" style="width: 70%;">
-						<center><br><button name="reset"  type="button" id="button" style="width: 30%;">Reset</button>
+						<center><br><button name="reset"  type="button" id="button" style="width: 30%; margin-bottom: 3%;">Reset</button>
 							<button name="submit"  type="button" id="button" style="width: 30%;">Submit</button></center>
 						</div>
 					</div>

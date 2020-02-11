@@ -36,6 +36,10 @@
     options: {}
 });
 </script>
+<center>
+    <button name="View"  type="button" id="viewbtn" style="width: 20%;">View</button>
+    <button name="Download"  type="button" id="dwlndbtn" style="width: 20%;">Download</button>
+</center>
 <!-- end of graph -->
 </div>
 <div class="col-sm-6">
@@ -64,6 +68,10 @@
     options: {}
 });
 </script>
+<center>
+    <button name="View"  type="button" id="viewbtn" style="width: 20%; margin-top: 10%;margin-bottom: 3%;">View</button>
+    <button name="Download"  type="button" id="dwlndbtn" style="width: 20%;">Download</button>
+</center>
 <!-- end of graph -->
 </div>
 <div class="col-sm-6">
@@ -92,6 +100,10 @@
     options: {}
 });
 </script>
+<center>
+    <button name="View"  type="button" id="viewbtn" style="width: 20%;">View</button>
+    <button name="Download"  type="button" id="dwlndbtn" style="width: 20%;">Download</button>
+</center>
 <!-- end of graph -->
 </div>
 <div class="col-sm-6">
@@ -120,6 +132,10 @@
     options: {}
 });
 </script>
+<center>
+    <button name="View"  type="button" id="viewbtn" style="width: 20%;  margin-top: 10%;margin-bottom: 3%;">View</button>
+    <button name="Download"  type="button" id="dwlndbtn" style="width: 20%;">Download</button>
+</center>
 <!-- end of graph -->
 </div>
 <div class="col-sm-6">
@@ -148,6 +164,10 @@
     options: {}
 });
 </script>
+<center>
+    <button name="View"  type="button" id="viewbtn" style="width: 20%; margin-top: 10%; margin-bottom: 3%;">View</button>
+    <button name="Download"  type="button" id="dwlndbtn" style="width: 20%;">Download</button>
+</center>
 <!-- end of graph -->
 </div>
 <div class="col-sm-6">
@@ -176,6 +196,10 @@
     options: {}
 });
 </script>
+<center>
+    <button name="View"  type="button" id="viewbtn" style="width: 20%;  margin-top: 10%; margin-bottom: 3%;">View</button>
+    <button name="Download"  type="button" id="dwlndbtn" style="width: 20%;">Download</button>
+</center>
 <!-- end of graph -->
 </div>
 </div>

@@ -1,6 +1,7 @@
 @extends('layouts.main')
 @section('content')
 <?php
+//Example data but soon will be taken straight from the database.
 $staffid = array
 (
 	array("name"=>"K001", "abb" => "K001"),
@@ -21,6 +22,12 @@ $staffid = array
 		margin-bottom: 1%;
 		height: 50%;
 	}
+	h1{
+		font-family: sans-serif;
+		font-weight: bold;
+		text-align: center;
+		padding-top: 1%;
+	}
 </style>
 <script>
 	function readURL(input) {
@@ -36,11 +43,12 @@ $staffid = array
 		}
 	}
 </script>
-
+<h1>SALES SECTION</h1>
 <div class="form-row mb-4">
 	<div class="col">
 		<table border="1" cellpadding="10">
 			<div class="w2-second w2-section" style="margin-left: 3%; padding-top: 3%;">
+				
 				<h3>INVOICE NUMBER:</h3>
 				<p>Auto Set By System</p><br>
 				<div class="w3-card-4" id="reportcard">
@@ -61,7 +69,7 @@ $staffid = array
 						<h4>CONTACT NUMBER:<br></h4>
 						<input type="text" name="contactnumber" style="width: 70%;">
 						<h4>ADDRESS:</h4>
-						<input type="text" name="address" style="width: 70%;">
+						<input type="text" name="address" style="width: 70%; margin-bottom: 10%;">
 					</div>
 				</div>
 			</div>
@@ -87,19 +95,22 @@ $staffid = array
 					</div>
 				</div>
 			</div>
-		</div>
+		</table>
+	</div>
 	</div>
 </table>
 </div>
 </div>
 <center>
 	<!-- Coding part it shows total. Calculation is simple as we fetch the price from the db and just add it all -->
-	<h3>TOTAL:</h3><br>
+	<h3 style="margin-top: 5%;">TOTAL:</h3><br>
 	<h1><?php ?></h1>
 
-	<button name="reset"  type="button" id="button" style="width: 10%;">Reset</button>
+	<button name="reset"  type="button" id="button" style="width: 10%; margin-bottom: 3%;">Reset</button>
 	<button name="submit"  type="button" id="button" style="width: 10%;">Submit</button>
-</center><br><br><br>
+</center>
+
+
 
 
 

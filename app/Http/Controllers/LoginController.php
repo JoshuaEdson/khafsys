@@ -51,6 +51,16 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+          public function leads()
+     {
+        return view('leads');
+    }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
      public function myaccount()
      {
         return view('myaccount');

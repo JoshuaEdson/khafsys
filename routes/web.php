@@ -23,6 +23,7 @@ Route::get('/invoice', 'LoginController@invoice');
 Route::get('/admin_dashboard', 'LoginController@admin_dashboard');
 Route::get('/staff_dashboard', 'LoginController@staff_dashboard');
 Route::get('/sales', 'LoginController@sales');
+Route::get('/leads', 'LoginController@leads');
 
 
 
