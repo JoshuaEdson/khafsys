@@ -24,10 +24,13 @@ Route::get('/admin_dashboard', 'LoginController@admin_dashboard');
 Route::get('/staff_dashboard', 'LoginController@staff_dashboard');
 Route::get('/sales', 'LoginController@sales');
 Route::get('/leads', 'LoginController@leads');
+Route::get('/testing', 'LoginController@testing');
 
+Route::get('/dashboard', 'DataController@index')->name('admin.dashboard');
+Route::get('/analysis', 'DataController@analysis')->name('analysis');
+Route::get('/analysis_tools', 'DataController@analysis_tools')->name('analysis_tools');
 
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-

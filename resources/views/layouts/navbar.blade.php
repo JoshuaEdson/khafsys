@@ -1,70 +1,71 @@
-<!--Navbar-->
+<!--Nav Bar-->
 <style>
   .logoimg {
-    width: 8%;
-    height: 8%;
-    padding-right: 2%;
+    margin: left;
+    width: 200px;
+    height: 70px;
+    /*border-image: 50px;*/
+    align-self: center;
+    padding: 0px;
+  }
+  .ukmlogo {
+    margin: left;
+    width: 200px;
+    height: 70px;
+    /*border-image: 50px;*/
+    align-self: center;
+    padding: 0px;
   }
 </style>
 <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-<nav class="navbar navbar-expand-lg navbar-dark primary-color" >
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-
-
-  <!-- Navbar Picture -->
-   <img src="{{ asset('resources/views/pictures/logo.png') }}" class="logoimg" href="#">
-
-  <!-- Collapse button -->
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavBar"
-    aria-controls="topNavBar" aria-expanded="false" aria-label="Toggle navigation">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- nav class="navbar light-green" >
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+-->
+  <nav class="navbar navbar-expand-lg navbar-light light-green">
+    <a class="navbar-brand" href="/DataIVI/web/dashboard">
+    <img src="{{ asset('resources/views/pictures/IIR4.0.png') }}" class="logoimg">
+    <img src="{{ asset('resources/views/pictures/UKMLogo.png') }}" class="ukmlogo">
+  </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <!-- Collapsible content -->
-  <div class="collapse navbar-collapse" id="topNavBar">
-
-    <!-- Links -->
-    <ul class="navbar-nav mr-auto">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="mr-auto"></div>
+      <ul class="navbar-nav my-2 my-lg-0">
+<ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="/khafbeautelegacy/khafsys/admin_dashboard">DASHBOARD
+        <strong><a class="nav-link" href="/DataIVI/web/dashboard" style="color: white; font-weight: bold;">DASHBOARD</a></strong>
+      </li>
+      <li class="nav-item">
+       <strong> <a class="nav-link" href="/DataIVI/web/analysis" style="color: white; font-weight: bold;">ANALYSIS</a></strong>
+      </li>
+      <li class="nav-item">
+       <strong> <a class="nav-link" href="/DataIVI/web/analysis_tools" style="color: white; font-weight: bold;">ANALYSIS TOOL</a></strong>
+      </li>
+<!--         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Profile
         </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/khafbeautelegacy/khafsys/acct_dept">ACCOUNTING</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/khafbeautelegacy/khafsys/sales">SALES</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/khafbeautelegacy/khafsys/leads">LEADS</a>
-      </li>
-       <li class="nav-item">
-        <a class="nav-link" href="/khafbeautelegacy/khafsys/myaccount">MY ACCOUNT</a>
-      </li>
+          <div class="dropdown-menu dropdown-menu-lg-right" aria-labelledby="navbarDropdown">
+            <h6 class="dropdown-header">Dropdown header</h6>
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+          </div>
 
-      <!-- Dropdown -->
-      <!-- <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">Dropdown</a>
-        <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>-->
- 
-    </ul>
-    <!-- Links -->
+        </li> -->
 
-<!--     <form class="form-inline">
-      <div class="md-form my-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+      </ul>
+
       </div>
-    </form> -->
-  </div>
-  <!-- Collapsible content -->
+  </nav>
 
-</nav>
-<!--/.Navbar-->
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+ 
