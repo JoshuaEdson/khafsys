@@ -28,9 +28,7 @@ Route::get('/testing', 'LoginController@testing');
 
 Route::get('/dashboard', 'DataController@index')->name('admin.dashboard');
 Route::get('/analysis', 'DataController@analysis')->name('analysis');
-Route::get('/analysis_tools', 'DataController@analysis_tools')->name('analysis_tools');
+Route::get('/analysis_tools', 'DataController@analysis_tools')->name('analysis.tools');
+Route::post('/analysis_tools', 'DataController@postData')->name('analysis.postData');
 
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+?>

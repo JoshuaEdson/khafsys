@@ -62,198 +62,524 @@ $univ = array
 			<div class="container col-sm-8 p-1 my-1" style="float: left;">
 				<canvas id="myChart" width="1920" height="1080"></canvas></div>
 				<div class="container col-sm-3 m-3" style="float: left;">
-					<label>Graph Types:</label><br>
-					<span class="form-check">
-						<div class="checkboxContainer row" id="checkboxId">
-							<div class="col-xs-12 col-sm-12 col-md-6 form-check">
-								<input type="checkbox" name="checkboxID" id="LineGraph" value="#" onclick="return ValidateGraphSelected();">Line Graph<br>
-								<input type="checkbox" name="checkboxID" id="BarGraph" value="#" onclick="return ValidateGraphSelected();">Bar Graph<br>
-								<input type="checkbox" name="checkboxID" id="RadarGraph" value="#" onclick="return ValidateGraphSelected();">Radar Graph<br>
-								<input type="checkbox" name="checkboxID" id="DoughnutGraph" value="#" onclick="return ValidateGraphSelected();">Doughnut Graph<br>
-							</div>
-							<div class="col-xs-12 col-sm-12 col-md-6">
-								<input type="checkbox" name="checkboxID" id="PieGraph" value="#" onclick="return ValidateGraphSelected();">Pie Graph<br>
-								<input type="checkbox" name="checkboxID" id="PolarAreaGraph" value="#" onclick="return ValidateGraphSelected();">Polar Area Graph<br>
-								<input type="checkbox" name="checkboxID" id="BubbleGraph" value="#" onclick="return ValidateGraphSelected();">Bubble Graph<br>
-								<input type="checkbox" name="checkboxID" id="ScatterGraph" value="#" onclick="return ValidateGraphSelected();">Scatter Graph
-							</div>
-							<script>
-								function ValidateGraphSelected()  
-								{  
-									var checkboxes = document.getElementsByName("checkboxID");  
-									var numberOfCheckedItems = 0;  
-									for(var i = 0; i < checkboxes.length; i++)  
-									{  
-										if(checkboxes[i].checked)  
-											numberOfCheckedItems++;  
-									}  
-									if(numberOfCheckedItems > 2)  
-									{  
-										alert("Maximum 2 Graphs Only Supported!");  
-										$('input:checkbox').prop('checked', false);
-										return false;  
-									}  else if (numberOfCheckedItems == 0){
-										alert("Please Pick a Graph");
-									}
-								}  
-							</script>
-						</div>
-					</span>
-					<div style="padding-top: 20px;">
-						<label for="datasets">Data 1:</label>
-						<select class="combobox" name="allColumnsname1" id="datasets1">
-							<option value="Select" selected>Select</option>
-							@foreach($allColumnsname as $acn1)
-							<option value="{{ $acn1 }} "> {{ $acn1 }} </option>
-							@endforeach
-						</select>
-						<label for="datasets2">Data 2:</label>
-						<select class="combobox" name="allColumnsname2" id="datasets2">
-							<option value="Select" selected>Select</option>
-							@foreach($allColumnsname as $acn2)
-							<option value="{{ $acn2 }} "> {{ $acn2 }} </option>
-							@endforeach
-						</select>
-						<label for="datasets">Data 3:</label>
-						<select class="combobox" name="allColumnsname3" id="datasets3">
-							<option value="Select" selected>Select</option>
-							@foreach($allColumnsname as $acn3)
-							<option value="{{ $acn3 }} "> {{ $acn3 }} </option>
-							@endforeach
-						</select>
-						<label for="datasets">Data 4:</label>
-						<select class="combobox" name="allColumnsname4" id="datasets4">
-							<option value="Select" selected>Select</option>
-							@foreach($allColumnsname as $acn4)
-							<option value="{{ $acn4 }} "> {{ $acn4 }} </option>
-							@endforeach
-						</select>
-						<center>
-							<div style="padding-top: 5%;">
-								<input class="btn" id="submitbtn" type="submit" name="submit" onclick="getData();">
-								<input class="btn" id="resetbtn" type="reset" name="reset"> 
+					<form action="{{ route('analysis.postData')}}" method="post" onsubmit=" return validateMyForm()">
+						@csrf
+						<label>Graph Types:</label><br>
+						<span class="form-check">
+							<div class="checkboxContainer row" id="checkboxId">
+								<div class="col-xs-12 col-sm-12 col-md-6">
+									<input type="checkbox" name="LineGraph" id="checkboxID" value="line" onclick=" ValidateGraphSelected();">Line Graph<br>
+									<input type="checkbox" name="BarGraph" id="checkboxID" value="bar" onclick=" ValidateGraphSelected();">Bar Graph<br>
+									<input type="checkbox" name="RadarGraph" id="checkboxID" value="radar" onclick=" ValidateGraphSelected();">Radar Graph<br>
+									<input type="checkbox" name="DoughnutGraph" id="checkboxID" value="doughnut" onclick=" ValidateGraphSelected();">Doughnut Graph
+								</div>
+								<div class="col-xs-12 col-sm-12 col-md-6">
+									<input type="checkbox" name="PieGraph" id="checkboxID" value="pie" onclick=" ValidateGraphSelected();">Pie Graph<br>
+									<input type="checkbox" name="PolarAreaGraph" id="checkboxID" value="polarArea" onclick=" ValidateGraphSelected();">Polar Area Graph<br>
+									<input type="checkbox" name="BubbleGraph" id="checkboxID" value="bubble" onclick=" ValidateGraphSelected();">Bubble Graph<br>
+									<input type="checkbox" name="ScatterGraph" id="checkboxID" value="scatter" onclick=" ValidateGraphSelected();">Scatter Graph
+								</div>
 								<script>
-									$(function () {
-										$("#resetbtn").bind("click", function () {
-											$("#datasets1")[0].selectedIndex = 0;
-											$("#datasets2")[0].selectedIndex = 0;
-											$("#datasets3")[0].selectedIndex = 0;
-											$("#datasets4")[0].selectedIndex = 0;
+									function ValidateGraphSelected()  
+									{  
+										var checkboxes = document.getElementById("checkboxID");  
+										var numberOfCheckedItems = 0;  
+										for(var i = 0; i < checkboxes.length; i++)  
+										{  
+											if(checkboxes[i].checked)  
+												numberOfCheckedItems++;  
+										}  
+										if(numberOfCheckedItems > 2)  
+										{  
+											alert("Maximum 2 Graphs Only Supported!");  
 											$('input:checkbox').prop('checked', false);
-										});
-									});
+											return false;  
+										} 
+									}
 								</script>
 							</div>
-						</center>
-					</div>
+						</span>
+						<div style="padding-top: 20px;">
+							<label for="datasets">Data 1:</label>
+							<select class="combobox" name="allColumnsname1" id="datasets1">
+								<option value="" selected>Select</option>
+								@foreach($allColumnsname as $acn1)
+								<option value="{{ $acn1 }} "> {{ $acn1 }} </option>
+								@endforeach
+							</select>
+							<label for="datasets2">Data 2:</label>
+							<select class="combobox" name="allColumnsname2" id="datasets2">
+								<option value="" selected>Select</option>
+								@foreach($allColumnsname as $acn2)
+								<option value="{{ $acn2 }} "> {{ $acn2 }} </option>
+								@endforeach
+							</select>
+							<label for="datasets3">Data 3:</label>
+							<select class="combobox" name="allColumnsname3" id="datasets3">
+								<option value="" selected>Select</option>
+								@foreach($allColumnsname as $acn3)
+								<option value="{{ $acn3 }} "> {{ $acn3 }} </option>
+								@endforeach
+							</select>
+							<label for="datasets4">Data 4:</label>
+							<select class="combobox" name="allColumnsname4" id="datasets4">
+								<option value="" selected>Select</option>
+								@foreach($allColumnsname as $acn4)
+								<option value="{{ $acn4 }} "> {{ $acn4 }} </option>
+								@endforeach
+							</select>
+							<center>
+								<div style="padding-top: 5%;">
+									
+									<input class="btn" id="submitbtn" type="submit" name="submit">
+									<input class="btn" id="resetbtn" type="reset" name="reset"> 
+									<script>
+										$(function () {
+											$("#resetbtn").bind("click", function () {
+												$("#datasets1")[0].selectedIndex = 0;
+												$("#datasets2")[0].selectedIndex = 0;
+												$("#datasets3")[0].selectedIndex = 0;
+												$("#datasets4")[0].selectedIndex = 0;
+												$('input:checkbox').prop('checked', false);
+											});
+										});
+									</script>
+								</div>
+							</center>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-	<script>
-//Function to Retrieve Data 
+</div>
+<script>
+	//Function to Retrieve Data 
 
-function getData() {
-	const DDBox1 = $("#datasets1")[0].value;
-	const DDBox2 = $("#datasets2")[0].value;
-	const DDBox3 = $("#datasets3")[0].value;
-	const DDBox4 = $("#datasets4")[0].value;
+	function validateMyForm() {
+		const DDBox1 = $("#datasets1")[0].value;
+		const DDBox2 = $("#datasets2")[0].value;
+		const DDBox3 = $("#datasets3")[0].value;
+		const DDBox4 = $("#datasets4")[0].value;
 
-	if (DDBox1 == 'Select'){
-		alert("Please Pick Data at Data 1 First!");
-		$("#datasets1")[0].selectedIndex = 0;
-		$("#datasets2")[0].selectedIndex = 0;
-		$("#datasets3")[0].selectedIndex = 0;
-		$("#datasets4")[0].selectedIndex = 0;
-	} else if(DDBox1 != 'Select' && DDBox2 == 'Select' && (DDBox3 != 'Select' || DDBox4 != 'Select')){
-		alert("Please Pick Data at Data 2 First!");
-		$("#datasets3")[0].selectedIndex = 0;
-		$("#datasets4")[0].selectedIndex = 0;
-	} else if(DDBox1 != 'Select' && DDBox2 != 'Select' && DDBox3 == 'Select' && DDBox4 != 'Select'){
-		alert("Please Pick Data at Data 3 First!");
-		$("#datasets4")[0].selectedIndex = 0;
-	}
+		// const ComboArray = [DDBox1, DDBox2, DDBox3, DDBox4];
+
+		// for(int i = 0; i < ComboArray.length; i++){
+		// 	if ComboArray[0] == null{
+		// 		alert("Please pick data at Data 1 first.")
+
+		// 	} else if ((ComboArray[i] != ComboArray[0]) != null){
+
+		// 	}
+		// }
 
 
-	// const datasets1 =JSON.parse( DDBox1);
-	alert(JSON.parse(DDBox1));
-
-}
-
-//Retrieve Data  - High Income 
-const HighIncomeNoCost = <?php echo json_encode($HighIncomeNoCost, true) ?>;
-const HighIncomeAddictCost = <?php echo json_encode($HighIncomeAddictCost, true) ?>;
-const HighIncomeEduCost = <?php echo json_encode($HighIncomeEduCost, true) ?>;
-const HighIncomeNFMCost = <?php echo json_encode($HighIncomeNFMCost, true) ?>;
-const HighIncomeUICost = <?php echo json_encode($HighIncomeUICost, true) ?>;
-const HighIncomeOtherCost = <?php echo json_encode($HighIncomeOtherCost, true) ?>;
-
-xCategoryVal = ['No income', 'Daily income', 'Low income', 'Medium income', 'High income'];
-yCategoryVal = ['Unexpected illness', 'Others', 'New family members (new born)', 'Education expenses', 'Addiction in spending more than needs', 'No'];
-
-var coloR = [];
-
-var dynamicColors = function() {
-	var r = Math.floor(Math.random() * 255);
-	var g = Math.floor(Math.random() * 255);
-	var b = Math.floor(Math.random() * 255);
-	return "rgba(" + r + "," + g + "," + b +','+ '0.2'+ ")";
-};
-
-const ctx = document.getElementById('myChart').getContext('2d');
-
-//defining the data
-var data = [{data}];
- 
-for (var i in data) {
-	coloR.push(dynamicColors());
-}
-
-var myChart = new Chart(ctx, {
-	type: 'bubble',
-	data: {
-		datasets: [{
-			label: 'Financial Relationship Between Income Type and Cost Increaments',
-			data: data,
-			backgroundColor: coloR,
-		}]
-	}, 
-	options:{
-		responsive: true,
-		scales: {
-			xAxes: [{
-				gridLines: {
-					display:false
-				},
-				display: true,
-				type:'category',
-				labels: xCategoryVal,
-			}], 
-			yAxes: [{
-				gridLines: {
-					display:false
-				},
-				display: true,
-				type:'category',
-				labels: yCategoryVal,
-			}],
-		},
-		tooltips: {
-			callbacks: {
-				label: function (tooltipItems, data) {
-					const labels = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].label;
-					const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].r;
-					DataPercent = (dataVal * 100) / 1075;
-					DataPercent = DataPercent.toFixed(2);
-					return label = labels + ": " + dataVal + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
-
-				},
-				title: function(tooltipItem, data){
-					return "Impacts To Financial:";
-				}
-			},
+		if (DDBox1 == ''){
+			alert("Please Pick Data at Data 1 First!");
+			$("#datasets1")[0].selectedIndex = 0;
+			$("#datasets2")[0].selectedIndex = 0;
+			$("#datasets3")[0].selectedIndex = 0;
+			$("#datasets4")[0].selectedIndex = 0;
+			return false;
+		} else if(DDBox1 != '' && DDBox2 == '' && (DDBox3 != '' || DDBox4 != '')){
+			alert("Please Pick Data at Data 2 First!");
+			return false;
+		} else if(DDBox1 != '' && DDBox2 != '' && DDBox3 == '' && DDBox4 != ''){
+			alert("Please Pick Data at Data 3 First!");
+			return false;
 		}
 	}
-});
-</script>
-@endsection
+
+	// function makelineChart()
+	// {
+			//getData
+			var obj1 = <?php echo json_encode($Data1SetlabelY ?? '', true) ?>;
+			var obj2 = <?php echo json_encode($Data1SetlabelX ?? '', true) ?>;
+			var obj3 = <?php echo json_encode($Data2SetlabelY ?? '', true) ?>;
+			var obj4 = <?php echo json_encode($Data2SetlabelX ?? '', true) ?>;
+			var obj5 = <?php echo json_encode($Data3SetlabelY ?? '', true) ?>;
+			var obj6 = <?php echo json_encode($Data3SetlabelX ?? '', true) ?>;
+			var obj7 = <?php echo json_encode($Data4SetlabelY ?? '', true) ?>;
+			var obj8 = <?php echo json_encode($Data4SetlabelX ?? '', true) ?>;
+
+			const graphType1 = <?php echo json_encode($checkboxLine1 ?? '', true) ?>;
+			const graphType2 = <?php echo json_encode($checkboxLine2 ?? '', true) ?>;
+			const graphType3 = <?php echo json_encode($checkboxLine3 ?? '', true) ?>;
+			const graphType4 = <?php echo json_encode($checkboxLine4 ?? '', true) ?>;
+			const graphType5 = <?php echo json_encode($checkboxLine5 ?? '', true) ?>;
+			const graphType6 = <?php echo json_encode($checkboxLine6 ?? '', true) ?>;
+			const graphType7 = <?php echo json_encode($checkboxLine7 ?? '', true) ?>;
+			const graphType8 = <?php echo json_encode($checkboxLine8 ?? '', true) ?>;
+			// console.log(graphType1);
+			// console.log(obj1, obj2, obj3, obj4, obj5, obj6, obj7, obj8);
+			
+			var checkBox = document.getElementById("checkboxID").value;
+			if (graphType1 == 'line'){
+				const ctx = document.getElementById('myChart').getContext('2d');
+				var coloR = [];
+
+				var dynamicColors = function() {
+					var r = Math.floor(Math.random() * 255);
+					var g = Math.floor(Math.random() * 255);
+					var b = Math.floor(Math.random() * 255);
+					return "rgb(" + r + "," + g + "," + b + ")";
+				};
+
+				for (var i in obj2) {
+					coloR.push(dynamicColors());
+				}
+				var lineChart = new Chart(ctx, {
+					type: graphType1,
+                    // The data for our dataset
+                    data: {
+                    	labels: obj2,
+                    	datasets: [{
+                    		label: obj2, 
+                    		fill: false,
+                    		labels: obj2,
+                    		backgroundColor: coloR,
+                    		borderColor: coloR,
+                    		data: obj1
+                    	}],
+                    },
+                    options: {
+                    	scales: {
+                    		xAxes: [{
+                    			ticks: {
+                    				autoSkip: false,
+                    			},
+                    		}],
+                    	},
+                    	tooltips: {
+                    		callbacks: {
+                    			label: function (tooltipItems, data) {
+                    				var i, label = [], l = data.datasets.length;
+                    				for (i = 0; i < l; i++) {
+                    					IndivData =  data.datasets[i].labels[tooltipItems.index];
+                    					IndivDataNum = data.datasets[i].data[tooltipItems.index];
+                    					DataPercent = (IndivDataNum * 100) / 1075;
+                    					DataPercent = DataPercent.toFixed(2);
+                    					label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
+
+
+                    				}
+                    				return label;
+                    			},
+                    			title: function(tooltipItem, data){
+                    				return "Impacts To "  ;
+                    			}
+                    		}
+                    	}
+                    }
+                });
+			} else if (graphType2 == 'bar'){
+				const ctx = document.getElementById('myChart').getContext('2d');
+				var coloR = [];
+
+				var dynamicColors = function() {
+					var r = Math.floor(Math.random() * 255);
+					var g = Math.floor(Math.random() * 255);
+					var b = Math.floor(Math.random() * 255);
+					return "rgb(" + r + "," + g + "," + b + ")";
+				};
+				for (var i in obj2) {
+					coloR.push(dynamicColors());
+				}
+				var barChart = new Chart(ctx, {
+					type: graphType2,
+                    // The data for our dataset
+                    data: {
+                    	labels: obj2,
+                    	datasets: [{
+                    		label: obj2, 
+                    		fill: false,
+                    		labels: obj2,
+                    		backgroundColor: coloR,
+                    		borderColor: coloR,
+                    		data: obj1
+                    	}],
+                    },
+                    options: {
+                    	scales: {
+                    		xAxes: [{
+                    			ticks: {
+                    				autoSkip: false,
+                    			},
+                    		}],
+                    	},
+                    	tooltips: {
+                    		callbacks: {
+                    			label: function (tooltipItems, data) {
+                    				var i, label = [], l = data.datasets.length;
+                    				for (i = 0; i < l; i++) {
+                    					IndivData =  data.datasets[i].labels[tooltipItems.index];
+                    					IndivDataNum = data.datasets[i].data[tooltipItems.index];
+                    					DataPercent = (IndivDataNum * 100) / 1075;
+                    					DataPercent = DataPercent.toFixed(2);
+                    					label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
+                    				}
+                    				return label;
+                    			},
+                    			title: function(tooltipItem, data){
+                    				return "Impacts To " ;
+                    			}
+                    		}
+                    	}
+                    }
+                });
+			} else if (graphType3 == 'radar'){
+				const ctx = document.getElementById('myChart').getContext('2d');
+				var coloR = [];
+
+				var dynamicColors = function() {
+					var r = Math.floor(Math.random() * 255);
+					var g = Math.floor(Math.random() * 255);
+					var b = Math.floor(Math.random() * 255);
+					return "rgb(" + r + "," + g + "," + b + ")";
+				};
+
+				for (var i in obj2) {
+					coloR.push(dynamicColors());
+				}
+				var barChart = new Chart(ctx, {
+					type: graphType3,
+                    // The data for our dataset
+                    data: {
+                    	labels: obj2,
+                    	datasets: [{
+                    		// label: obj2, 
+                    		fill: true,
+                    		// labels: obj2,
+                    		backgroundColor: coloR,
+                    		borderColor: coloR,
+                    		data: obj1
+                    	}],
+                    },
+                    options: {
+                    	scales: {
+                    		xAxes: [{
+                    			ticks: {
+                    				autoSkip: false,
+                    			},
+                    		}],
+                    	},
+                    	tooltips: {
+                    		callbacks: {
+                    			label: function (tooltipItems, data) {
+                    				var i, label = [], l = data.datasets.length;
+                    				for (i = 0; i < l; i++) {
+                    					IndivData =  data.datasets[i].labels[tooltipItems.index];
+                    					IndivDataNum = data.datasets[i].data[tooltipItems.index];
+                    					DataPercent = (IndivDataNum * 100) / 1075;
+                    					DataPercent = DataPercent.toFixed(2);
+                    					label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
+
+
+                    				}
+                    				return label;
+                    			},
+                    			title: function(tooltipItem, data){
+                    				return "Impacts To " ;
+                    			}
+                    		}
+                    	}
+                    }
+                });
+			} else if (graphType4 == 'doughnut'){
+				const ctx = document.getElementById('myChart').getContext('2d');
+				var coloR = [];
+
+				var dynamicColors = function() {
+					var r = Math.floor(Math.random() * 255);
+					var g = Math.floor(Math.random() * 255);
+					var b = Math.floor(Math.random() * 255);
+					return "rgb(" + r + "," + g + "," + b + ")";
+				};
+
+				for (var i in obj2) {
+					coloR.push(dynamicColors());
+				}
+				var scatterChart = new Chart(ctx, {
+					type: graphType4,
+                    // The data for our dataset
+                    data: {
+                    	labels: obj2,
+                    	datasets: [{
+                    		label: 'Testing Luk',
+                    		backgroundColor: coloR,
+                    		borderColor: coloR,
+                    		data: obj1
+                    	}]
+                    },
+                    options: {}
+                });
+			} else if (graphType5 == 'pie'){
+				const ctx = document.getElementById('myChart').getContext('2d');
+				var coloR = [];
+
+				var dynamicColors = function() {
+					var r = Math.floor(Math.random() * 255);
+					var g = Math.floor(Math.random() * 255);
+					var b = Math.floor(Math.random() * 255);
+					return "rgb(" + r + "," + g + "," + b + ")";
+				};
+
+				for (var i in obj2) {
+					coloR.push(dynamicColors());
+				}
+				var scatterChart = new Chart(ctx, {
+					type: graphType5,
+                    // The data for our dataset
+                    data: {
+                    	labels: obj2,
+                    	datasets: [{
+                    		label: 'Testing Luk',
+                    		backgroundColor: coloR,
+                    		borderColor: coloR,
+                    		data: obj1
+                    	}]
+                    },
+                    options: {}
+                });
+			} else if (graphType6 == 'polarArea'){
+				const ctx = document.getElementById('myChart').getContext('2d');
+				var coloR = [];
+
+				var dynamicColors = function() {
+					var r = Math.floor(Math.random() * 255);
+					var g = Math.floor(Math.random() * 255);
+					var b = Math.floor(Math.random() * 255);
+					return "rgb(" + r + "," + g + "," + b + ")";
+				};
+
+				for (var i in obj2) {
+					coloR.push(dynamicColors());
+				}
+				var scatterChart = new Chart(ctx, {
+					type: graphType6,
+                    // The data for our dataset
+                    data: {
+                    	labels: obj2,
+                    	datasets: [{
+                    		label: 'Testing Luk',
+                    		backgroundColor: coloR,
+                    		borderColor: coloR,
+                    		data: obj1
+                    	}]
+                    },
+                    options: {}
+                });
+			} else if (graphType7 == 'bubble'){
+				const ctx = document.getElementById('myChart').getContext('2d');
+				var coloR = [];
+
+				var dynamicColors = function() {
+					var r = Math.floor(Math.random() * 255);
+					var g = Math.floor(Math.random() * 255);
+					var b = Math.floor(Math.random() * 255);
+					return "rgb(" + r + "," + g + "," + b + ")";
+				};
+
+				for (var i in obj2) {
+					coloR.push(dynamicColors());
+				}
+
+				xCategoryVal = [obj2];
+				yCategoryVal = [obj1];
+
+				//defining the data
+				var data = [{
+					x: [xCategoryVal],
+					y: [yCategoryVal], 
+					r: [yCategoryVal],	
+					label: [yCategoryVal]
+				}];
+
+				for (var i in data) {
+					coloR.push(dynamicColors());
+				}
+
+				var myChart = new Chart(ctx, {
+					type: graphType7,
+					data: {
+						datasets: [{
+							labels: xCategoryVal,
+							data: [data],
+							backgroundColor: coloR,
+						}]
+					}, 
+					options:{
+						responsive: true,
+						scales: {
+							xAxes: [{
+								gridLines: {
+									display:false
+								},
+								display: true,
+								type:'category',
+								labels: xCategoryVal,
+							}], 
+							yAxes: [{
+								gridLines: {
+									display:false
+								},
+								display: true,
+								type:'category',
+								labels: yCategoryVal,
+							}],
+						},
+						tooltips: {
+							callbacks: {
+								label: function (tooltipItems, data) {
+									const labels = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].label;
+									const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].r;
+									DataPercent = (dataVal * 100) / 1075;
+									DataPercent = DataPercent.toFixed(2);
+									return label = labels + ": " + dataVal + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
+								},
+								title: function(tooltipItem, data){
+									return "Impacts To Financial:";
+								}
+							},
+						}
+					}
+				});
+			} else if (graphType8 == 'scatter'){
+				const ctx = document.getElementById('myChart').getContext('2d');
+				var coloR = [];
+
+				var dynamicColors = function() {
+					var r = Math.floor(Math.random() * 255);
+					var g = Math.floor(Math.random() * 255);
+					var b = Math.floor(Math.random() * 255);
+					return "rgb(" + r + "," + g + "," + b + ")";
+				};
+
+				for (var i in obj2) {
+					coloR.push(dynamicColors());
+				}
+				var scatterChart = new Chart(ctx, {
+					type: graphType8,
+					data: {
+						datasets: [{
+							label: obj2,
+							data: function AllData(tooltipItems, data){
+								const allData = [];
+								for(var i = 0; i < obj2.length; i++){
+									
+								}
+							}
+						}]
+					},
+					options: {
+						scales: {
+							xAxes: [{
+								type: 'category',
+								position: 'bottom'
+							}]
+						}
+					}
+				});
+			}
+		</script>
+		@endsection
