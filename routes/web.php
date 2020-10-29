@@ -13,20 +13,20 @@
 //this is where you can route all of the request into the appropriate web page.
 
 
-Route::get('/', 'LoginController@loginpage');
-Route::get('/signup', 'LoginController@signup');
-Route::get('/myaccount', 'LoginController@myaccount');
-Route::get('/acct_dept', 'LoginController@acct_dept');
-Route::get('/acct_dept_ori', 'LoginController@acct_dept_ori');
+// Route::get('/', 'LoginController@loginpage');
+// Route::get('/signup', 'LoginController@signup');
+// Route::get('/myaccount', 'LoginController@myaccount');
+// Route::get('/acct_dept', 'LoginController@acct_dept');
+// Route::get('/acct_dept_ori', 'LoginController@acct_dept_ori');
 
-Route::get('/invoice', 'LoginController@invoice');
-Route::get('/admin_dashboard', 'LoginController@admin_dashboard');
-Route::get('/staff_dashboard', 'LoginController@staff_dashboard');
-Route::get('/sales', 'LoginController@sales');
-Route::get('/leads', 'LoginController@leads');
-Route::get('/testing', 'LoginController@testing');
+// Route::get('/invoice', 'LoginController@invoice');
+// Route::get('/admin_dashboard', 'LoginController@admin_dashboard');
+// Route::get('/staff_dashboard', 'LoginController@staff_dashboard');
+// Route::get('/sales', 'LoginController@sales');
+// Route::get('/leads', 'LoginController@leads');
+// Route::get('/testing', 'LoginController@testing');
 
-Route::get('/dashboard', 'DataController@index')->name('admin.dashboard');
+Route::get('/', 'DataController@index')->name('admin.dashboard');
 Route::get('/analysis', 'DataController@analysis')->name('analysis');
 Route::get('/analysis_tools', 'DataController@analysis_tools')->name('analysis.tools');
 Route::post('/analysis_tools', 'DataController@postData')->name('analysis.postData');

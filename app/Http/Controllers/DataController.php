@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use App\Questionnaire;
 use App\Finance;
+use DB;
 
 class DataController extends Controller
 {
@@ -198,6 +199,7 @@ class DataController extends Controller
 	public function postData(Request $request)
 	{
 		// $data1 ="He";
+		$allColumnsname = Schema::getColumnListing('masterdata');
 		$var1 = $request->input("allColumnsname1");
 		$var2 = $request->input("allColumnsname2");
 		$var3 = $request->input("allColumnsname3");
@@ -212,7 +214,7 @@ class DataController extends Controller
 		$checkboxLine6 = $request->input("PolarAreaGraph");
 		$checkboxLine7 = $request->input("BubbleGraph");
 		$checkboxLine8 = $request->input("ScatterGraph");
-
+		
 
 		if ($var1 != null && $var2 == null && $var3 == null && $var4 == null) 
 		{
@@ -229,6 +231,26 @@ class DataController extends Controller
 			$Data2 = Questionnaire::select('Nom', $var2)->distinct('Nom')->get();
 			$Data2SetlabelY = $Data2->countBy($var2)->values()->toArray(); // numberic
 			$Data2SetlabelX = $Data2->pluck($var2)->unique()->values()->toArray(); //string
+
+			// $dummyCollections = [];
+			$xData = [];
+			$yData = [];
+			$XYData = [];
+			$rData = [];
+			//get x and y values
+			foreach ($Data1SetlabelX as $array1) {
+				// array_push($dummyCollections, $array1); //all elements in columns
+				foreach ($Data2SetlabelX as $array2) {
+					
+					array_push($xData, $array1); //each of the elements in the first var connect with each elements in second var.
+					array_push($yData, $array2); //each of the elements in the first var connect with each elements in second var.
+					array_push($XYData, [$array1. ' ' .$array2]); //each of the elements in the first var connect with each elements in second var.
+
+					$example = Questionnaire::select('Nom', $var1, $var2)->distinct('Nom')
+					->where($var1, $array1)->where($var2, $array2)->get()->count();
+					array_push($rData, $example);
+				}	
+			}
 		}
 		else if (($var1 != null && $var2 != null && $var3 != null) && $var4 == null)
 		{
@@ -258,7 +280,6 @@ class DataController extends Controller
 			$Data4SetlabelX = $Data4->pluck($var4)->unique()->values()->toArray(); //string
 		}
 
-		$allColumnsname = Schema::getColumnListing('masterdata');
-		return view('analysis_tools', compact('Data1SetlabelY' , 'Data1SetlabelX', 'Data2SetlabelY', 'Data2SetlabelX', 'Data3SetlabelY', 'Data3SetlabelX', 'Data4SetlabelY', 'Data4SetlabelX', 'allColumnsname', 'checkboxLine1', 'checkboxLine2', 'checkboxLine3', 'checkboxLine4', 'checkboxLine5', 'checkboxLine6', 'checkboxLine7', 'checkboxLine8'));
+		return view('analysis_tools', compact('Data1SetlabelY' , 'Data1SetlabelX', 'Data2SetlabelY', 'Data2SetlabelX', 'Data3SetlabelY', 'Data3SetlabelX', 'Data4SetlabelY', 'Data4SetlabelX', 'allColumnsname', 'checkboxLine1', 'checkboxLine2', 'checkboxLine3', 'checkboxLine4', 'checkboxLine5', 'checkboxLine6', 'checkboxLine7', 'checkboxLine8','var1', 'var2', 'var3', 'var4', 'xData', 'yData', 'XYData', 'rData'));
 	}
 }
