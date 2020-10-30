@@ -56,12 +56,12 @@ $univ = array
 <div>
 	<h1><strong>RELATIONSHIP ANALYSIS TOOL</strong></h1>
 </div>
-<div class="container-fluid" style="margin-bottom: 2%;">
+<div class="col-sm-12" style="margin-bottom: 2%;">
 	<div class="row" style="padding: 10px;">
-		<div class="col-sm-12 m-3">
+		<div class="col-sm-12">
 			<div class="container col-sm-8 p-1 my-1" style="float: left;">
-				<canvas id="myChart" width="1920" height="1080"></canvas></div>
-				<div class="container col-sm-3 m-3" style="float: left;">
+				<canvas id="myChart" width="*" height="*"></canvas></div>
+				<div class="container col-sm-4" style="float: left;">
 					<form action="{{ route('analysis.postData')}}" method="post" onsubmit=" return validateMyForm()">
 						@csrf
 						<label>Graph Types:</label><br>
@@ -101,28 +101,28 @@ $univ = array
 							</div>
 						</span>
 
-						<div style="padding-top: 20px;">
+						<div style="padding-top: 20px; float: center">
 							<label for="datasets">Data 1:</label>
 							<select class="combobox" name="allColumnsname1" id="datasets">
 								<option value="" selected>Select</option>
 								@foreach($allColumnsname as $acn1)
 								<option value="{{ $acn1 }} "> {{ $acn1 }} </option>
 								@endforeach
-							</select>
+							</select><br>
 							<label for="datasets2">Data 2:</label>
 							<select class="combobox" name="allColumnsname2" id="datasets">
 								<option value="" selected>Select</option>
 								@foreach($allColumnsname as $acn2)
 								<option value="{{ $acn2 }} "> {{ $acn2 }} </option>
 								@endforeach
-							</select>
+							</select><br>
 							<label for="datasets3">Data 3:</label>
 							<select class="combobox" name="allColumnsname3" id="datasets">
 								<option value="" selected>Select</option>
 								@foreach($allColumnsname as $acn3)
 								<option value="{{ $acn3 }} "> {{ $acn3 }} </option>
 								@endforeach
-							</select>
+							</select><br>
 							<label for="datasets4">Data 4:</label>
 							<select class="combobox" name="allColumnsname4" id="datasets">
 								<option value="" selected>Select</option>

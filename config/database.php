@@ -2,12 +2,14 @@
 
 use Illuminate\Support\Str;
 
-return [
-    //Production
+//Production
     // define('RDS_HOSTNAME', (isset($_SERVER['RDS_HOSTNAME'])) ? $_SERVER['RDS_HOSTNAME'] : null);
     // define('RDS_USERNAME', (isset($_SERVER['RDS_USERNAME'])) ? $_SERVER['RDS_USERNAME'] : null);
     // define('RDS_PASSWORD', (isset($_SERVER['RDS_PASSWORD'])) ? $_SERVER['RDS_PASSWORD'] : null);
     // define('RDS_DB_NAME', (isset($_SERVER['RDS_DB_NAME'])) ? $_SERVER['RDS_DB_NAME'] : null);
+
+return [
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -47,6 +49,8 @@ return [
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
+        
+
         //development
         'mysql' => [
             'driver' => 'mysql',
@@ -71,7 +75,7 @@ return [
        // 'mysql' => [
        //      'driver' => 'mysql',
        //      'url' => env('DATABASE_URL'),
-       //      'host' => (RDS_HOSTNAME) ? RDS_HOSTNAME : env('DB_HOST', '127.0.0.1'),
+       //      'host' => (RDS_HOSTNAME) ? RDS_HOSTNAME : env('DB_HOST', 'aac9mof1cuwd5y.cjyuy2xuennh.ap-southeast-1.rds.amazonaws.com'),
        //      'port' => env('DB_PORT', '3306'),
        //      'database' => (RDS_DB_NAME) ? RDS_DB_NAME : env('DB_DATABASE', 'forge'),
        //      'username' => (RDS_USERNAME) ? RDS_USERNAME : env('DB_USERNAME', 'forge'),

@@ -93,7 +93,70 @@ class DataController extends Controller
 
 	public function analysis()
 	{
+		$ordered = Questionnaire::select('Nom', 'Country')->distinct('Nom')->get();
+		$lol = $ordered->countBy('Country')->values()->toArray();
+		$CountryName = $ordered->pluck('Country')->unique()->values()->toArray();
 
+		//Gender Data
+		$GData = Questionnaire::select('Nom', 'Gender')->distinct('Nom')->get();
+		$CountGender = $GData->countBy('Gender')->values()->toArray();
+		$GenderType = $GData->pluck('Gender')->unique()->values()->toArray();
+
+		//Occupation Data
+		$Occupation = Questionnaire::select('Nom', 'Occupation')->distinct('Nom')->get();
+		$CountOccup = $Occupation->countBy('Occupation')->values()->toArray(); // numberic
+		$OccupationType = $Occupation->pluck('Occupation')->unique()->values()->toArray(); //string
+
+		//Income Group
+		$Income = Questionnaire::select('Nom', 'Income_Group')->distinct('Nom')->get();
+		$CountIncome = $Income->countBy('Income_Group')->values()->toArray(); // numberic
+		$IncomeType = $Income->pluck('Income_Group')->unique()->values()->toArray(); //string
+
+		//Social Media
+		$SocMed = Questionnaire::select('Nom', 'Social_Media')->distinct('Nom')->get();
+		$CountSocialMedia = $SocMed->countBy('Social_Media')->values()->toArray(); // numberic
+		$SocialMediaType = $SocMed->pluck('Social_Media')->unique()->values()->toArray();//string
+
+		//Usage Purpose
+		$usage = Questionnaire::select('Nom', 'Usage_Purpose')->distinct('Nom')->get();
+		$CountUsage = $usage->countBy('Usage_Purpose')->values()->toArray(); // numberic
+		$UsageType = $usage->pluck('Usage_Purpose')->unique()->values()->toArray(); //string
+
+		//Problem Occurs
+		$Problem = Questionnaire::select('Nom', 'Problems_Occur')->distinct('Nom')->get();
+		$CountProblem = $Problem->countBy('Problems_Occur')->values()->toArray();
+		$ProblemType = $Problem->pluck('Problems_Occur')->unique()->values()->toArray(); //
+
+		//Cost Increaments
+		$Cost = Questionnaire::select('Nom', 'Cost_Increaments')->distinct('Nom')->get();
+		$CountCost = $Cost->countBy('Cost_Increaments')->values()->toArray(); // numberic
+		$CostType = $Cost->pluck('Cost_Increaments')->unique()->values()->toArray(); //string
+
+		//Psychological Problem
+		$Psychological = Questionnaire::select('Nom', 'Psychological_Problem')->distinct('Nom')->get();
+		$CountPsychological = $Psychological->countBy('Psychological_Problem')->values()->toArray(); // numberic
+		$PsychologicalType = $Psychological->pluck('Psychological_Problem')->unique()->values()->toArray();
+
+		//Abused
+		$Abused = Questionnaire::select('Nom', 'Abused')->distinct('Nom')->get();
+		$CountAbused = $Abused->countBy('Abused')->values()->toArray(); // numberic
+		$AbusedType = $Abused->pluck('Abused')->unique()->values()->toArray(); //string
+
+
+		//Spread Fake News 
+		$SFN = Questionnaire::select('Nom', 'Spread_Fake_News')->distinct('Nom')->get();
+		$CountSFN = $SFN->countBy('Spread_Fake_News')->values()->toArray(); // numberic
+		$SFNType = $SFN->pluck('Spread_Fake_News')->unique()->values()->toArray(); //string
+
+		//Believe Fake News 
+		$BFN = Questionnaire::select('Nom', 'Believe_Fake_News')->distinct('Nom')->get();
+		$CountBFN = $BFN->countBy('Believe_Fake_News')->values()->toArray(); // numberic
+		$BFNType = $BFN->pluck('Believe_Fake_News')->unique()->values()->toArray(); //string
+
+		//Relationship Rate
+		$RR = Questionnaire::select('Nom', 'Relationship_Rate')->distinct('Nom')->get();
+		$CountRR = $RR->countBy('Relationship_Rate')->values()->toArray(); // numberic
+		$RRType = $RR->pluck('Relationship_Rate')->unique()->values()->toArray(); //string
 		//No Income Group
 		$NoIncomeNoCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
 		->where('Income_Group', 'No income')->where('Cost_Increaments', 'No')->get()->count();
@@ -185,7 +248,11 @@ class DataController extends Controller
 			'LowIncomeEduCost', 'LowIncomeNFMCost', 'LowIncomeUICost', 'LowIncomeOtherCost', 'MediumIncomeNoCost',
 			'MediumIncomeAddictCost', 'MediumIncomeEduCost', 'MediumIncomeNFMCost', 'MediumIncomeUICost', 
 			'MediumIncomeOtherCost', 'HighIncomeNoCost', 'HighIncomeAddictCost', 'HighIncomeEduCost',
-			'HighIncomeNFMCost', 'HighIncomeUICost', 'HighIncomeOtherCost'));
+			'HighIncomeNFMCost', 'HighIncomeUICost', 'HighIncomeOtherCost', 'lol', 'CountryName', 'CountGender', 'GenderType',
+			'CountOccup', 'OccupationType', 'CountIncome', 'IncomeType' , 'CountSocialMedia',
+			'SocialMediaType', 'CountUsage', 'UsageType' , 'CountProblem', 'ProblemType',
+			'CostType', 'CountCost', 'CountPsychological', 'PsychologicalType', 'AbusedType',
+			'CountAbused', 'CountSFN', 'SFNType', 'CountBFN', 'BFNType', 'CountRR', 'RRType'));
 	}
 
 	public function analysis_tools()
@@ -263,6 +330,30 @@ class DataController extends Controller
 			$Data3 = Questionnaire::select('Nom', $var3)->distinct('Nom')->get();
 			$Data3SetlabelY = $Data3->countBy($var3)->values()->toArray(); // numberic
 			$Data3SetlabelX = $Data3->pluck($var3)->unique()->values()->toArray(); //string
+
+			$DataX1 = [];
+			$DataY1 = [];
+			$DataX2 = [];
+			$Datay2 = [];
+
+			$XYData = [];
+			$rData = [];
+			//get x and y values
+			foreach ($Data1SetlabelX as $array1) {
+				// array_push($dummyCollections, $array1); //all elements in columns
+				foreach ($Data2SetlabelX as $array2) {
+					
+					array_push($xData, $array1); //each of the elements in the first var connect with each elements in second var.
+					array_push($yData, $array2); //each of the elements in the first var connect with each elements in second var.
+					array_push($XYData, [$array1. ' ' .$array2]); //each of the elements in the first var connect with each elements in second var.
+
+					$example = Questionnaire::select('Nom', $var1, $var2)->distinct('Nom')
+					->where($var1, $array1)->where($var2, $array2)->get()->count();
+					array_push($rData, $example);
+				}	
+			}
+
+
 		}  
 		else if ($var1 != null && $var2 != null && $var3 != null && $var4 != null)
 		{

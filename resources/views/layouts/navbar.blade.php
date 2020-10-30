@@ -37,9 +37,9 @@
       <ul class="navbar-nav my-2 my-lg-0">
 <ul class="navbar-nav">
       <li class="nav-item">
-        <strong><a class="nav-link" href="/DataIVI/web/dashboard" style="color: white; font-weight: bold;">DASHBOARD</a></strong>
+        <strong><a class="nav-link" href="/DataIVI/web/" style="color: white; font-weight: bold;">DASHBOARD</a></strong>
       </li>
-      <li class="nav-item">
+      <li class="nav-item"> <!-- href="/DataIVI/web/analysis" -->
        <strong> <a class="nav-link" href="/DataIVI/web/analysis" style="color: white; font-weight: bold;">ANALYSIS</a></strong>
       </li>
       <li class="nav-item">
