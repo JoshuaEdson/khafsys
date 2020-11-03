@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Str;
 
-//Production
+// Production
     // define('RDS_HOSTNAME', (isset($_SERVER['RDS_HOSTNAME'])) ? $_SERVER['RDS_HOSTNAME'] : null);
     // define('RDS_USERNAME', (isset($_SERVER['RDS_USERNAME'])) ? $_SERVER['RDS_USERNAME'] : null);
     // define('RDS_PASSWORD', (isset($_SERVER['RDS_PASSWORD'])) ? $_SERVER['RDS_PASSWORD'] : null);

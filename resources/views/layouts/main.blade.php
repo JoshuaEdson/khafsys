@@ -13,21 +13,42 @@
   <link href="{{ asset('public/scripting/css/mdb.min.css') }} " rel="stylesheet">
   <!-- Your custom styles (optional) -->
   <link href="{{ asset('public/scripting/css/style.csss') }} " rel="stylesheet">
-</head>
 
+  <!-- <link rel="icon" href="{{ asset('favicon_2.png') }}" sizes="32x32"  type='image/x-icon'> -->
+</head>
+<style>
+  html {   
+   /*height: 100%;*/
+   position: absolute;
+ }
+
+body{
+  position: static;
+  min-height: 100vh;
+  padding-bottom: 2.5rem;  
+}
+
+ footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  /*line-height: 60px;*/
+  /*background-color: #003b6f;*/
+}
+</style>
 <body>
 
   <!-- Start your project here-->
   <?php
   //if()  //make user authentications here. At the moment, make a dual main for both login and signup
   ?>
-@include('layouts.navbar') <!--same throughout every pages-->
+  @include('layouts.navbar') <!--same throughout every pages-->
 
-@yield('content')<!--Dynamic-->
+  @yield('content')<!--Dynamic-->
 
-<!--until here-->
-
-@include('layouts.footer') <!--same throughout every pages-->
+  <!--until here-->
+  @include('layouts.footer') <!--same throughout every pages-->
 
 
 

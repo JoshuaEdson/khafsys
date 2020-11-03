@@ -93,6 +93,7 @@ class DataController extends Controller
 
 	public function analysis()
 	{
+		//Country Data
 		$ordered = Questionnaire::select('Nom', 'Country')->distinct('Nom')->get();
 		$lol = $ordered->countBy('Country')->values()->toArray();
 		$CountryName = $ordered->pluck('Country')->unique()->values()->toArray();
@@ -157,103 +158,114 @@ class DataController extends Controller
 		$RR = Questionnaire::select('Nom', 'Relationship_Rate')->distinct('Nom')->get();
 		$CountRR = $RR->countBy('Relationship_Rate')->values()->toArray(); // numberic
 		$RRType = $RR->pluck('Relationship_Rate')->unique()->values()->toArray(); //string
-		//No Income Group
-		$NoIncomeNoCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'No income')->where('Cost_Increaments', 'No')->get()->count();
-		$NoIncomeAddictCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'No income')->where('Cost_Increaments', 'Addiction in spending more than needs')->get()->count();
-		$NoIncomeEduCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'No income')->where('Cost_Increaments', 'Education expenses')->get()->count();
-		$NoIncomeNFMCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'No income')->where('Cost_Increaments', 'New family members (new born)')->get()->count();
-		$NoIncomeUICost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'No income')->where('Cost_Increaments', 'Unexpected illness')->get()->count();
-		$NoIncomeOtherCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'No income')->where('Cost_Increaments', 'Others')->get()->count();
 
-		//Daily Income Group
-		$DailyIncomeNoCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Daily income')->where('Cost_Increaments', 'No')->get()->count();
-		$DailyIncomeAddictCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Daily income')->where('Cost_Increaments', 'Addiction in spending more than needs')->get()->count();
-		$DailyIncomeEduCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Daily income')->where('Cost_Increaments', 'Education expenses')->get()->count();
-		$DailyIncomeNFMCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Daily income')->where('Cost_Increaments', 'New family members (new born)')->get()->count();
-		$DailyIncomeUICost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Daily income')->where('Cost_Increaments', 'Unexpected illness')->get()->count();
-		$DailyIncomeOtherCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Daily income')->where('Cost_Increaments', 'Others')->get()->count();
+//All done. Just put the data in the dashboard. 
 
-		//Low Income Group
-		$LowIncomeNoCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Low income')->where('Cost_Increaments', 'No')->get()->count();
-		$LowIncomeAddictCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Low income')->where('Cost_Increaments', 'Addiction in spending more than needs')->get()->count();
-		$LowIncomeEduCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Low income')->where('Cost_Increaments', 'Education expenses')->get()->count();
-		$LowIncomeNFMCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Low income')->where('Cost_Increaments', 'New family members (new born)')->get()->count();
-		$LowIncomeUICost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Low income')->where('Cost_Increaments', 'Unexpected illness')->get()->count();
-		$LowIncomeOtherCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Low income')->where('Cost_Increaments', 'Others')->get()->count();
-
-		//Medium Income Group
-		$MediumIncomeNoCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Medium income')->where('Cost_Increaments', 'No')->get()->count();
-		$MediumIncomeAddictCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Medium income')->where('Cost_Increaments', 'Addiction in spending more than needs')->get()->count();
-		$MediumIncomeEduCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Medium income')->where('Cost_Increaments', 'Education expenses')->get()->count();
-		$MediumIncomeNFMCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Medium income')->where('Cost_Increaments', 'New family members (new born)')->get()->count();
-		$MediumIncomeUICost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Medium income')->where('Cost_Increaments', 'Unexpected illness')->get()->count();
-		$MediumIncomeOtherCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'Medium income')->where('Cost_Increaments', 'Others')->get()->count();
-
-		//High Income Group
-		$HighIncomeNoCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'High income')->where('Cost_Increaments', 'No')->get()->count();
-		$HighIncomeAddictCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'High income')->where('Cost_Increaments', 'Addiction in spending more than needs')->get()->count();
-		$HighIncomeEduCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'High income')->where('Cost_Increaments', 'Education expenses')->get()->count();
-		$HighIncomeNFMCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'High income')->where('Cost_Increaments', 'New family members (new born)')->get()->count();
-		$HighIncomeUICost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'High income')->where('Cost_Increaments', 'Unexpected illness')->get()->count();
-		$HighIncomeOtherCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
-		->where('Income_Group', 'High income')->where('Cost_Increaments', 'Others')->get()->count();
-
-		//Cost Increaments
-		$Cost = Questionnaire::select('Nom', 'Cost_Increaments')->distinct('Nom')->get();
-		$CountCost = $Cost->countBy('Cost_Increaments')->values()->toArray(); // numberic
-		$CostType = $Cost->pluck('Cost_Increaments')->unique()->values()->toArray(); //string
-
-		//Psychological Problem
-		$Psychological = Questionnaire::select('Nom', 'Psychological_Problem')->distinct('Nom')->get();
-		$CountPsychological = $Psychological->countBy('Psychological_Problem')->values()->toArray(); // numberic
-		$PsychologicalType = $Psychological->pluck('Psychological_Problem')->unique()->values()->toArray();
-
-		//Abused
-		$Abused = Questionnaire::select('Nom', 'Abused')->distinct('Nom')->get();
-		$CountAbused = $Abused->countBy('Abused')->values()->toArray(); // numberic
-		$AbusedType = $Abused->pluck('Abused')->unique()->values()->toArray(); //string
-
-		return view('analysis', compact('NoIncomeNoCost', 'NoIncomeAddictCost', 'NoIncomeEduCost', 'NoIncomeNFMCost',
-			'NoIncomeUICost', 'NoIncomeOtherCost', 'DailyIncomeNoCost', 'DailyIncomeAddictCost', 'DailyIncomeEduCost',
-			'DailyIncomeNFMCost', 'DailyIncomeUICost', 'DailyIncomeOtherCost', 'LowIncomeNoCost', 'LowIncomeAddictCost',
-			'LowIncomeEduCost', 'LowIncomeNFMCost', 'LowIncomeUICost', 'LowIncomeOtherCost', 'MediumIncomeNoCost',
-			'MediumIncomeAddictCost', 'MediumIncomeEduCost', 'MediumIncomeNFMCost', 'MediumIncomeUICost', 
-			'MediumIncomeOtherCost', 'HighIncomeNoCost', 'HighIncomeAddictCost', 'HighIncomeEduCost',
-			'HighIncomeNFMCost', 'HighIncomeUICost', 'HighIncomeOtherCost', 'lol', 'CountryName', 'CountGender', 'GenderType',
+		// return $SocialMediaType;
+		return view('analysis', compact('dataQ', 'lol', 'CountryName', 'CountGender', 'GenderType',
 			'CountOccup', 'OccupationType', 'CountIncome', 'IncomeType' , 'CountSocialMedia',
 			'SocialMediaType', 'CountUsage', 'UsageType' , 'CountProblem', 'ProblemType',
 			'CostType', 'CountCost', 'CountPsychological', 'PsychologicalType', 'AbusedType',
 			'CountAbused', 'CountSFN', 'SFNType', 'CountBFN', 'BFNType', 'CountRR', 'RRType'));
 	}
+		//No Income Group
+		// $NoIncomeNoCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'No income')->where('Cost_Increaments', 'No')->get()->count();
+		// $NoIncomeAddictCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'No income')->where('Cost_Increaments', 'Addiction in spending more than needs')->get()->count();
+		// $NoIncomeEduCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'No income')->where('Cost_Increaments', 'Education expenses')->get()->count();
+		// $NoIncomeNFMCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'No income')->where('Cost_Increaments', 'New family members (new born)')->get()->count();
+		// $NoIncomeUICost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'No income')->where('Cost_Increaments', 'Unexpected illness')->get()->count();
+		// $NoIncomeOtherCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'No income')->where('Cost_Increaments', 'Others')->get()->count();
+
+		// //Daily Income Group
+		// $DailyIncomeNoCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Daily income')->where('Cost_Increaments', 'No')->get()->count();
+		// $DailyIncomeAddictCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Daily income')->where('Cost_Increaments', 'Addiction in spending more than needs')->get()->count();
+		// $DailyIncomeEduCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Daily income')->where('Cost_Increaments', 'Education expenses')->get()->count();
+		// $DailyIncomeNFMCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Daily income')->where('Cost_Increaments', 'New family members (new born)')->get()->count();
+		// $DailyIncomeUICost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Daily income')->where('Cost_Increaments', 'Unexpected illness')->get()->count();
+		// $DailyIncomeOtherCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Daily income')->where('Cost_Increaments', 'Others')->get()->count();
+
+		// //Low Income Group
+		// $LowIncomeNoCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Low income')->where('Cost_Increaments', 'No')->get()->count();
+		// $LowIncomeAddictCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Low income')->where('Cost_Increaments', 'Addiction in spending more than needs')->get()->count();
+		// $LowIncomeEduCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Low income')->where('Cost_Increaments', 'Education expenses')->get()->count();
+		// $LowIncomeNFMCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Low income')->where('Cost_Increaments', 'New family members (new born)')->get()->count();
+		// $LowIncomeUICost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Low income')->where('Cost_Increaments', 'Unexpected illness')->get()->count();
+		// $LowIncomeOtherCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Low income')->where('Cost_Increaments', 'Others')->get()->count();
+
+		// //Medium Income Group
+		// $MediumIncomeNoCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Medium income')->where('Cost_Increaments', 'No')->get()->count();
+		// $MediumIncomeAddictCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Medium income')->where('Cost_Increaments', 'Addiction in spending more than needs')->get()->count();
+		// $MediumIncomeEduCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Medium income')->where('Cost_Increaments', 'Education expenses')->get()->count();
+		// $MediumIncomeNFMCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Medium income')->where('Cost_Increaments', 'New family members (new born)')->get()->count();
+		// $MediumIncomeUICost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Medium income')->where('Cost_Increaments', 'Unexpected illness')->get()->count();
+		// $MediumIncomeOtherCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'Medium income')->where('Cost_Increaments', 'Others')->get()->count();
+
+		// //High Income Group
+		// $HighIncomeNoCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'High income')->where('Cost_Increaments', 'No')->get()->count();
+		// $HighIncomeAddictCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'High income')->where('Cost_Increaments', 'Addiction in spending more than needs')->get()->count();
+		// $HighIncomeEduCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'High income')->where('Cost_Increaments', 'Education expenses')->get()->count();
+		// $HighIncomeNFMCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'High income')->where('Cost_Increaments', 'New family members (new born)')->get()->count();
+		// $HighIncomeUICost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'High income')->where('Cost_Increaments', 'Unexpected illness')->get()->count();
+		// $HighIncomeOtherCost = Questionnaire::select('Nom', 'Income_Group', 'Cost_Increaments')->distinct('Nom')
+		// ->where('Income_Group', 'High income')->where('Cost_Increaments', 'Others')->get()->count();
+
+		// //Cost Increaments
+		// $Cost = Questionnaire::select('Nom', 'Cost_Increaments')->distinct('Nom')->get();
+		// $CountCost = $Cost->countBy('Cost_Increaments')->values()->toArray(); // numberic
+		// $CostType = $Cost->pluck('Cost_Increaments')->unique()->values()->toArray(); //string
+
+		// //Psychological Problem
+		// $Psychological = Questionnaire::select('Nom', 'Psychological_Problem')->distinct('Nom')->get();
+		// $CountPsychological = $Psychological->countBy('Psychological_Problem')->values()->toArray(); // numberic
+		// $PsychologicalType = $Psychological->pluck('Psychological_Problem')->unique()->values()->toArray();
+
+		// //Abused
+		// $Abused = Questionnaire::select('Nom', 'Abused')->distinct('Nom')->get();
+		// $CountAbused = $Abused->countBy('Abused')->values()->toArray(); // numberic
+		// $AbusedType = $Abused->pluck('Abused')->unique()->values()->toArray(); //string
+
+		// return view('analysis');
+		// return view('analysis', compact('NoIncomeNoCost', 'NoIncomeAddictCost', 'NoIncomeEduCost', 'NoIncomeNFMCost',
+		// 	'NoIncomeUICost', 'NoIncomeOtherCost', 'DailyIncomeNoCost', 'DailyIncomeAddictCost', 'DailyIncomeEduCost',
+		// 	'DailyIncomeNFMCost', 'DailyIncomeUICost', 'DailyIncomeOtherCost', 'LowIncomeNoCost', 'LowIncomeAddictCost',
+		// 	'LowIncomeEduCost', 'LowIncomeNFMCost', 'LowIncomeUICost', 'LowIncomeOtherCost', 'MediumIncomeNoCost',
+		// 	'MediumIncomeAddictCost', 'MediumIncomeEduCost', 'MediumIncomeNFMCost', 'MediumIncomeUICost', 
+		// 	'MediumIncomeOtherCost', 'HighIncomeNoCost', 'HighIncomeAddictCost', 'HighIncomeEduCost',
+		// 	'HighIncomeNFMCost', 'HighIncomeUICost', 'HighIncomeOtherCost', 'lol', 'CountryName', 'CountGender', 'GenderType',
+		// 	'CountOccup', 'OccupationType', 'CountIncome', 'IncomeType' , 'CountSocialMedia',
+		// 	'SocialMediaType', 'CountUsage', 'UsageType' , 'CountProblem', 'ProblemType',
+		// 	'CostType', 'CountCost', 'CountPsychological', 'PsychologicalType', 'AbusedType',
+		// 	'CountAbused', 'CountSFN', 'SFNType', 'CountBFN', 'BFNType', 'CountRR', 'RRType'));
+	
 
 	public function analysis_tools()
 	{
@@ -270,7 +282,6 @@ class DataController extends Controller
 		$var1 = $request->input("allColumnsname1");
 		$var2 = $request->input("allColumnsname2");
 		$var3 = $request->input("allColumnsname3");
-		$var4 = $request->input("allColumnsname4");
 		// return $var1;
 
 		$checkboxLine1 = $request->input("LineGraph");
@@ -283,14 +294,33 @@ class DataController extends Controller
 		$checkboxLine8 = $request->input("ScatterGraph");
 		
 
-		if ($var1 != null && $var2 == null && $var3 == null && $var4 == null) 
+		if ($var1 != null && $var2 == null && $var3 == null) 
 		{
 
 			$Data1 = Questionnaire::select('Nom', $var1)->distinct('Nom')->get();
 			$Data1SetlabelY = $Data1->countBy($var1)->values()->toArray(); // numberic
 			$Data1SetlabelX = $Data1->pluck($var1)->unique()->values()->toArray(); //string
+
+			//testing
+			$xData1 = [];
+			$yData1 = [];
+			// $data2 =[];
+
+			$XYData1 = [];
+			// $rData = [];
+			//get x and y values
+			foreach ($Data1SetlabelX as $array1) {
+
+					array_push($xData1, $array1); 
+					array_push($XYData1, [$array1]); 
+
+					$example = Questionnaire::select('Nom', $var1)->distinct('Nom')
+					->where($var1, $array1)->get()->count();
+					array_push($yData1, $example);
+			}
+
 		} 
-		else if (($var1 != null && $var2 != null) && $var3 == null && $var4 == null)
+		else if (($var1 != null && $var2 != null) && $var3 == null)
 		{
 			$Data1 = Questionnaire::select('Nom', $var1)->distinct('Nom')->get();
 			$Data1SetlabelY = $Data1->countBy($var1)->values()->toArray(); // numberic
@@ -298,28 +328,34 @@ class DataController extends Controller
 			$Data2 = Questionnaire::select('Nom', $var2)->distinct('Nom')->get();
 			$Data2SetlabelY = $Data2->countBy($var2)->values()->toArray(); // numberic
 			$Data2SetlabelX = $Data2->pluck($var2)->unique()->values()->toArray(); //string
+			// $Data3 = Questionnaire::select('Nom', $var3)->distinct('Nom', $var3)->get();
+			// $Data3SetlabelY = $Data3->countBy($var3)->values()->toArray(); // numberic
+			// $Data3SetlabelX = $Data3->pluck($var3)->unique()->values()->toArray(); //string
 
-			// $dummyCollections = [];
-			$xData = [];
-			$yData = [];
-			$XYData = [];
-			$rData = [];
+
+			$xData1 = [];
+			$yData1 = [];
+			// $data2 =[];
+
+			$XYData1 = [];
+			$rData1 = [];
 			//get x and y values
 			foreach ($Data1SetlabelX as $array1) {
-				// array_push($dummyCollections, $array1); //all elements in columns
 				foreach ($Data2SetlabelX as $array2) {
-					
-					array_push($xData, $array1); //each of the elements in the first var connect with each elements in second var.
-					array_push($yData, $array2); //each of the elements in the first var connect with each elements in second var.
-					array_push($XYData, [$array1. ' ' .$array2]); //each of the elements in the first var connect with each elements in second var.
+
+					array_push($xData1, $array1); 
+					array_push($yData1, $array2); 
+					array_push($XYData1, [$array1. ' ' .$array2]); 
 
 					$example = Questionnaire::select('Nom', $var1, $var2)->distinct('Nom')
 					->where($var1, $array1)->where($var2, $array2)->get()->count();
-					array_push($rData, $example);
-				}	
-			}
+					array_push($rData1, $example);
+				}
+			}	
+			// return [$xData, $yData, $XYData, $rData];
 		}
-		else if (($var1 != null && $var2 != null && $var3 != null) && $var4 == null)
+
+		else if ($var1 != null && $var2 != null && $var3 != null)
 		{
 			$Data1 = Questionnaire::select('Nom', $var1)->distinct('Nom')->get();
 			$Data1SetlabelY = $Data1->countBy($var1)->values()->toArray(); // numberic
@@ -331,46 +367,49 @@ class DataController extends Controller
 			$Data3SetlabelY = $Data3->countBy($var3)->values()->toArray(); // numberic
 			$Data3SetlabelX = $Data3->pluck($var3)->unique()->values()->toArray(); //string
 
-			$DataX1 = [];
-			$DataY1 = [];
-			$DataX2 = [];
-			$Datay2 = [];
 
-			$XYData = [];
-			$rData = [];
+			$xData1 = [];
+			$yData1 = [];
+			$XYData1 = [];
+			$rData1 = [];
+
+			$xData2 = [];
+			$yData2 = [];
+			$XYData2 = [];
+			$rData2 = [];
+
+
 			//get x and y values
 			foreach ($Data1SetlabelX as $array1) {
-				// array_push($dummyCollections, $array1); //all elements in columns
 				foreach ($Data2SetlabelX as $array2) {
-					
-					array_push($xData, $array1); //each of the elements in the first var connect with each elements in second var.
-					array_push($yData, $array2); //each of the elements in the first var connect with each elements in second var.
-					array_push($XYData, [$array1. ' ' .$array2]); //each of the elements in the first var connect with each elements in second var.
+
+					array_push($xData1, $array1); 
+					array_push($yData1, $array2); 
+					array_push($XYData1, [$array1. ' ' .$array2]); 
 
 					$example = Questionnaire::select('Nom', $var1, $var2)->distinct('Nom')
 					->where($var1, $array1)->where($var2, $array2)->get()->count();
-					array_push($rData, $example);
-				}	
+					array_push($rData1, $example);
+				}
+			}	
+
+			foreach ($Data1SetlabelX as $array3) {
+				foreach ($Data3SetlabelX as $array4) {
+
+					array_push($xData2, $array3); 
+					array_push($yData2, $array4); 
+					array_push($XYData2, [$array3. ' ' .$array4]); 
+
+					$example1 = Questionnaire::select('Nom', $var1, $var3)->distinct('Nom')
+					->where($var1, $array3)->where($var3, $array4)->get()->count();
+					array_push($rData2, $example1);
+				}
 			}
+			// return [$xData2 ,$yData2,$XYData2 ,$rData2];
 
-
-		}  
-		else if ($var1 != null && $var2 != null && $var3 != null && $var4 != null)
-		{
-			$Data1 = Questionnaire::select('Nom', $var1)->distinct('Nom')->get();
-			$Data1SetlabelY = $Data1->countBy($var1)->values()->toArray(); // numberic
-			$Data1SetlabelX = $Data1->pluck($var1)->unique()->values()->toArray(); //string
-			$Data2 = Questionnaire::select('Nom', $var2)->distinct('Nom')->get();
-			$Data2SetlabelY = $Data2->countBy($var2)->values()->toArray(); // numberic
-			$Data2SetlabelX = $Data2->pluck($var2)->unique()->values()->toArray(); //string
-			$Data3 = Questionnaire::select('Nom', $var3)->distinct('Nom')->get();
-			$Data3SetlabelY = $Data3->countBy($var3)->values()->toArray(); // numberic
-			$Data3SetlabelX = $Data3->pluck($var3)->unique()->values()->toArray(); //string
-			$Data4 = Questionnaire::select('Nom', $var4)->distinct('Nom')->get();
-			$Data4SetlabelY = $Data4->countBy($var4)->values()->toArray(); // numberic
-			$Data4SetlabelX = $Data4->pluck($var4)->unique()->values()->toArray(); //string
 		}
+		
 
-		return view('analysis_tools', compact('Data1SetlabelY' , 'Data1SetlabelX', 'Data2SetlabelY', 'Data2SetlabelX', 'Data3SetlabelY', 'Data3SetlabelX', 'Data4SetlabelY', 'Data4SetlabelX', 'allColumnsname', 'checkboxLine1', 'checkboxLine2', 'checkboxLine3', 'checkboxLine4', 'checkboxLine5', 'checkboxLine6', 'checkboxLine7', 'checkboxLine8','var1', 'var2', 'var3', 'var4', 'xData', 'yData', 'XYData', 'rData'));
+		return view('analysis_tools', compact('Data1SetlabelY' , 'Data1SetlabelX', 'Data2SetlabelY', 'Data2SetlabelX', 'Data3SetlabelY', 'Data3SetlabelX', 'allColumnsname', 'checkboxLine1', 'checkboxLine2', 'checkboxLine3', 'checkboxLine4', 'checkboxLine5', 'checkboxLine6', 'checkboxLine7', 'checkboxLine8','var1', 'var2', 'var3', 'xData1', 'yData1', 'XYData1', 'rData1', 'data2', 'xData2', 'yData2', 'XYData2', 'rData2'));
 	}
 }

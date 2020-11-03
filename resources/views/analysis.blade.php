@@ -1,19 +1,52 @@
 @extends('layouts.main')
 @section('content')
 
-<title>IVI IIR 4.0: Data Analysis</title>
+
+<title>IVI IIR 4.0: Analysis Tool</title>
 <style>
-	canvas{
+	canvas {
 		text-align: center;
+		max-height: 500px;
+		position: relative;
 	}
 	.center {
-		/*margin: 0;*/
 		padding-top: 30%;
-		margin-top: 30%;
-		/*right: 100%;*/
-/*		-ms-transform: translate(-50%, -50%);
-transform: translate(-50%, -50%);*/
-}
+		margin-top: 30%;																			
+	}
+	h1 {
+		text-align: center;"
+		margin: 20px;
+		padding-top: 20px;
+		padding-left: 40px;
+	}
+
+	input[type="checkbox"] {
+		/*height: */
+		/*width: 100%;*/
+		padding: 12px 20px;
+		margin: 10px 10px 0px 0px;
+		box-sizing: border-box;
+		font: 100% Lucida Sans, Verdana;
+	}
+	select{
+		padding: 3px 7%;
+		margin: 10px 20px 10px 10px;
+	}
+	label{
+		font-weight: bold;
+	}
+	h3 {
+		font-weight: bold;
+		font: Lucida Sans, Verdana;
+		text-decoration: underline;
+	}
+	h5 {
+		font: Lucida Sans, Verdana;
+	}
+	li {
+		font: Lucida Sans, Verdana;
+	}
+
 </style>
 
 <!-- Header for the dashboard. -->
@@ -21,65 +54,737 @@ transform: translate(-50%, -50%);*/
 <!-- Add jQuery lib here -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-<div style="color: blue; text-align: center;">
-	<h1><strong>DATA ANALYSIS: FINANCIAL PROBLEM</strong></h1>
+<div>
+	<h1><strong>GRAPH ANALYSIS</strong></h1>
 </div>
-
-<div class="container-fluid text-center">
-	<div class="row">
+<div class="col-sm-12" style="margin-bottom: 10%; height:*;">
+	<div class="row" style="padding: 10px;">
 		<div class="col-sm-12">
-			<div class="container col-sm-12 p-3 my-3 border">
-				<canvas id="myChart" width="800" height="500"></canvas>
-				<!-- <canvas id="forecast" width="100" height="50"></canvas> -->
-				<div class="col-sm-12"><center>
-					<button id="0" type="button">View Data</button>
-					<button id="1" type="button">Download</button>
-				</center></div><br><br></div>
-		<div class="col-sm-6">
-				<div class="container p-3 my-3 border">
-					<canvas id="myChart" width="800" height="500"></canvas>
-					<div class="col-sm-12"><center>
-						<button id="0" type="button">View Data</button>
-						<button id="1" type="button">Download</button>
-					</center></div><br><br></div>
+			<div class="container col-sm-8 p-1 my-1 border" style="float: left; height:100%;">
+				<canvas id="myChart" style="width:*  height:*"></canvas></div>
+				<div class="container col-sm-4" style="float: left;">
+					<form action="{{ route('analysis.postData')}}" method="post" onsubmit=" return validateMyForm()">
+						@csrf
+						<label>Graph Types:</label><br>
+						<span class="form-check">
+							<div class="checkboxContainer row" id="checkboxId">
+								<div class="col-xs-12 col-sm-12 col-md-6">
+									<input type="checkbox" name="LineGraph" id="checkboxID" value="line" onclick=" ValidateGraphSelected();">Line Graph<br>
+									<input type="checkbox" name="BarGraph" id="checkboxID" value="bar" onclick=" ValidateGraphSelected();">Bar Graph<br>
+									<input type="checkbox" name="RadarGraph" id="checkboxID" value="radar" onclick=" ValidateGraphSelected();">Radar Graph<br>
+									<input type="checkbox" name="DoughnutGraph" id="checkboxID" value="doughnut" onclick=" ValidateGraphSelected();">Doughnut Graph
+								</div>
+								<div class="col-xs-12 col-sm-12 col-md-6">
+									<input type="checkbox" name="PieGraph" id="checkboxID" value="pie" onclick=" ValidateGraphSelected();">Pie Graph<br>
+									<input type="checkbox" name="PolarAreaGraph" id="checkboxID" value="polarArea" onclick=" ValidateGraphSelected();">Polar Area Graph<br>
+									<input type="checkbox" name="BubbleGraph" id="checkboxID" value="bubble" onclick=" ValidateGraphSelected();">Bubble Graph<br>
+									<input type="checkbox" name="ScatterGraph" id="checkboxID" value="scatter" onclick=" ValidateGraphSelected();">Scatter Graph
+								</div>
+								<script>
+									function ValidateGraphSelected()  
+									{  
+										var checkboxes = document.forms[0];
+										var numberOfCheckedItems = 0;  
+										for(var i = 0; i < checkboxes.length; i++)  
+										{  
+											if(checkboxes[i].checked)  {
+												numberOfCheckedItems++;  
+											}
+										}  
+										if(numberOfCheckedItems > 1)  
+										{  
+											alert("Maximum 1 Graph Only Supported!");  
+											$('input:checkbox').prop('checked', false);
+											return false;  
+										} 
+									}
+								</script>
+							</div>
+						</span>
+						<div style="padding-top: 20px;">
+							<center>
+								<label for="datasets">Data 1:</label>
+								<select class="combobox" name="allColumnsname1" id="datasets">
+									<option value="" selected>Select</option>
+									@foreach($allColumnsname as $acn1)
+									<option value="{{ $acn1 }} "> {{ $acn1 }} </option>
+									@endforeach
+								</select><br>
+								<label for="datasets2">Data 2:</label>
+								<select class="combobox" name="allColumnsname2" id="datasets">
+									<option value="" selected>Select</option>
+									@foreach($allColumnsname as $acn2)
+									<option value="{{ $acn2 }} "> {{ $acn2 }} </option>
+									@endforeach
+								</select><br>
+								<label for="datasets3">Data 3:</label>
+								<select class="combobox" name="allColumnsname3" id="datasets">
+									<option value="" selected>Select</option>
+									@foreach($allColumnsname as $acn3)
+									<option value="{{ $acn3 }} "> {{ $acn3 }} </option>
+									@endforeach
+								</select><br>
+							</center>
+							<center>
+								<div style="padding-top: 5%;">
+									
+									<input class="btn" id="submitbtn" type="submit" name="submit">
+									<input class="btn" id="resetbtn" type="reset" name="reset"> 
+									<script>
+										$(function () {
+											$("#resetbtn").bind("click", function () {
+												document.getElementsByName("allColumnsname1").selectedIndex = 0;
+												document.getElementsByName("allColumnsname2").selectedIndex = 0;
+												document.getElementsByName("allColumnsname3").selectedIndex = 0;
+												document.getElementsByName("allColumnsname4").selectedIndex = 0;
+												$('input:checkbox').prop('checked', false);
+											});
+										});
+									</script>
+								</div>
+							</center>
+						</div>
+					</form>
 				</div>
 			</div>
-		<div style="color: blue; text-align: center;">
-			<h1><strong>DATA ANALYSIS: PSYCHOLOGICAL PROBLEM</strong></h1>
 		</div>
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="container p-3 my-3 border">
-						<canvas id="myChart2" width="800" height="600"></canvas>
-						<div class="col-sm-12"><center>
-							<button id="0" type="button">View Data</button>
-							<button id="1" type="button">Download</button>
-						</center></div></div>
+		<div class="col-sm-12 my-3">
+			<div class="col-sm-12 m-1" style="padding-top: 3%; padding-bottom: 10%; float: left;">
+				<h3>WELCOME TO GRAPH ANALYSIS</h3>
+				<h5>THIS TOOLS CONTAINS SOME RESTRICTION ON DATA VISUALIZATION. BELOW ARE THE GUIDELINES:</h5>
+				<ol>
+					<li>THIS TOOLS ONLY SUPPORTS ONE TYPE OF GRAPH TO VISUALIZE DATA.</li>
+					<li>IN THIS GRAPH ANALYSIS TOOLS, KINDLY CONSIDER THE FORMAT BELOW:</li>
+				</ol>
+				<div class="container col-sm-2 p-1 my-1" style="float: left; margin: 1%;">					
+					<ul>
+						<li>GRAPHS THAT SUPPORTS 1 DATA:</li>
+						<ol>
+							<li>LINE GRAPH</li>
+							<li>BAR GRAPH</li>
+							<li>RADAR GRAPH</li>
+							<li>DOUGHNUT GRAPH</li>
+							<li>PIE GRAPH</li>
+							<li>POLAR AREA GRAPH</li>
+							<li>SCATTER GRAPH</li>
+						</ol>
+					</ul>
+				</div>
+				<div class="container col-sm-2 p-1 my-1" style="float: left;margin: 1%;">				
+					<ul>
+						<li>GRAPHS THAT SUPPORTS 2 DATA:</li>
+						<ol>
+							<li>LINE GRAPH</li>
+							<li>BAR GRAPH</li>
+							<li>DOUGHNUT GRAPH</li>
+							<li>BUBBLE GRAPH</li>
+							<li>SCATTER GRAPH</li>
+						</ol>
+					</ul>
+				</div>
+				<div class="container col-sm-2 p-1 my-1" style="float: left;margin: 1%;">				
+					<ul>
+						<li>GRAPHS THAT SUPPORTS 3 DATA:</li>
+						<ol>
+							<li>LINE GRAPH</li>
+							<li>BAR GRAPH</li>
+							<li>SCATTER GRAPH</li>
+						</ol>
+					</ul>
+				</div>
+				<div class="container col-sm-4 my-1" style="float: left;margin: 1%;">		
+					<ul>
+						<li>DATA LABEL AXIS FORMATTING SHOULD BE AS FOLLOW TO MATCH THE AXIS ON THE GRAPHS:</li>
+						<ol>
+							<li>DATA 1 IS CONSIDERED AS X-AXIS</li>
+							<li>DATA 2 IS CONSIDERED AS Y-AXIS (LEFT)</li>
+							<li>DATA 3 IS CONSIDERED AS Y-AXIS (RIGHT)</li>
+						</ol>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	//Function to Retrieve Data 
 
-						<div class="container p-3 my-3 border">
-							<canvas id="myChart2" width="800" height="600"></canvas>
-							<div class="col-sm-12"><center>
-								<button id="0" type="button">View Data</button>
-								<button id="1" type="button">Download</button>
-							</center></div></div>
-						</div>
-					</div>
-				</div></div>
-				<script>
+	function validateMyForm() {
+		const DDBox1 = document.getElementsByName("allColumnsname1")[0].value;
+		const DDBox2 = document.getElementsByName("allColumnsname2")[0].value;
+		const DDBox3 = document.getElementsByName("allColumnsname3")[0].value;
 
-					const color = [];
-					const xlabels = [];
-					const incomeType = <?php echo json_encode($IncomeType, true) ?>;
-					const costType = <?php echo json_encode($CostType, true) ?>;
-					const psychologicalType = <?php echo json_encode($PsychologicalType, true) ?>;
-					const abusedType = <?php echo json_encode($AbusedType, true) ?>;
+		if (DDBox1 == ""){
+			alert("Please Pick Data at Data 1 First!");
+			return false;
+		} else if(DDBox1 != "" && DDBox2 == "" && DDBox3 != ""){
+			alert("Please Pick Data at Data 2 First!");
+			return false;
+		}
+	}
 
-					const PsychologicalData = <?php echo json_encode($CountPsychological, true) ?>;
-					const AbusedData= <?php echo json_encode($CountAbused, true) ?>;
-					const incomeData = <?php echo json_encode($CountIncome, true) ?>;
-					const costData = <?php echo json_encode($CountCost, true) ?>;
+	var obj1 = <?php echo json_encode($Data1SetlabelY ?? '', true) ?>;
+	var obj2 = <?php echo json_encode($Data1SetlabelX ?? '', true) ?>;
+	var obj3 = <?php echo json_encode($Data2SetlabelY ?? '', true) ?>;
+	var obj4 = <?php echo json_encode($Data2SetlabelX ?? '', true) ?>;
+	var obj5 = <?php echo json_encode($Data3SetlabelY ?? '', true) ?>;
+	var obj6 = <?php echo json_encode($Data3SetlabelX ?? '', true) ?>;
+	var obj7 = <?php echo json_encode($Data4SetlabelY ?? '', true) ?>;
+	var obj8 = <?php echo json_encode($Data4SetlabelX ?? '', true) ?>;
 
+	var var1 = <?php echo json_encode($var1 ?? '', true) ?>;
+	var var2 = <?php echo json_encode($var2 ?? '', true) ?>;
+	var var3 = <?php echo json_encode($var3 ?? '', true) ?>;
+
+	const graphType1 = <?php echo json_encode($checkboxLine1 ?? '', true) ?>;
+	const graphType2 = <?php echo json_encode($checkboxLine2 ?? '', true) ?>;
+	const graphType3 = <?php echo json_encode($checkboxLine3 ?? '', true) ?>;
+	const graphType4 = <?php echo json_encode($checkboxLine4 ?? '', true) ?>;
+	const graphType5 = <?php echo json_encode($checkboxLine5 ?? '', true) ?>;
+	const graphType6 = <?php echo json_encode($checkboxLine6 ?? '', true) ?>;
+	const graphType7 = <?php echo json_encode($checkboxLine7 ?? '', true) ?>;
+	const graphType8 = <?php echo json_encode($checkboxLine8 ?? '', true) ?>;
+
+	const xData1 = <?php echo json_encode($xData1 ?? '', true) ?>;
+	const yData1 = <?php echo json_encode($yData1 ?? '', true) ?>;
+	const XYData1 = <?php echo json_encode($XYData1 ?? '', true) ?>;
+	const rData1 = <?php echo json_encode($rData1 ?? '', true) ?>;
+	const xData2 = <?php echo json_encode($xData2 ?? '', true) ?>;
+	const yData2 = <?php echo json_encode($yData2 ?? '', true) ?>;
+	const XYData2 = <?php echo json_encode($XYData2 ?? '', true) ?>;
+	const rData2 = <?php echo json_encode($rData2 ?? '', true) ?>;
+
+	var checkBox = document.getElementById("checkboxID").value;
+
+	if (graphType1 == 'line')
+	{
+		const ctx = document.getElementById('myChart').getContext('2d');
+		var coloR = [];
+		var dynamicColors = function() {
+			var r = Math.floor(Math.random() * 255);
+			var g = Math.floor(Math.random() * 255);
+			var b = Math.floor(Math.random() * 255);
+			return "rgb(" + r + "," + g + "," + b + ")";
+		};
+
+		for (var i in rData) {
+			coloR.push(dynamicColors());
+		}
+
+		xCategoryVal = obj2;
+		yCategoryVal = obj4;
+		thirdData = obj6;
+
+		var data1 = [];
+		var data2 = [];
+		var xAxes = [];
+		var yAxes = [];
+		var data2Axes = [];
+		var title = [];
+		var label = [];
+		var labels = [];
+
+
+		if(yCategoryVal == "" && thirdData == "")
+		{	
+			
+		} else if(yCategoryVal != "" && thirdData == "") 
+		{
+
+
+		} else if(yCategoryVal != "" && thirdData != "") 
+		{	
+
+			data= {
+				labels: XYData,
+				datasets: [{
+					label: $xData1,
+					yAxisID: 'A',
+					data: yData1
+				}, {
+					label: $xData2,
+					yAxisID: 'B',
+					data: yData2
+				}]
+			}
+
+
+			// xAxes= [{
+			// 	scaleLabel: {
+			// 		display: true,
+			// 		labelString: var1
+			// 	},
+			// 	ticks: {
+			// 		autoSkip: false,
+			// 	},
+			// 	offset: 150,
+			// 	gridLines: {
+			// 		display:true,
+			// 	},
+			// 	display: true,
+			// 	type:'category',
+			// 	labels: xCategoryVal,
+			// 	id:'x-prime',
+			// 	position: 'bottom'
+			// }]
+
+			yAxes: [{
+				id: 'A',
+				type: 'category',
+				position: 'left',
+			}, {
+				id: 'B',
+				type: 'category',
+				position: 'right',
+			}]
+
+		
+			labels = 'Relationship Between ' + var1 + ' and ' + var2;
+
+			label= function (tooltipItems, data) {
+				const labels = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].label;
+				const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].r;
+				var percentRes = ((dataVal * 100) / 1075);
+				percentRes = percentRes.toFixed(2);
+				return label = labels + ": " + dataVal + " Respondent(s) : "  + percentRes + "%";
+			}
+			title= function(tooltipItem, data){
+				return "Impacts To " + var1 +" and " + var2;
+			}
+
+		}
+
+		var myChart = new Chart(ctx, {
+			type: graphType1,
+			data: {
+				datasets: [{
+					label: labels,
+					data: data,
+					backgroundColor: coloR,
+					borderColor: coloR,
+					fill: false,
+				}]
+			}, 
+			options:{
+				title: {
+					display: true,
+					text: labels
+				},
+				responsive: true,
+				scales: {
+					xAxes: xAxes, 
+					yAxes: yAxes,
+				},
+				tooltips: {
+					callbacks: {
+						label: label,
+						title: title
+					}
+				}
+			}
+		});
+	}
+	if (graphType2 == 'bar'){
+		const ctx = document.getElementById('myChart').getContext('2d');
+		var coloR = [];
+
+		var dynamicColors = function() {
+			var r = Math.floor(Math.random() * 255);
+			var g = Math.floor(Math.random() * 255);
+			var b = Math.floor(Math.random() * 255);
+			return "rgb(" + r + "," + g + "," + b + ")";
+		};
+
+		for (var i in obj2) {
+			coloR.push(dynamicColors());
+		}
+
+		xCategoryVal = obj2;
+		yCategoryVal = obj4;
+		xAxes = [];
+		yAxes =[];
+		labels = [];
+		label = [];
+		title = [];
+		datas = [];
+
+		if(yCategoryVal != "")
+				{	//Data Sets
+					datas= {
+						datasets: [{
+							labels: obj2,
+							label: obj2,
+							data: obj1,
+							backgroundColor: 'rgb(0,35,102)',
+							borderColor: 'rgb(0,35,102)',
+							borderWidth: 3,
+							fill: false,
+							// xAxisID: "x-prime",
+						},
+						{
+							labels: obj4,
+							label: obj4,
+							data: obj3,
+							backgroundColor: 'rgb(227,38,54)',
+							borderColor: 'rgb(227,38,54)',
+							borderWidth: 3,
+							fill: false,
+							// xAxisID: "x-sec",
+						}],
+					}
+					//Axes
+					xAxes = [{
+						ticks: {
+							autoSkip: false,
+						},
+						display: true,
+						type:'category',
+						position: 'bottom',
+						labels: xCategoryVal,
+						scaleLabel: {
+							display: true,
+							labelString: var1 + ' and ' + var2
+						}
+					}]
+
+					yAxes= [{
+						// ticks: {
+						// 	max: 1200,
+						// 	min: 0,
+						// 	stepSize: 100
+						// },
+						scaleLabel: {
+							display: true,
+							labelString: 'Respondents'
+						}
+					}]
+
+					label = 'Relationship Between ' + var1 + ' and ' + var2;
+
+					labels = function (tooltipItems, data) {
+						var i, label = [], l = data.datasets.length;
+						for (i = 0; i < l; i++) {
+							IndivData = data.datasets[i].data[tooltipItems.index];
+							IndivData1 = (IndivData * 100) / 1075;
+							IndivData1 = IndivData1.toFixed(2);
+							label[i] = data.datasets[i].label + ": " + data.datasets[i].labels[tooltipItems.index] + ' : ' + IndivData1 + '% ; Total Respondents = ' + IndivData;
+						}
+						return label;
+					}
+
+					title = function(tooltipItem, data){
+						return "Impacts To " + var1 +" and " + var2;
+					}
+				} 
+				else if(yCategoryVal == "")
+				{	
+					datas= {
+						datasets: [{
+							labels: obj2,
+							label: var1,
+							data: obj1,
+							backgroundColor: 'rgb(0,35,102)',
+							borderColor: 'rgb(0,35,102)',
+							fill: false,
+						}]
+					}
+
+					label = 'Bar Graph For ' + var1;
+						//Axes
+						xAxes = [{
+							// for(i = 0; i < )
+							ticks: {
+								autoSkip: false,
+							},
+							display: true,
+							type:'category',
+							position: 'bottom',
+							id:'x-prime',
+							labels: obj2,
+							scaleLabel: {
+								display: true,
+								labelString: var1
+							}
+						}]
+
+						yAxes= [{
+							// ticks: {
+							// 	max: 1200,
+							// 	min: 0,
+							// 	stepSize: 100,
+							// },
+							scaleLabel: {
+								display: true,
+								labelString: 'Respondents'
+							}
+						}]
+
+						labels = function (tooltipItems, data) {
+							var i, label = [], l = data.datasets.length;
+							for (i = 0; i < l; i++) {
+								IndivData =  data.datasets[i].labels[tooltipItems.index];
+								IndivDataNum = data.datasets[i].data[tooltipItems.index];
+								DataPercent = (IndivDataNum * 100) / 1075;
+								DataPercent = DataPercent.toFixed(2);
+								label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
+							}
+							return label;
+						}
+
+						title = function(tooltipItem, data){
+							dataTitle = document.getElementById("")
+							return "Impacts To " + var1;
+						}
+					}
+
+					var barChart = new Chart(ctx, {
+						type: graphType2,
+                    // The data for our dataset
+                    data: datas,
+                    options: {
+                    	title: {
+                    		display: true,
+                    		text: label
+                    	},
+                    	scales: {
+                    		xAxes: xAxes, 
+                    		yAxes:yAxes
+                    	},
+                    	tooltips: {
+                    		callbacks: {
+                    			label: labels,
+                    			title: title
+                    		}
+                    	}
+                    }
+                });
+				} 
+
+				if (graphType3 == 'radar'){
 					const ctx = document.getElementById('myChart').getContext('2d');
+					var coloR = [];
+
+					var dynamicColors = function() {
+						var r = Math.floor(Math.random() * 255);
+						var g = Math.floor(Math.random() * 255);
+						var b = Math.floor(Math.random() * 255);
+						return "rgb(" + r + "," + g + "," + b + "," + 0.4 +")";
+					};
+
+					for (var i in obj2) {
+						coloR.push(dynamicColors());
+					}
+
+					xCategoryVal = obj2;
+					yCategoryVal = obj4;
+					xAxes = [];
+					yAxes =[];
+					labels = [];
+					title = [];
+					datas = [];
+					console.log(obj1,obj2,obj3,obj4)
+
+					if(yCategoryVal != "")
+					{	
+						document.getElementsByName("allColumnsname1").selectedIndex = 0;
+						document.getElementsByName("allColumnsname2").selectedIndex = 0;
+						document.getElementsByName("allColumnsname3").selectedIndex = 0;
+						document.getElementsByName("allColumnsname4").selectedIndex = 0;
+						alert("Radar Graph only supports 1 Data at a time!");
+						radarChart.destroy();
+					} 
+
+					else if(yCategoryVal == "")
+					{	
+						datas= {
+							labels: obj2,
+							datasets: [{
+								label: 'RADAR GRAPH FOR ' + var1.toUpperCase(), 
+                    		// fill: true,
+                    		labels: obj2,
+                    		backgroundColor: coloR,
+                    		borderColor: coloR,
+                    		data: obj1
+                    	}],
+                    }
+
+                    labels= function (tooltipItems, data) {
+                    	var i, label = [], l = data.datasets.length;
+                    	for (i = 0; i < l; i++) {
+                    		IndivData =  data.datasets[i].labels[tooltipItems.index];
+                    		IndivDataNum = data.datasets[i].data[tooltipItems.index];
+                    		DataPercent = (IndivDataNum * 100) / 1075;
+                    		DataPercent = DataPercent.toFixed(2);
+                    		label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
+                    	}
+                    	return label;
+                    }
+
+                    title= function(tooltipItem, data){
+                    	return "Impacts To " + var1;
+                    }
+                }
+
+                var radarChart = new Chart(ctx, {
+                	type: graphType3,
+                    // The data for our dataset
+                    data: datas,
+                    options: {
+                    	scale: {
+                    		angleLines: {
+                    			display: false
+                    		}
+                    	},
+                    	tooltips: {
+                    		callbacks: {
+                    			label: labels,
+                    			title: title
+                    		}
+                    	}
+                    }
+                });
+            }
+
+            if (graphType4 == 'doughnut'){
+            	const ctx = document.getElementById('myChart').getContext('2d');
+            	var coloR = [];
+
+            	var dynamicColors = function() {
+            		var r = Math.floor(Math.random() * 255);
+            		var g = Math.floor(Math.random() * 255);
+            		var b = Math.floor(Math.random() * 255);
+            		return "rgb(" + r + "," + g + "," + b + ")";
+            	};
+
+            	for (var i in obj2) {
+            		coloR.push(dynamicColors());
+            	}
+
+            	xCategoryVal = obj2;
+            	yCategoryVal = obj4;
+            	xAxes = [];
+            	yAxes =[];
+            	labels = [];
+            	title = [];
+            	datas = [];
+
+            	if(yCategoryVal != "")
+				{	//Data Sets
+					datas= {
+						labels: [obj2,obj4],
+						datasets: [{
+							labels: obj2,
+							label: var1,
+							data: obj1,
+							backgroundColor: coloR,
+							borderColor: coloR,
+							borderWidth: 3,
+							fill: false,
+						},
+						{
+							labels : obj4,
+							label: var2,
+							data: obj3,
+							backgroundColor: coloR,
+							borderColor: coloR,
+							borderWidth: 3,
+							fill: false,
+						}],
+					}
+
+					labels = function (tooltipItems, data) {
+						var i, label = [], l = data.datasets.length;
+						for (i = 0; i < l; i++) {
+							IndivData = data.datasets[i].data[tooltipItems.index];
+							IndivData1 = (IndivData * 100) / 1075;
+							IndivData1 = IndivData1.toFixed(2);
+							label[i] = data.datasets[i].label + ": " + data.datasets[i].labels[tooltipItems.index] + ' : ' + IndivData1 + '% ; Total Respondents = ' + IndivData;
+						}
+						return label;
+					}
+
+					title = function(tooltipItem, data){
+						return "Impacts To " + var1 +" and " + var2;
+					}
+				} 
+				else if(yCategoryVal == "")
+				{	
+					datas= {
+						labels: obj2,
+						datasets: [{
+							labels: obj2,
+							label: var1,
+							data: obj1,
+							backgroundColor: coloR,
+							borderColor: coloR,
+							fill: false,
+						}]
+					}
+
+						//Axes
+						xAxes = [{
+							ticks: {
+								autoSkip: false,
+							},
+							display: true,
+							type:'category',
+							position: 'bottom',
+							id:'x-prime',
+							labels: obj2,
+							scaleLabel: {
+								display: true,
+								labelString: var1
+							}
+						}]
+
+						yAxes= [{
+							ticks: {
+								max: 1200,
+								min: 0,
+								stepSize: 100,
+							},
+							scaleLabel: {
+								display: true,
+								labelString: 'Respondents'
+							}
+						}]
+
+						labels = function (tooltipItems, data) {
+							var i, label = [], l = data.datasets.length;
+							for (i = 0; i < l; i++) {
+								IndivData =  data.datasets[i].labels[tooltipItems.index];
+								IndivDataNum = data.datasets[i].data[tooltipItems.index];
+								DataPercent = (IndivDataNum * 100) / 1075;
+								DataPercent = DataPercent.toFixed(2);
+								label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
+							}
+							return label;
+						}
+
+						title = function(tooltipItem, data){
+							dataTitle = document.getElementById("")
+							return "Impacts To " + var1;
+						}
+					}
+
+					var barChart = new Chart(ctx, {
+						type: graphType4,
+                    // The data for our dataset
+                    data: datas,
+                    options: {
+                    	tooltips: {
+                    		callbacks: {
+                    			label: labels,
+                    			title: title
+                    		}
+                    	}
+                    }
+                });
+				}  
+
+				if (graphType5 == 'pie'){
+					const ctx = document.getElementById('myChart').getContext('2d');
+					var coloR = [];
 
 					var dynamicColors = function() {
 						var r = Math.floor(Math.random() * 255);
@@ -87,349 +792,485 @@ transform: translate(-50%, -50%);*/
 						var b = Math.floor(Math.random() * 255);
 						return "rgb(" + r + "," + g + "," + b + ")";
 					};
-					for (var i in incomeType) {
-						this.dynamicColors;
-						color.push(dynamicColors());
+
+					for (var i in obj2) {
+						coloR.push(dynamicColors());
 					}
+
+					xCategoryVal = obj2;
+					yCategoryVal = obj4;
+					xAxes = [];
+					yAxes =[];
+					labels = [];
+					title = [];
+					datas = [];
+
+					if(yCategoryVal != "")
+				{	//Data Sets
+					datas= {
+						labels: [obj2,obj4],
+						datasets: [{
+							labels: obj2,
+							label: var1,
+							data: obj1,
+							backgroundColor: coloR,
+							borderColor: coloR,
+							borderWidth: 3,
+							fill: false,
+						},
+						{
+							labels : obj4,
+							label: var2,
+							data: obj3,
+							backgroundColor: coloR,
+							borderColor: coloR,
+							borderWidth: 3,
+							fill: false,
+						}],
+					}
+
+					labels = function (tooltipItems, data) {
+						var i, label = [], l = data.datasets.length;
+						for (i = 0; i < l; i++) {
+							IndivData = data.datasets[i].data[tooltipItems.index];
+							IndivData1 = (IndivData * 100) / 1075;
+							IndivData1 = IndivData1.toFixed(2);
+							label[i] = data.datasets[i].label + ": " + data.datasets[i].labels[tooltipItems.index] + ' : ' + IndivData1 + '% ; Total Respondents = ' + IndivData;
+						}
+						return label;
+					}
+
+					title = function(tooltipItem, data){
+						return "Impacts To " + var1 +" and " + var2;
+					}
+				} 
+				else if(yCategoryVal == "")
+				{	
+					datas= {
+						labels: obj2,
+						datasets: [{
+							labels: obj2,
+							label: var1,
+							data: obj1,
+							backgroundColor: coloR,
+							borderColor: coloR,
+							fill: false,
+						}]
+					}
+					xAxes = [{
+						ticks: {
+							autoSkip: false,
+						},
+						display: true,
+						type:'category',
+						position: 'bottom',
+						id:'x-prime',
+						labels: obj2,
+						scaleLabel: {
+							display: true,
+							labelString: var1
+						}
+					}]
+
+					yAxes= [{
+						ticks: {
+							max: 1200,
+							min: 0,
+							stepSize: 100,
+						},
+						scaleLabel: {
+							display: true,
+							labelString: 'Respondents'
+						}
+					}]
+
+					labels = function (tooltipItems, data) {
+						var i, label = [], l = data.datasets.length;
+						for (i = 0; i < l; i++) {
+							IndivData =  data.datasets[i].labels[tooltipItems.index];
+							IndivDataNum = data.datasets[i].data[tooltipItems.index];
+							DataPercent = (IndivDataNum * 100) / 1075;
+							DataPercent = DataPercent.toFixed(2);
+							label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
+						}
+						return label;
+					}
+
+					title = function(tooltipItem, data){
+						dataTitle = document.getElementById("")
+						return "Impacts To " + var1;
+					}
+				}
+
+
+				var pieChart = new Chart(ctx, {
+					type: graphType5,
+                    // The data for our dataset
+                    data: datas,
+                    options: {
+                    	title: {
+                    		display: true,
+                    		text: 'PIE GRAPH FOR ' + var1.toUpperCase()
+                    	},
+                    	tooltips: {
+                    		callbacks: {
+                    			label: labels,
+                    			title:title
+                    		}
+                    	}
+                    }
+                });
+			} 
+
+			if (graphType6 == 'polarArea'){
+				const ctx = document.getElementById('myChart').getContext('2d');
+				var coloR = [];
+
+				var dynamicColors = function() {
+					var r = Math.floor(Math.random() * 255);
+					var g = Math.floor(Math.random() * 255);
+					var b = Math.floor(Math.random() * 255);
+					return "rgb(" + r + "," + g + "," + b + "," + 0.4 +")";
+				};
+
+				for (var i in obj2) {
+					coloR.push(dynamicColors());
+				}
+				xCategoryVal = obj2;
+				yCategoryVal = obj4;
+				xAxes = [];
+				yAxes =[];
+				labels = [];
+				title = [];
+				datas = [];
+				console.log(obj1,obj2,obj3,obj4)
+
+				if(yCategoryVal != "")
+				{	
+					document.getElementsByName("allColumnsname1").selectedIndex = 0;
+					document.getElementsByName("allColumnsname2").selectedIndex = 0;
+					document.getElementsByName("allColumnsname3").selectedIndex = 0;
+					document.getElementsByName("allColumnsname4").selectedIndex = 0;
+					alert("Polar Area Graph only supports 1 Data at a time!");
+					polarAreaChart.destroy();
+				} 
+
+				else if(yCategoryVal == "")
+				{	
+					datas= {
+						labels: obj2,
+						datasets: [{
+							label: 'RADAR GRAPH FOR ' + var1.toUpperCase(), 
+                    		// fill: true,
+                    		labels: obj2,
+                    		backgroundColor: coloR,
+                    		borderColor: coloR,
+                    		data: obj1
+                    	}],
+                    }
+
+                    labels= function (tooltipItems, data) {
+                    	var i, label = [], l = data.datasets.length;
+                    	for (i = 0; i < l; i++) {
+                    		IndivData =  data.datasets[i].labels[tooltipItems.index];
+                    		IndivDataNum = data.datasets[i].data[tooltipItems.index];
+                    		DataPercent = (IndivDataNum * 100) / 1075;
+                    		DataPercent = DataPercent.toFixed(2);
+                    		label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
+                    	}
+                    	return label;
+                    }
+
+                    title= function(tooltipItem, data){
+                    	return "Impacts To " + var1;
+                    }
+                }
+
+                var polarAreaChart = new Chart(ctx, {
+                	type: 'polarArea',
+                    // The data for our dataset
+                    data: datas,
+                    options: {
+                    	scale: {
+                    		angleLines: {
+                    			display: false
+                    		}
+                    	},
+                    	tooltips: {
+                    		callbacks: {
+                    			label: labels,
+                    			title: title
+                    		}
+                    	}
+                    }
+                });
+            }
+            if (graphType7 == 'bubble')
+            {
+            	const ctx = document.getElementById('myChart').getContext('2d');
+            	var coloR = [];
+            	var dynamicColors = function() {
+            		var r = Math.floor(Math.random() * 255);
+            		var g = Math.floor(Math.random() * 255);
+            		var b = Math.floor(Math.random() * 255);
+            		return "rgb(" + r + "," + g + "," + b + "," + 0.5 + ")";
+            	};
+
+            	for (var i in rData) {
+            		coloR.push(dynamicColors());
+            	}
+
+            	xCategoryVal = obj2;
+            	yCategoryVal = obj4;
+            	var data = [];
+
+            	if(yCategoryVal == "")
+            	{	
+            		document.getElementsByName("allColumnsname1").selectedIndex = 0;
+            		document.getElementsByName("allColumnsname2").selectedIndex = 0;
+            		document.getElementsByName("allColumnsname3").selectedIndex = 0;
+            		document.getElementsByName("allColumnsname4").selectedIndex = 0;
+            		alert("Bubble Graph only supports 2 Data!");
+            		radarChart.destroy();
+            	} else {
+            		data = xData.map((x, i) => {
+            			return {
+            				x: x,
+            				y: yData[i],
+            				r: (((rData[i] * 100) / 1075).toFixed(2)),
+            				label: XYData[i]
+            			};
+            		});
+            	}
+
+            	var myChart = new Chart(ctx, {
+            		type: graphType7,
+            		data: {
+            			datasets: [{
+            				label: 'Relationship Between ' + var1 + ' and ' + var2,
+            				data: data,
+            				backgroundColor: coloR,
+            				borderColor: coloR,
+            			}]
+            		}, 
+            		options:{
+            			title: {
+            				display: true,
+            				text: 'BUBBLE GRAPH FOR ' + var1.toUpperCase() + ' AND ' + var2.toUpperCase()
+            			},
+            			responsive: true,
+            			scales: {
+            				xAxes: [{
+            					scaleLabel: {
+            						display: true,
+            						labelString: var1
+            					},
+            					ticks: {
+            						autoSkip: false,
+            					},
+            					offset: 150,
+            					gridLines: {
+            						display:false,
+            					},
+            					display: true,
+            					type:'category',
+            					labels: xCategoryVal,
+            				}], 
+            				yAxes: [{
+            					scaleLabel: {
+            						display: true,
+            						labelString: var2
+            					},
+            					ticks: {
+            						autoSkip: false,
+            					},
+            					gridLines: {
+            						display:false,
+            					},
+            					offset: 150,
+            					display: true,
+            					type:'category',
+            					labels: yCategoryVal,
+            				}],
+            			},
+            			tooltips: {
+            				callbacks: {
+            					label: function (tooltipItems, data) {
+            						const labels = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].label;
+            						const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].r;
+            						return label = labels + ": " + dataVal  + "%"+ " Respondent(s).";
+            					},
+            					title: function(tooltipItem, data){
+            						return "Impacts To " + var1 +" and " + var2;
+            					}
+            				}
+            			}
+            		}
+            	});
+            }
+            if (graphType8 == 'scatter')
+            {
+            	const ctx = document.getElementById('myChart').getContext('2d');
+            	var coloR = [];
+            	var dynamicColors = function() {
+            		var r = Math.floor(Math.random() * 255);
+            		var g = Math.floor(Math.random() * 255);
+            		var b = Math.floor(Math.random() * 255);
+            		return "rgb(" + r + "," + g + "," + b + "," + 0.1 + ")";
+            	};
+
+            	for (var i in rData) {
+            		coloR.push(dynamicColors());
+            	}
+
+            	xCategoryVal = obj2;
+            	yCategoryVal = obj4;
+            	var data = [];
+            	var xAxes = [];
+            	var yAxes = [];
+            	var title = [];
+            	var label = [];
+            	var labels = [];
+
+
+            	if(yCategoryVal == "")
+            	{	
+            		data = xData.map((x, i) => {
+            			return {
+            				x: x,
+            				y: yData[i],
+            				label: XYData[i]
+            			};
+            		});
+
+
+            		console.log(data);
+						//Axes
+						xAxes = [{
+							ticks: {
+								autoSkip: false,
+							},
+							display: true,
+							type:'category',
+							// position: 'bottom',
+							labels: xCategoryVal,
+							scaleLabel: {
+								display: true,
+								labelString: var1
+							}
+						}]
+
+						yAxes= [{
+							ticks:{
+								// max: 1200,
+								// min: 0,
+								// stepSize: 100
+							},
+							scaleLabel: {
+								display: true,
+								labelString: 'Respondents'
+							}
+						}]
+
+						labels = 'Relationship Between ' + var1;
+
+						label= function (tooltipItems, data) {
+							const labels = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].label;
+							const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].y;
+							var percentRes = ((dataVal * 100) / 1075);
+							percentRes = percentRes.toFixed(2);
+							return label = labels + ": " + dataVal + " Respondent(s) : "  + percentRes + "%";
+						}
+						title= function(tooltipItem, data){
+							return "Impacts To " + var1;
+						}
+
+					} else {
+						data = xData.map((x, i) => {
+							return {
+								x: x,
+								y: yData[i],
+								r: rData[i],
+								label: XYData[i]
+							};
+						});
+
+						xAxes= [{
+							scaleLabel: {
+								display: true,
+								labelString: var1
+							},
+							ticks: {
+								autoSkip: false,
+							},
+							offset: 150,
+							gridLines: {
+								display:false,
+							},
+							display: true,
+							type:'category',
+							labels: xCategoryVal,
+						}]
+						yAxes= [{
+							scaleLabel: {
+								display: true,
+								labelString: var2
+							},
+							ticks: {
+								autoSkip: false,
+							},
+							gridLines: {
+								display:false,
+							},
+							offset: 150,
+							display: true,
+							type:'category',
+							labels: yCategoryVal,
+						}]
+						labels = 'Relationship Between ' + var1 + ' and ' + var2;
+
+						label= function (tooltipItems, data) {
+							const labels = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].label;
+							const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].r;
+							var percentRes = ((dataVal * 100) / 1075);
+							percentRes = percentRes.toFixed(2);
+							return label = labels + ": " + dataVal + " Respondent(s) : "  + percentRes + "%";
+						}
+						title= function(tooltipItem, data){
+							return "Impacts To " + var1 +" and " + var2;
+						}
+
+					}
+
 					var myChart = new Chart(ctx, {
-						type: 'line',
+						type: graphType8,
 						data: {
 							datasets: [{
-								labels: incomeType,
-								label: 'Income',
-								data: incomeData,
-								backgroundColor: 'rgb(0,35,102)',
-								borderColor: 'rgb(0,35,102)',
-								borderWidth: 3,
+								label: labels,
+								data: data,
+								backgroundColor: coloR,
+								borderColor: coloR,
 								fill: false,
-								xAxisID: "x-prime",
-							},
-							{
-								labels : costType,
-								label: 'Expenses',
-								data: costData,
-								backgroundColor: 'rgb(227,38,54)',
-								borderColor: 'rgb(227,38,54)',
-								borderWidth: 3,
-								fill: false,
-								xAxisID: "x-sec",
-							}, 
-							{
-								labels: psychologicalType,
-								label: 'Psychological',
-								data: PsychologicalData,
-								backgroundColor: 'rgb(0,35,102)',
-								borderColor: 'rgb(0,35,102)',
-								borderWidth: 3,
-								fill: false,
-								yAxisID: "y-prime",
-							},
-							{
-								labels: abusedType,
-								label: 'Abused',
-								data: AbusedData,
-								backgroundColor: 'rgb(0,35,102)',
-								borderColor: 'rgb(0,35,102)',
-								borderWidth: 3,
-								fill: false,
-								yAxisID: "y-sec",
-							}],
+							}]
 						}, 
 						options:{
-							tooltips: {
-								enabled: true,
-								mode: 'single',
-								backgroundColor: 'rgba(0,0,0,0.9)',
-								titleFontSize: 14,
-								titleFontStyle: 'bold',
-								titleFontColor: "#FFF",
-								bodyFontSize: 12,
-								bodyFontStyle: 'normal',
-								bodyFontColor: "#FFF",
-								footerFontSize: 12,
-								footerFontStyle: 'normal',
-								footerFontColor: "#FFF",
-								cornerRadius: 5,
-								callbacks: {
-									label: function (tooltipItems, data) {
-										var i, label = [], l = data.datasets.length;
-										for (i = 0; i < l; i++) {
-											IndivData = data.datasets[i].data[tooltipItems.index];
-											IndivData1 = (IndivData * 100) / 1075;
-											IndivData1 = IndivData1.toFixed(2);
-											label[i] = data.datasets[i].label + ": " + data.datasets[i].labels[tooltipItems.index] + ' : ' + IndivData1 + '% ; Total Respondents = ' + IndivData;
-
-										}
-										return label;
-									},
-									title: function(tooltipItem, data){
-										return "Impacts To Financial:";
-									}
-								},
+							title: {
+								display: true,
+								text: 'SCATTER GRAPH FOR ' + var1.toUpperCase() + ' AND ' + var2.toUpperCase()
 							},
+							responsive: true,
 							scales: {
-								xAxes: [{
-									ticks: {
-										autoSkip: false,
-									},
-									display: true,
-									type:'category',
-									position: 'bottom',
-									id:'x-prime',
-									labels: incomeType,
-								}, {
-									ticks: {
-										autoSkip: false,
-									},
-									type:'category',
-									position: 'top',
-									id:'x-sec',
-									labels: costType,
-								}],
-								yAxes: [{
-									ticks: {
-										autoSkip: false,
-									},
-									display: true,
-									type:'category',
-									position: 'left',
-									id:'y-prime',
-									labels: psychologicalType,
-								}, {
-									ticks: {
-										autoSkip: false,
-									},
-									type:'category',
-									position: 'right',
-									id:'y-sec',
-									labels: abusedType,
-								}],
+								xAxes: xAxes, 
+								yAxes: yAxes,
 							},
-						},
-					});
-				</script>
-
-				<!-- Psychological Problem -->
-				<script>
-					const psychologicalType = <?php echo json_encode($PsychologicalType, true) ?>;
-					const abusedType = <?php echo json_encode($AbusedType, true) ?>;
-
-					const psychologicalData = <?php echo json_encode($CountPsychological, true) ?>;
-					const abusedData = <?php echo json_encode($CountAbused, true) ?>;
-					const ctx2 = document.getElementById('myChart2').getContext('2d');
-
-					var dynamicColors = function() {
-						var r = Math.floor(Math.random() * 255);
-						var g = Math.floor(Math.random() * 255);
-						var b = Math.floor(Math.random() * 255);
-						return "rgb(" + r + "," + g + "," + b + ")";
-					};
-					for (var i in incomeType) {
-						this.dynamicColors;
-						color.push(dynamicColors());
-					}
-					var myChart2 = new Chart(ctx2, {
-						type: 'line',
-						data: {
-							datasets: [{
-								labels: psychologicalType,
-								label: 'Psychological Factors',
-								data: psychologicalData,
-								backgroundColor: 'rgb(0,35,102)',
-								borderColor: 'rgb(0,35,102)',
-								borderWidth: 3,
-								fill: false,
-								xAxisID: "x1",
-							},
-							{
-								labels : abusedType,
-								label: 'Abused Factors',
-								data: abusedData,
-								backgroundColor: 'rgb(227,38,54)',
-								borderColor: 'rgb(227,38,54)',
-								borderWidth: 3,
-								fill: false,
-								xAxisID: "x2",
-							}],
-						}, 
-						options:{
 							tooltips: {
-								enabled: true,
-								mode: 'single',
-								backgroundColor: 'rgba(0,0,0,0.9)',
-								titleFontSize: 14,
-								titleFontStyle: 'bold',
-								titleFontColor: "#FFF",
-								bodyFontSize: 12,
-								bodyFontStyle: 'normal',
-								bodyFontColor: "#FFF",
-								footerFontSize: 12,
-								footerFontStyle: 'normal',
-								footerFontColor: "#FFF",
-								cornerRadius: 5,
 								callbacks: {
-									label: function (tooltipItems, data) {
-										var i, label = [], l = data.datasets.length;
-										for (i = 0; i < l; i++) {
-											IndivData = data.datasets[i].data[tooltipItems.index];
-											IndivData1 = (IndivData * 100) / 1075;
-											IndivData1 = IndivData1.toFixed(2);
-											label[i] = data.datasets[i].label + ": " + data.datasets[i].labels[tooltipItems.index] + ' : ' + IndivData1 + '% ; Total Respondents = ' + IndivData;
-
-										}
-										return label;
-									},
-									title: function(tooltipItem, data){
-										return "Impacts To Psychological:";
-									},
-								},
-							},
-							scales: {
-								yAxes: [{
-									ticks: {
-										max: 1100,
-										min: 0,
-										stepSize: 100
-									}
-								}],
-								xAxes: [{
-									ticks: {
-										autoSkip: false,
-									},
-									display: true,
-									type:'category',
-									position: 'bottom',
-									id:'x1',
-									labels: psychologicalType,
-								}, {
-									type:'category',
-									position: 'top',
-									id:'x2',
-									labels: abusedType,
-								}],
-							},
-						},
+									label: label,
+									title: title
+								}
+							}
+						}
 					});
-				</script>
-
-
-				<!-- Psychological Problem -->
-				<script>
-					const psychologicalType = <?php echo json_encode($PsychologicalType, true) ?>;
-					const abusedType = <?php echo json_encode($AbusedType, true) ?>;
-
-					const psychologicalData = <?php echo json_encode($CountPsychological, true) ?>;
-					const abusedData = <?php echo json_encode($CountAbused, true) ?>;
-					const ctx2 = document.getElementById('myChart2').getContext('2d');
-
-					var dynamicColors = function() {
-						var r = Math.floor(Math.random() * 255);
-						var g = Math.floor(Math.random() * 255);
-						var b = Math.floor(Math.random() * 255);
-						return "rgb(" + r + "," + g + "," + b + ")";
-					};
-					for (var i in incomeType) {
-						this.dynamicColors;
-						color.push(dynamicColors());
-					}
-					var myChart2 = new Chart(ctx2, {
-						type: 'line',
-						data: {
-							datasets: [{
-								labels: psychologicalType,
-								label: 'Psychological Factors',
-								data: psychologicalData,
-								backgroundColor: 'rgb(0,35,102)',
-								borderColor: 'rgb(0,35,102)',
-								borderWidth: 3,
-								fill: false,
-								xAxisID: "x1",
-							},
-							{
-								labels : abusedType,
-								label: 'Abused Factors',
-								data: abusedData,
-								backgroundColor: 'rgb(227,38,54)',
-								borderColor: 'rgb(227,38,54)',
-								borderWidth: 3,
-								fill: false,
-								xAxisID: "x2",
-							}],
-						}, 
-						options:{
-							tooltips: {
-								enabled: true,
-								mode: 'single',
-								backgroundColor: 'rgba(0,0,0,0.9)',
-								titleFontSize: 14,
-								titleFontStyle: 'bold',
-								titleFontColor: "#FFF",
-								bodyFontSize: 12,
-								bodyFontStyle: 'normal',
-								bodyFontColor: "#FFF",
-								footerFontSize: 12,
-								footerFontStyle: 'normal',
-								footerFontColor: "#FFF",
-								cornerRadius: 5,
-								callbacks: {
-									label: function (tooltipItems, data) {
-										var i, label = [], l = data.datasets.length;
-										for (i = 0; i < l; i++) {
-											IndivData = data.datasets[i].data[tooltipItems.index];
-											IndivData1 = (IndivData * 100) / 1075;
-											IndivData1 = IndivData1.toFixed(2);
-											label[i] = data.datasets[i].label + ": " + data.datasets[i].labels[tooltipItems.index] + ' : ' + IndivData1 + '% ; Total Respondents = ' + IndivData;
-
-										}
-										return label;
-									},
-									title: function(tooltipItem, data){
-										return "Impacts To Psychological:";
-									},
-								},
-							},
-							scales: {
-								yAxes: [{
-									ticks: {
-										max: 1100,
-										min: 0,
-										stepSize: 100
-									}
-								}],
-								xAxes: [{
-									ticks: {
-										autoSkip: false,
-									},
-									display: true,
-									type:'category',
-									position: 'bottom',
-									id:'x1',
-									labels: psychologicalType,
-								}, {
-									type:'category',
-									position: 'top',
-									id:'x2',
-									labels: abusedType,
-								}],
-							},
-						},
-					});
-				</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				@endsection
+				}
+			</script>
+			@endsection
