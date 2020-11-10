@@ -6,7 +6,7 @@
     <!-- Grid row -->
 
   <!-- Copyright -->
-  <center><div>© 2020 Copyright: INSTITUTE OF IR 4.0
+  <center><div>© 2020 Copyright: INSTITUTE IR 4.0
   </div></center>
   <!-- Copyright -->
 

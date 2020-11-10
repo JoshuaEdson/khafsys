@@ -19,6 +19,7 @@
 <style>
   html {   
    /*height: 100%;*/
+   width: *;
    position: absolute;
  }
 
@@ -26,6 +27,7 @@ body{
   position: static;
   min-height: 100vh;
   padding-bottom: 2.5rem;  
+  width: 100%;
 }
 
  footer {
