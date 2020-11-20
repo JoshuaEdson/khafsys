@@ -69,16 +69,16 @@
 						<span class="form-check">
 							<div class="checkboxContainer row" id="checkboxId">
 								<div class="col-xs-12 col-sm-12 col-md-6">
-									<input type="checkbox" name="LineGraph" id="checkboxID" value="line" onclick=" ValidateGraphSelected();">Line Graph<br>
-									<input type="checkbox" name="BarGraph" id="checkboxID" value="bar" onclick=" ValidateGraphSelected();">Bar Graph<br>
-									<input type="checkbox" name="RadarGraph" id="checkboxID" value="radar" onclick=" ValidateGraphSelected();">Radar Graph<br>
-									<input type="checkbox" name="DoughnutGraph" id="checkboxID" value="doughnut" onclick=" ValidateGraphSelected();">Doughnut Graph
+									<input type="checkbox" name="LineGraph" id="checkboxID" value="line" <?php if(isset($_POST['LineGraph'])) echo "checked='checked'"; ?> onclick=" ValidateGraphSelected();">Line Graph<br>
+									<input type="checkbox" name="BarGraph" id="checkboxID" value="bar" <?php if(isset($_POST['BarGraph'])) echo "checked='checked'"; ?> onclick=" ValidateGraphSelected();">Bar Graph<br>
+									<input type="checkbox" name="RadarGraph" id="checkboxID" value="radar" <?php if(isset($_POST['RadarGraph'])) echo "checked='checked'"; ?> onclick=" ValidateGraphSelected();">Radar Graph<br>
+									<input type="checkbox" name="DoughnutGraph" id="checkboxID" value="doughnut" <?php if(isset($_POST['DoughnutGraph'])) echo "checked='checked'"; ?> onclick=" ValidateGraphSelected();">Doughnut Graph
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-6">
-									<input type="checkbox" name="PieGraph" id="checkboxID" value="pie" onclick=" ValidateGraphSelected();">Pie Graph<br>
-									<input type="checkbox" name="PolarAreaGraph" id="checkboxID" value="polarArea" onclick=" ValidateGraphSelected();">Polar Area Graph<br>
-									<input type="checkbox" name="BubbleGraph" id="checkboxID" value="bubble" onclick=" ValidateGraphSelected();">Bubble Graph<br>
-									<input type="checkbox" name="ScatterGraph" id="checkboxID" value="scatter" onclick=" ValidateGraphSelected();">Scatter Graph
+									<input type="checkbox" name="PieGraph" id="checkboxID" value="pie" <?php if(isset($_POST['PieGraph'])) echo "checked='checked'"; ?> onclick=" ValidateGraphSelected();">Pie Graph<br>
+									<input type="checkbox" name="PolarAreaGraph" id="checkboxID" value="polarArea" <?php if(isset($_POST['PolarAreaGraph'])) echo "checked='checked'"; ?> onclick=" ValidateGraphSelected();">Polar Area Graph<br>
+									<input type="checkbox" name="BubbleGraph" id="checkboxID" value="bubble" <?php if(isset($_POST['BubbleGraph'])) echo "checked='checked'"; ?> onclick=" ValidateGraphSelected();">Bubble Graph<br>
+									<input type="checkbox" name="ScatterGraph" id="checkboxID" value="scatter" <?php if(isset($_POST['ScatterGraph'])) echo "checked='checked'"; ?> onclick=" ValidateGraphSelected();">Scatter Graph
 								</div>
 								<script>
 									function ValidateGraphSelected()  
@@ -107,21 +107,24 @@
 								<select class="combobox" name="allColumnsname1" id="datasets">
 									<option value="" selected>Select</option>
 									@foreach($allColumnsname as $acn1)
-									<option value="{{ $acn1 }} "> {{ $acn1 }} </option>
+									<option value="{{ $acn1 }}" {{ ( $acn1 == $var1) ? 'selected' : '' }}> 
+									{{ $acn1 }} </option>
 									@endforeach
 								</select><br>
 								<label for="datasets2">Data 2:</label>
 								<select class="combobox" name="allColumnsname2" id="datasets">
 									<option value="" selected>Select</option>
 									@foreach($allColumnsname as $acn2)
-									<option value="{{ $acn2 }} "> {{ $acn2 }} </option>
+									<option value="{{ $acn2 }}" {{ ( $acn2 == $var2) ? 'selected' : '' }}> 
+									{{ $acn2 }} </option>
 									@endforeach
 								</select><br>
 								<label for="datasets3">Data 3:</label>
 								<select class="combobox" name="allColumnsname3" id="datasets">
 									<option value="" selected>Select</option>
 									@foreach($allColumnsname as $acn3)
-									<option value="{{ $acn3 }} "> {{ $acn3 }} </option>
+									<option value="{{ $acn3 }}" {{ ( $acn3 == $var3) ? 'selected' : '' }}> 
+									{{ $acn3 }} </option>
 									@endforeach
 								</select><br>
 							</center>
@@ -152,61 +155,61 @@
 			<div class="col-sm-12 m-1" style="padding-top: 3%; padding-bottom: 10%; float: left;">
 				<h3>WELCOME TO GRAPH ANALYSIS</h3>
 				<h6>THIS TOOLS CONTAINS SOME RESTRICTION ON DATA VISUALIZATION. BELOW ARE THE GUIDELINES:</h5>
-				<ol>
-					<li>THIS TOOLS ONLY SUPPORTS ONE TYPE OF GRAPH TO VISUALIZE DATA.</li>
-					<li>IN THIS GRAPH ANALYSIS TOOLS, KINDLY CONSIDER THE FORMAT BELOW:</li>
-				</ol>
-				<div class="container col-sm-2 p-1 my-1" style="float: left; margin: 1%;">					
-					<ul>
-						<li>GRAPHS THAT SUPPORTS 1 DATA:</li>
-						<ol>
-							<li>LINE GRAPH</li>
-							<li>BAR GRAPH</li>
-							<li>RADAR GRAPH</li>
-							<li>DOUGHNUT GRAPH</li>
-							<li>PIE GRAPH</li>
-							<li>POLAR AREA GRAPH</li>
-							<li>SCATTER GRAPH</li>
-						</ol>
-					</ul>
-				</div>
-				<div class="container col-sm-2 p-1 my-1" style="float: left;margin: 1%;">				
-					<ul>
-						<li>GRAPHS THAT SUPPORTS 2 DATA:</li>
-						<ol>
-							<li>LINE GRAPH</li>
-							<li>BAR GRAPH</li>
-							<li>DOUGHNUT GRAPH</li>
-							<li>BUBBLE GRAPH</li>
-							<li>SCATTER GRAPH</li>
-						</ol>
-					</ul>
-				</div>
-				<div class="container col-sm-2 p-1 my-1" style="float: left;margin: 1%;">				
-					<ul>
-						<li>GRAPHS THAT SUPPORTS 3 DATA:</li>
-						<ol>
-							<li>LINE GRAPH</li>
-							<li>BAR GRAPH</li>
-							<li>SCATTER GRAPH</li>
-						</ol>
-					</ul>
-				</div>
-				<div class="container col-sm-4 my-1" style="float: left;margin: 1%;">		
-					<ul>
-						<li>DATA LABEL AXIS FORMATTING SHOULD BE AS FOLLOW TO MATCH THE AXIS ON THE GRAPHS:</li>
-						<ol>
-							<li>DATA 1 IS CONSIDERED AS X-AXIS</li>
-							<li>DATA 2 IS CONSIDERED AS Y-AXIS (LEFT)</li>
-							<li>DATA 3 IS CONSIDERED AS Y-AXIS (RIGHT)</li>
-						</ol>
-					</ul>
+					<ol>
+						<li>THIS TOOLS ONLY SUPPORTS ONE TYPE OF GRAPH TO VISUALIZE DATA.</li>
+						<li>IN THIS GRAPH ANALYSIS TOOLS, KINDLY CONSIDER THE FORMAT BELOW:</li>
+					</ol>
+					<div class="container col-sm-2 p-1 my-1" style="float: left; margin: 1%;">					
+						<ul>
+							<li>GRAPHS THAT SUPPORTS 1 DATA:</li>
+							<ol>
+								<li>LINE GRAPH</li>
+								<li>BAR GRAPH</li>
+								<li>RADAR GRAPH</li>
+								<li>DOUGHNUT GRAPH</li>
+								<li>PIE GRAPH</li>
+								<li>POLAR AREA GRAPH</li>
+								<li>SCATTER GRAPH</li>
+							</ol>
+						</ul>
+					</div>
+					<div class="container col-sm-2 p-1 my-1" style="float: left;margin: 1%;">				
+						<ul>
+							<li>GRAPHS THAT SUPPORTS 2 DATA:</li>
+							<ol>
+								<li>LINE GRAPH</li>
+								<li>BAR GRAPH</li>
+								<li>DOUGHNUT GRAPH</li>
+								<li>BUBBLE GRAPH</li>
+								<li>SCATTER GRAPH</li>
+							</ol>
+						</ul>
+					</div>
+					<div class="container col-sm-2 p-1 my-1" style="float: left;margin: 1%;">				
+						<ul>
+							<li>GRAPHS THAT SUPPORTS 3 DATA:</li>
+							<ol>
+								<li>LINE GRAPH</li>
+								<li>BAR GRAPH</li>
+								<li>SCATTER GRAPH</li>
+							</ol>
+						</ul>
+					</div>
+					<div class="container col-sm-4 my-1" style="float: left;margin: 1%;">		
+						<ul>
+							<li>DATA LABEL AXIS FORMATTING SHOULD BE AS FOLLOW TO MATCH THE AXIS ON THE GRAPHS:</li>
+							<ol>
+								<li>DATA 1 IS CONSIDERED AS X-AXIS</li>
+								<li>DATA 2 IS CONSIDERED AS Y-AXIS (LEFT)</li>
+								<li>DATA 3 IS CONSIDERED AS Y-AXIS (RIGHT)</li>
+							</ol>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<script>
+	<script>
 	//Function to Retrieve Data 
 
 	function validateMyForm() {
@@ -700,16 +703,16 @@
 					}
 				} 
 				else if(yCategoryVal != "" && y2CategoryVal !="")  
-					{		
-						datas= {
-							datasets: [{
-								labels: obj2,
-								label: var1,
-								data: obj1,
-								backgroundColor: 'rgb(0,35,102)',
-								borderColor: 'rgb(0,35,102)',
-								borderWidth: 3,
-								fill: false,
+				{		
+					datas= {
+						datasets: [{
+							labels: obj2,
+							label: var1,
+							data: obj1,
+							backgroundColor: 'rgb(0,35,102)',
+							borderColor: 'rgb(0,35,102)',
+							borderWidth: 3,
+							fill: false,
 						},
 						{
 							labels: obj4,
@@ -769,8 +772,8 @@
 					}
 				} 
 
-					var barChart = new Chart(ctx, {
-						type: graphType2,
+				var barChart = new Chart(ctx, {
+					type: graphType2,
                     // The data for our dataset
                     data: datas,
                     options: {

@@ -17,7 +17,6 @@
 	}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -26,7 +25,7 @@
 <style>
 	form{
 		/*margin: 0.5%;*/
-		padding-bottom: 10%;
+		padding-bottom: 5%;
 	}
 	h1	{
 		padding-top: 2%;
@@ -71,60 +70,83 @@
 
 
 <h1>UPLOAD DATA</h1>
-
-<div class="row">
-	<div class="container-fluid bg-2 text-center" id="who" style="text-align: center;">
-		<input type="file" id="fileInput" name="file" style="width:317px" />
-		<input class="btn" id="ajaxUploadButton" type="submit" value="Upload" />
-		<!-- <script type="text/javascript" src="js/bootstrap-filestyle.min.js"> </script> -->
-		<!-- <p><input type='file' onchange="readURL(this);" style="display: inline"></p>  -->
-		<!--class="img-responsive" -->
-	</div>
+<div id="response" class="<?php if(!empty($type)) { echo $type . " display-block"; } ?>">
+	<?php if(!empty($message)) { echo $message; } ?>
 </div>
-<!-- <script>
-	$(document).ready(function () {
-		$.noConflict();
-		$('#table').DataTable();
-	});</script> -->
-	<!-- <div class="container"> -->
-		<form class="text-left p-3 m-3 border border-light">
-			<script>
-				allColumnsname = <?php echo json_encode($allColumnsname ?? '', true) ?>;
-				data = <?php echo json_encode($data ?? '' , true) ?>;
+<div class="container-fluid bg-2 text-center border border-light" id="who" style="text-align: left; width: 25%;" >
+	<form id="uploadData" name="uploadData" action="" method="post" enctype="multipart/form-data">
+		<div class="input-row">
+			<input type="file" name="file" id="file" accept=".csv"><br>
+			Dataset Name:  <input type="text" name="datasetName"><br>
+			<input class="btn" id="submit" type="submit" value="UPLOAD" />
+			<input class="btn" type="reset" onclick="reset()" value="Reset"> 
+			<br/>
+			<script> 
+				function reset() { 
+					document.getElementById("uploadData").reset(); 
+				} 
+			</script> 
+			<?php
+			$fileName = echo $_GET["file"]; 
+			$tablename = echo $_GET["datasetName"]; 
 
-			</script>
-			<p class="h4 mb-4 ">DATA</p>
-			<div style="padding-bottom: 20px;">
-					<label for="dbUsed">Current Datasets:</label>
-					<select class="combobox" name="allColumnsname1" id="dbUsed">
-						@foreach($allColumnsname as $acn1)
-						<option value="{{ $acn1 }} "> {{ $acn1 }} </option>
-						@endforeach
-					</select><br>
-			</div>
-			<table id="table" class="table table-striped table-bordered" width="100%">
-				<thead width="100%">
-					<tr>
-						{!! $data->links() !!}
-						@foreach($allColumnsname ?? '' as $acn)
-						<th class="th-sm" value="{{ $acn }} "> {{ $acn }} </th>
-						@endforeach
-					</tr>
-				</thead>
-				<tbody>
-					@foreach($data as $data)
-					<tr>
-						@foreach($allColumnsname ?? '' as $acn)
-						<td>{{ $data -> $acn }}</td>
-						@endforeach
-					</tr>
-					@endforeach
-				</tbody>
-				<tfoot>
-				</tfoot>
-			</table>
+			$query = <<<eof
+			LOAD DATA INFILE $fileName
+			INTO TABLE $tableName
+			FIELDS TERMINATED BY '|' OPTIONALLY ENCLOSED BY '"'
+			LINES TERMINATED BY '\n'
+			(field1,field2,field3,etc)
+			eof;
+
+			$db->query($query);
+			?>
+		</div>
+	</form>
+</div>
+
+<div class="text-left p-3 m-1 border border-light">
+	<!-- {{ csrf_token() }} -->
+	<script>
+		allColumnsname = <?php echo json_encode($allColumnsname ?? '', true) ?>;
+		data = <?php echo json_encode($data ?? '' , true) ?>;
+		tables = <?php echo json_encode($tables ?? '' , true) ?>;
+		tablename = <?php echo json_encode($tablename ?? '' , true) ?>;
+		console.log(tables);
+	</script>
+	<p class="h4 mb-4 ">DATA</p>
+	<!-- <div style="padding-bottom: 1px;"> -->
+		<form action="{{ route('analysis.changeDatabase')}}" method="post" style="height: 5px;"> 
+			@csrf
+			<label for="tableUsed">Datasets:</label>
+			<select class="combobox" name="tableList" id="tableUsed" style="width:250px; height: 25px;">
+				<option value="No Datasets Selected" selected>Select</option>
+				@foreach($tables as $table)
+				<option value="{{ $table }}" {{ ( $table == $tablename) ? 'selected' : '' }}> 
+				{{ $table }} </option>
+				@endforeach
+			</select>
+			<input class="btn" id="submitbtn" type="submit" name="submit" value="Go">
 		</form>
-		<!-- </div> -->
-		<!-- Default form register -->
+		<table id="table" class="table table-striped table-bordered" width="100%">
 
-		@endsection
+			{!! $data->links() !!}
+			<thead name="allColumnsname" id="allColumnsname" width="100%">
+				<tr>
+					@foreach($allColumnsname ?? '' as $acn)
+					<th class="th-sm" value="{{ $acn }} "> {{ $acn }} </th>
+					@endforeach
+				</tr>
+			</thead>
+			<tbody name="data" id="data">
+				@foreach($data as $data)
+				<tr>
+					@foreach($allColumnsname ?? '' as $acn)
+					<td>{{ $data -> $acn }}</td>
+					@endforeach
+				</tr>
+				@endforeach
+			</tbody>
+		</table>
+	</div>
+
+	@endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use App\Questionnaire;
+use DB;
 
 class DataController extends Controller
 {
@@ -90,9 +91,32 @@ class DataController extends Controller
 
 	public function analysis()
 	{
-		$data = Questionnaire::paginate(10);
-		$allColumnsname = Schema::getColumnListing('masterdata');
-    	return view ( 'analysis', compact('allColumnsname', 'data') );//->withData ($data);
+		$table = new Questionnaire;
+		$tablename = $table->getTable();
+		// return $defaultTable;
+		$tables = DB::select('SHOW TABLES');
+		$tables = array_map('current',$tables); //display all database in array. 
+		$data = DB::table($tablename)->paginate(15);
+
+		$allColumnsname = Schema::getColumnListing($tablename);
+
+    	return view ( 'analysis', compact('allColumnsname', 'data', 'tablename', 'tables') );//->withData ($data);
+    }
+
+    public function changeDatabase(Request $request)
+    {
+    	$tablename = $request->input("tableList");
+    	// return $tablename;
+    	$tables = DB::select('SHOW TABLES');
+		$tables = array_map('current',$tables); //display
+		    	// return $tables;
+
+    	$allColumnsname = Schema::getColumnListing($tablename);
+    	$data = DB::table($tablename)->paginate(15);
+    	 
+		// return $data;
+    	return view('analysis', compact('allColumnsname', 'data', 'tables', 'tablename'));
+
     }
 
     public function analysis_tools()
@@ -100,7 +124,11 @@ class DataController extends Controller
 		// //get all column name
     	$allColumnsname = Schema::getColumnListing('masterdata');
 
-    	return view('analysis_tools', compact('allColumnsname'));
+    	$var1 = "";
+    	$var2 = "";
+    	$var3 = "";
+
+    	return view('analysis_tools', compact('allColumnsname', 'var1', 'var2', 'var3'));
     }
 
     public function postData(Request $request)

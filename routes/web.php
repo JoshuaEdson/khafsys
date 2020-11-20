@@ -17,6 +17,7 @@ Route::get('/', 'DataController@index')->name('admin.dashboard');
 Route::get('/analysis', 'DataController@analysis')->name('analysis');
 Route::get('/analysis_tools', 'DataController@analysis_tools')->name('analysis.tools');
 Route::post('/analysis_tools', 'DataController@postData')->name('analysis.postData');
+Route::post('/analysis', 'DataController@changeDatabase')->name('analysis.changeDatabase');
 
 //datatables
 // Route::get ( '/analysis', function () {

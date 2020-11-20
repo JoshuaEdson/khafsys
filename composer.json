@@ -12,6 +12,7 @@
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
+        "rap2hpoutre/fast-excel": "^2.2",
         "yajra/laravel-datatables": "1.5",
         "yajra/laravel-datatables-oracle": "^9.14"
     },
