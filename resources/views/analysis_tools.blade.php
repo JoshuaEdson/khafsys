@@ -57,14 +57,25 @@
 <div>
 	<h1><strong>GRAPH ANALYSIS</strong></h1>
 </div>
-<div class="col-sm-12" style="margin-bottom: 10%; height:*;">
-	<div class="row" style="padding: 10px;">
-		<div class="col-sm-12">
-			<div class="container col-sm-8 p-1 my-1 border" style="float: left; height:100%;">
-				<canvas id="myChart" style="width:*  height:*"></canvas></div>
-				<div class="container col-sm-4" style="float: left;">
-					<form action="{{ route('analysis.postData')}}" method="post" onsubmit=" return validateMyForm()">
-						@csrf
+<form action="{{ route('analysis.postData', $tablename)}}" method="post" >
+	@csrf
+	<div  style=" padding-left: 2%;">
+		<label for="tableUsed">Datasets:</label>
+		<select class="combobox col-sm-2" name="tableList" id="tableUsed" style="width:250px; height: 35px; ">
+			<option value="No Datasets Selected" selected>Select</option>
+			@foreach($tables as $table)
+			<option value="{{ $table }}" {{ ( $table == $tablename) ? 'selected' : '' }}> 
+			{{ $table }} </option>
+			@endforeach
+		</select>
+		<input class="btn" name="dataTable" id="submit" type="submit" value="Go">
+	</div>
+	<div class="col-sm-12" style="margin-bottom: 10%; height:*;">
+		<div class="row" style="padding: 10px;">
+			<div class="col-sm-12">
+				<div class="container col-sm-8 p-1 my-1 border" style="float: left; height:100%;">
+					<canvas id="myChart" style="width:*  height:*"></canvas></div>
+					<div class="container col-sm-4" style="float: left;">
 						<label>Graph Types:</label><br>
 						<span class="form-check">
 							<div class="checkboxContainer row" id="checkboxId">
@@ -131,16 +142,32 @@
 							<center>
 								<div style="padding-top: 5%;">
 									
-									<input class="btn" id="submitbtn" type="submit" name="submit">
+									<input class="btn" id="submitbtn" type="submit" name="submit" onsubmit="return validateMyForm()">
 									<input class="btn" id="resetbtn" type="reset" name="reset"> 
 									<script>
 										$(function () {
-											$("#resetbtn").bind("click", function () {
-												document.getElementsByName("allColumnsname1").selectedIndex = 0;
-												document.getElementsByName("allColumnsname2").selectedIndex = 0;
-												document.getElementsByName("allColumnsname3").selectedIndex = 0;
-												document.getElementsByName("allColumnsname4").selectedIndex = 0;
+											$("#resetbtn").on("click", function () {
+												document.getElementsByName("allColumnsname1")[0].value = "";
+												document.getElementsByName("allColumnsname2")[0].value = "";
+												document.getElementsByName("allColumnsname3")[0].value = "";
+												document.getElementsByName("allColumnsname4")[0].value = "";
 												$('input:checkbox').prop('checked', false);
+											});
+										});
+
+										$(function () {
+											$("#submitbtn").on("click", function () {
+												const DDBox1 = document.getElementsByName("allColumnsname1")[0].value;
+												const DDBox2 = document.getElementsByName("allColumnsname2")[0].value;
+												const DDBox3 = document.getElementsByName("allColumnsname3")[0].value;
+
+												if (DDBox1 == ""){
+													alert("Please Pick Data at Data 1 First!");
+													return false;
+												} else if(DDBox1 != "" && DDBox2 == "" && (DDBox3 != "" || DDBox4 != "")){
+													alert("Please Pick Data at Data 2 First!");
+													return false;
+												}
 											});
 										});
 									</script>
@@ -212,19 +239,8 @@
 	<script>
 	//Function to Retrieve Data 
 
-	function validateMyForm() {
-		const DDBox1 = document.getElementsByName("allColumnsname1")[0].value;
-		const DDBox2 = document.getElementsByName("allColumnsname2")[0].value;
-		const DDBox3 = document.getElementsByName("allColumnsname3")[0].value;
+	
 
-		if (DDBox1 == ""){
-			alert("Please Pick Data at Data 1 First!");
-			return false;
-		} else if(DDBox1 != "" && DDBox2 == "" && (DDBox3 != "" || DDBox4 != "")){
-			alert("Please Pick Data at Data 2 First!");
-			return false;
-		}
-	}
 
 	var obj1 = <?php echo json_encode($Data1SetlabelY ?? '', true) ?>;
 	var obj2 = <?php echo json_encode($Data1SetlabelX ?? '', true) ?>;
@@ -1257,6 +1273,7 @@
 
             	xCategoryVal = obj2;
             	yCategoryVal = obj4;
+            	y2CategoryVal = obj6;
             	var data = [];
 
             	if(yCategoryVal == "")
@@ -1266,7 +1283,15 @@
             		document.getElementsByName("allColumnsname3").selectedIndex = 0;
             		document.getElementsByName("allColumnsname4").selectedIndex = 0;
             		alert("Bubble Graph only supports 2 Data!");
-            		radarChart.destroy();
+            		myChart.destroy();
+            	} else if(yCategoryVal != ""  && y2CategoryVal != "")
+            	{
+            		document.getElementsByName("allColumnsname1").selectedIndex = 0;
+            		document.getElementsByName("allColumnsname2").selectedIndex = 0;
+            		document.getElementsByName("allColumnsname3").selectedIndex = 0;
+            		document.getElementsByName("allColumnsname4").selectedIndex = 0;
+            		alert("Bubble Graph only supports 2 Data!");
+            		myChart.destroy();
             	} else {
             		data = xData1.map((x, i) => {
             			return {

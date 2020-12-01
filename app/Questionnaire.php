@@ -8,4 +8,5 @@ class Questionnaire extends Model
 {
     protected $table = 'masterdata';
 
+ 
 }

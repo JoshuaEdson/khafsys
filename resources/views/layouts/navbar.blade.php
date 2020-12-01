@@ -37,13 +37,13 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto" style="margin-left: 85px;">
       <li class="nav-item active">
-        <strong><a class="nav-link" href="/DataIVI/web/" style="color: white;">HOME</a></strong>
+        <strong><a class="nav-link" href="/DataIVI/web/home/masterdata" style="color: white;">HOME</a></strong>
       </li>
       <li class="nav-item"> 
-       <strong> <a class="nav-link" href="/DataIVI/web/analysis" style="color: white;">DATA</a></strong>
+       <strong> <a class="nav-link" href="/DataIVI/web/analysis/masterdata" style="color: white;">DATA</a></strong>
      </li>
      <li class="nav-item">
-       <strong> <a class="nav-link" href="/DataIVI/web/analysis_tools" style="color: white;">ANALYSIS TOOL</a></strong>
+       <strong> <a class="nav-link" href="/DataIVI/web/analysis_tools/masterdata" style="color: white;">ANALYSIS TOOL</a></strong>
      </li>
 <!--         <li class="nav-item dropdown">/DataIVI/web/
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

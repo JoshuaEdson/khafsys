@@ -53,6 +53,11 @@
 	}
 
 </style>
+
+<div id="response"
+class="<?php if(!empty($type)) { echo $type . " display-block"; } ?>">
+<?php if(!empty($message)) { echo $message; } ?>
+</div>
 <script>
 	function readURL(input) {
 		if (input.files && input.files[0]) {
@@ -73,39 +78,6 @@
 <div id="response" class="<?php if(!empty($type)) { echo $type . " display-block"; } ?>">
 	<?php if(!empty($message)) { echo $message; } ?>
 </div>
-<div class="container-fluid bg-2 text-center border border-light" id="who" style="text-align: left; width: 25%;" >
-	<form id="uploadData" name="uploadData" action="" method="post" enctype="multipart/form-data">
-		<div class="input-row">
-			<input type="file" name="file" id="file" accept=".csv"><br>
-			Dataset Name:  <input type="text" name="datasetName"><br>
-			<input class="btn" id="submit" type="submit" value="UPLOAD" />
-			<input class="btn" type="reset" onclick="reset()" value="Reset"> 
-			<br/>
-			<script> 
-				function reset() { 
-					document.getElementById("uploadData").reset(); 
-				} 
-			</script> 
-			<?php
-			$fileName = echo $_GET["file"]; 
-			$tablename = echo $_GET["datasetName"]; 
-
-			$query = <<<eof
-			LOAD DATA INFILE $fileName
-			INTO TABLE $tableName
-			FIELDS TERMINATED BY '|' OPTIONALLY ENCLOSED BY '"'
-			LINES TERMINATED BY '\n'
-			(field1,field2,field3,etc)
-			eof;
-
-			$db->query($query);
-			?>
-		</div>
-	</form>
-</div>
-
-<div class="text-left p-3 m-1 border border-light">
-	<!-- {{ csrf_token() }} -->
 	<script>
 		allColumnsname = <?php echo json_encode($allColumnsname ?? '', true) ?>;
 		data = <?php echo json_encode($data ?? '' , true) ?>;
@@ -113,40 +85,60 @@
 		tablename = <?php echo json_encode($tablename ?? '' , true) ?>;
 		console.log(tables);
 	</script>
-	<p class="h4 mb-4 ">DATA</p>
-	<!-- <div style="padding-bottom: 1px;"> -->
-		<form action="{{ route('analysis.changeDatabase')}}" method="post" style="height: 5px;"> 
-			@csrf
-			<label for="tableUsed">Datasets:</label>
-			<select class="combobox" name="tableList" id="tableUsed" style="width:250px; height: 25px;">
-				<option value="No Datasets Selected" selected>Select</option>
-				@foreach($tables as $table)
-				<option value="{{ $table }}" {{ ( $table == $tablename) ? 'selected' : '' }}> 
-				{{ $table }} </option>
-				@endforeach
-			</select>
-			<input class="btn" id="submitbtn" type="submit" name="submit" value="Go">
-		</form>
-		<table id="table" class="table table-striped table-bordered" width="100%">
-
-			{!! $data->links() !!}
-			<thead name="allColumnsname" id="allColumnsname" width="100%">
-				<tr>
-					@foreach($allColumnsname ?? '' as $acn)
-					<th class="th-sm" value="{{ $acn }} "> {{ $acn }} </th>
-					@endforeach
-				</tr>
-			</thead>
-			<tbody name="data" id="data">
-				@foreach($data as $data)
-				<tr>
-					@foreach($allColumnsname ?? '' as $acn)
-					<td>{{ $data -> $acn }}</td>
-					@endforeach
-				</tr>
-				@endforeach
-			</tbody>
-		</table>
+<form id="dataManagement" action="{{ route('analysis.uploadData', $tablename)}}" name="uploadData" method="post" enctype="multipart/form-data">
+	@csrf
+	<div class="container-fluid bg-2 text-center border border-light" id="who" style="text-align: left; width: 25%;" >
+		
+		<div class="input-row">
+			<input type="file" name="file" id="file" accept=".csv"><br>
+			Dataset Name:  <input type="text" name="datasetName"><br>
+			<input class="btn" name="upload" id="submit" type="submit" value="UPLOAD"/>
+			<input class="btn" type="reset" onclick="reset();" value="Reset"> 
+			<br/>
+		</div>
+		<!-- </form> -->
 	</div>
 
+	<div class="text-left p-3 m-1 border border-light">
+		<!-- {{ csrf_token() }} -->
+
+	<p class="h4 mb-4 ">DATA</p>
+	<!-- <div style="padding-bottom: 1px;"> -->
+
+		<label for="tableUsed">Datasets:</label>
+		<select class="combobox" name="tableList" id="tableUsed" style="width:250px; height: 25px;">
+			<option value="No Datasets Selected" selected>Select</option>
+			@foreach($tables as $table)
+			<option value="{{ $table }}" {{ ( $table == $tablename) ? 'selected' : '' }}> 
+			{{ $table }} </option>
+			@endforeach
+		</select>
+		<input class="btn" name="dataTable" id="submit" type="submit" value="Go">
+	</form>
+	<table id="table" class="table table-striped table-bordered" width="100%">
+
+		{!! $data->links() !!}  
+		<thead name="allColumnsname" id="allColumnsname" width="100%">
+			<tr> 
+				@foreach($allColumnsname ?? '' as $acn)
+				<th class="th-sm" value="{{ $acn }} "> {{ $acn }} </th>
+				@endforeach
+			</tr>
+		</thead>
+		<tbody name="data" id="data">
+			@foreach($data as $data)
+			<tr>
+				@foreach($allColumnsname ?? '' as $acn)
+				<td>{{ $data -> $acn }}</td>
+				@endforeach
+			</tr>
+			@endforeach
+		</tbody>
+	</table>
+</div>
+<script> 
+	function reset() { 
+		document.getElementById("uploadData").reset(); 
+	} 
+	</script>
 	@endsection

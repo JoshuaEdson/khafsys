@@ -13,11 +13,12 @@ use App\Questionnaire;
 */
 //this is where you can route all of the request into the appropriate web page.
 
-Route::get('/', 'DataController@index')->name('admin.dashboard');
-Route::get('/analysis', 'DataController@analysis')->name('analysis');
-Route::get('/analysis_tools', 'DataController@analysis_tools')->name('analysis.tools');
+Route::get('home/{table}', 'DataController@index')->name('admin.dashboard');
+Route::post('home/', 'DataController@getAdminDashboardData')->name('analysis.getAdminDashboardData');
 Route::post('/analysis_tools', 'DataController@postData')->name('analysis.postData');
-Route::post('/analysis', 'DataController@changeDatabase')->name('analysis.changeDatabase');
+Route::post('/analysis/', 'DataController@uploadData')->name('analysis.uploadData');
+Route::get('/analysis/{table}', 'DataController@analysis')->name('analysis');
+Route::get('/analysis_tools/{table}', 'DataController@analysis_tools')->name('analysis.tools');
 
 //datatables
 // Route::get ( '/analysis', function () {
