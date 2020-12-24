@@ -88,7 +88,10 @@ class DataController extends Controller
     	$tables = DB::select('SHOW TABLES');
 		$tables = array_map('current',$tables); //display
 		    	// return $tables;
-
+		$Data1SetlabelX = [];
+		$Data1SetlabelY = [];
+		$Data2SetlabelX = [];
+		$rData1Chunked = [];
 		$allColumnsname = Schema::getColumnListing($tablename);
 		// $data = DB::table($tablename)->paginate(15);
 		// //get all column name
@@ -98,7 +101,7 @@ class DataController extends Controller
 		$var2 = ""; // to set a null value which can be use when database changed
 		$var3 = ""; // to set a null value which can be use when database changed
 
-		return view('analysis_tools', compact('allColumnsname', 'var1', 'var2', 'var3', 'data', 'tables', 'tablename'));
+		return view('analysis_tools', compact('allColumnsname', 'var1', 'var2', 'var3', 'data', 'tables', 'tablename', 'Data2SetlabelX', 'Data1SetlabelX', 'rData1Chunked', 'Data1SetlabelY'));
 	}
 
 	public function uploadData(Request $request)
@@ -124,6 +127,7 @@ class DataController extends Controller
 			// $file = $request->input("file");
 
 		$fileName = $_FILES["file"]["tmp_name"];
+		// return $fileName;
 			// get structure from csv and insert db
 		ini_set('auto_detect_line_endings',TRUE);
 		$handle = fopen($fileName,'r');
@@ -219,7 +223,8 @@ public function postData(Request $request)
 			$Data1 = DB::table($tablename)->select($firstColumn, $var1)->distinct($firstColumn)->get();
 			$Data1SetlabelY = $Data1->countBy($var1)->values()->toArray(); // numberic
 			$Data1SetlabelX = $Data1->pluck($var1)->unique()->values()->toArray(); //string
-
+			$Data2SetlabelX = [];
+			$rData1Chunked = [];
 			//testing
 			$xData1 = [];
 			$yData1 = [];
@@ -241,28 +246,34 @@ public function postData(Request $request)
 			$Data1 = DB::table($tablename)->select($firstColumn, $var1)->distinct($firstColumn)->get();
 			$Data1SetlabelY = $Data1->countBy($var1)->values()->toArray(); // numberic
 			$Data1SetlabelX = $Data1->pluck($var1)->unique()->values()->toArray(); //string
+			$totalData1 = $Data1->pluck($var1)->unique()->values()->count(); //string
 			$Data2 = DB::table($tablename)->select($firstColumn, $var2)->distinct($firstColumn)->get();
 			$Data2SetlabelY = $Data2->countBy($var2)->values()->toArray(); // numberic
 			$Data2SetlabelX = $Data2->pluck($var2)->unique()->values()->toArray(); //string
+			$totalData2 = $Data2->pluck($var2)->unique()->values()->count(); //string
 
 			$xData1 = [];
 			$yData1 = [];
 			$XYData1 = [];
 			$rData1 = [];
+			$gDataArray1 = [];
+			$gDataArray2 = [];
 
 			//get x and y values
 			foreach ($Data1SetlabelX as $array1) {
 				foreach ($Data2SetlabelX as $array2) {
-
-					array_push($xData1, $array1); 
+					array_push($xData1, $array1);
 					array_push($yData1, $array2); 
-					array_push($XYData1, [$array1. ' ' .$array2]); 
-
+					array_push($XYData1, $array1. ' ' .$array2); 
 					$example = DB::table($tablename)->select($firstColumn, $var1, $var2)->distinct($firstColumn)
 					->where($var1, $array1)->where($var2, $array2)->get()->count();
 					array_push($rData1, $example);
 				}
 			}	
+
+			$XYData1Chunked = array_chunk($XYData1, $totalData2);
+			$rData1Chunked = array_chunk($rData1, $totalData2);
+		
 		}
 
 		else if ($var1 != null && $var2 != null && $var3 != null)
@@ -273,9 +284,11 @@ public function postData(Request $request)
 			$Data2 =DB::table($tablename)->select($firstColumn, $var2)->distinct($firstColumn)->get();
 			$Data2SetlabelY = $Data2->countBy($var2)->values()->toArray(); // numberic
 			$Data2SetlabelX = $Data2->pluck($var2)->unique()->values()->toArray(); //string
+			$totalData2 = $Data2->pluck($var2)->unique()->values()->count(); //string
 			$Data3 =DB::table($tablename)->select($firstColumn, $var3)->distinct($firstColumn)->get();
 			$Data3SetlabelY = $Data3->countBy($var3)->values()->toArray(); // numberic
 			$Data3SetlabelX = $Data3->pluck($var3)->unique()->values()->toArray(); //string
+			$totalData3 = $Data3->pluck($var3)->unique()->values()->count(); //string
 
 
 			$xData1 = [];
@@ -315,9 +328,14 @@ public function postData(Request $request)
 					array_push($rData2, $example1);
 				}
 			}
+
+			$XYData1Chunked = array_chunk($XYData1, $totalData2);
+			$rData1Chunked = array_chunk($rData1, $totalData2);
+			$XYData2Chunked = array_chunk($XYData2, $totalData3);
+			$rData2Chunked = array_chunk($rData2, $totalData3);
 		}
 	}
 
-	return view('analysis_tools', compact('Data1SetlabelY' , 'Data1SetlabelX', 'Data2SetlabelY', 'Data2SetlabelX', 'Data3SetlabelY', 'Data3SetlabelX', 'allColumnsname', 'checkboxLine1', 'checkboxLine2', 'checkboxLine3', 'checkboxLine4', 'checkboxLine5', 'checkboxLine6', 'checkboxLine7', 'checkboxLine8','var1', 'var2', 'var3', 'xData1', 'yData1', 'XYData1', 'rData1', 'data2', 'xData2', 'yData2', 'XYData2', 'rData2', 'data', 'tables', 'tablename'));
+	return view('analysis_tools', compact('Data1SetlabelY' , 'Data1SetlabelX', 'Data2SetlabelY', 'Data2SetlabelX', 'Data3SetlabelY', 'Data3SetlabelX', 'allColumnsname', 'checkboxLine1', 'checkboxLine2', 'checkboxLine3', 'checkboxLine4', 'checkboxLine5', 'checkboxLine6', 'checkboxLine7', 'checkboxLine8','var1', 'var2', 'var3', 'xData1', 'yData1', 'XYData1', 'rData1', 'data2', 'xData2', 'yData2', 'XYData2', 'rData2', 'data', 'tables', 'tablename', 'XYData1Chunked', 'XYData2Chunked', 'rData1Chunked', 'rData2Chunked'));
 }
 }

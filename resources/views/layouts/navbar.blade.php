@@ -25,7 +25,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<a class=" navbar-brand" href="/">
+<a class=" navbar-brand" href="/DataIVI/web/home/masterdata">
   <img src="{{ asset('resources/views/pictures/IIR4.0.png') }}" class="logoimg">
   <img src="{{ asset('resources/views/pictures/UKMLogo.png') }}" class="ukmlogo">
 </a><br>
