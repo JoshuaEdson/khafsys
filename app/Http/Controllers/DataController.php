@@ -45,18 +45,18 @@ class DataController extends Controller
 		$allDataBody = [];
 		foreach ($allColumnsNew as $acn) {
 
-		$fullData = DB::table($tablename)->select($firstColumn, $acn)->distinct($firstColumn)->get();
-		$fullDataCount = $fullData->countBy($acn)->values()->toArray();
-		$fullDataBody = $fullData->pluck($acn)->unique()->values()->toArray();
-		
-		array_push($allDataBody, $fullDataBody);
-		array_push($allDataCount, $fullDataCount);
+			$fullData = DB::table($tablename)->select($firstColumn, $acn)->distinct($firstColumn)->get();
+			$fullDataCount = $fullData->countBy($acn)->values()->toArray();
+			$fullDataBody = $fullData->pluck($acn)->unique()->values()->toArray();
+
+			array_push($allDataBody, $fullDataBody);
+			array_push($allDataCount, $fullDataCount);
 
 		}
 
 		return view('admn_dshbrd', compact('allDataBody', 'allDataCount', 'tablename', 'tables', 'allColumnsNew'));
 	}
-		
+
 	
 
 	public function getAdminDashboardData(Request $request)
@@ -91,17 +91,20 @@ class DataController extends Controller
 		$Data1SetlabelX = [];
 		$Data1SetlabelY = [];
 		$Data2SetlabelX = [];
+		$Data3SetlabelY = [];
 		$rData1Chunked = [];
 		$allColumnsname = Schema::getColumnListing($tablename);
 		// $data = DB::table($tablename)->paginate(15);
 		// //get all column name
 		// $allColumnsname = Schema::getColumnListing('masterdata');
-
+		$totalData = "";
 		$var1 = ""; // to set a null value which can be use when database changed
 		$var2 = ""; // to set a null value which can be use when database changed
 		$var3 = ""; // to set a null value which can be use when database changed
-
-		return view('analysis_tools', compact('allColumnsname', 'var1', 'var2', 'var3', 'data', 'tables', 'tablename', 'Data2SetlabelX', 'Data1SetlabelX', 'rData1Chunked', 'Data1SetlabelY'));
+		$PnDChartData1 = "";
+		$PnDChartData2 = "";
+		$Data3Setlabela = "";
+		return view('analysis_tools', compact('Data3Setlabela','PnDChartData1', 'PnDChartData2', 'totalData','allColumnsname', 'var1', 'var2', 'var3', 'data', 'tables', 'tablename', 'Data2SetlabelX', 'Data1SetlabelX', 'rData1Chunked', 'Data1SetlabelY'));
 	}
 
 	public function uploadData(Request $request)
@@ -217,14 +220,22 @@ public function postData(Request $request)
 			break;
 		}	
 
+		$totalData = DB::table($tablename)->select($firstColumn)->distinct($firstColumn)->count();
+		// return $totalData;
+
 		if ($var1 != null && $var2 == null && $var3 == null) 
 		{
 
-			$Data1 = DB::table($tablename)->select($firstColumn, $var1)->distinct($firstColumn)->get();
+			$PnDChartData1 = DB::table($tablename)->select($firstColumn, $var1)->distinct($firstColumn)->count();
+			$Data1 = DB::table($tablename)->select($firstColumn, $var1)->distinct($firstColumn)->orderBy($var1)->get();
+			// $Data1Setlabela = DB::table($tablename)->select($var1)->distinct($var1)->orderBy($var1)->get();
 			$Data1SetlabelY = $Data1->countBy($var1)->values()->toArray(); // numberic
-			$Data1SetlabelX = $Data1->pluck($var1)->unique()->values()->toArray(); //string
+			// $Data1Setlabelz = $Data1->pluck($var1)->unique()->values()->toArray(); //string
+			$Data1Setlabelw = DB::table($tablename)->select($var1)->distinct($var1)->orderBy($var1)->get();
+			$Data1SetlabelX = $Data1Setlabelw->pluck($var1)->unique()->values()->toArray();
 			$Data2SetlabelX = [];
 			$rData1Chunked = [];
+			$Data3Setlabela = "";
 			//testing
 			$xData1 = [];
 			$yData1 = [];
@@ -240,16 +251,29 @@ public function postData(Request $request)
 				array_push($yData1, $example);
 			}
 
+			// foreach ($Data1Setlabelw as $key => $value) {
+			// 	array_push($Data1SetlabelX, $value);
+			// }
+			// return $Data1SetlabelY;
+
 		} 
 		else if (($var1 != null && $var2 != null) && $var3 == null)
 		{
-			$Data1 = DB::table($tablename)->select($firstColumn, $var1)->distinct($firstColumn)->get();
+
+			$PnDChartData1 = DB::table($tablename)->select($firstColumn, $var1)->distinct($firstColumn)->count();
+			$PnDChartData2 = DB::table($tablename)->select($firstColumn, $var2)->distinct($firstColumn)->count();
+
+			$Data1 = DB::table($tablename)->select($firstColumn, $var1)->distinct($firstColumn)->orderBy($var1)->get();
 			$Data1SetlabelY = $Data1->countBy($var1)->values()->toArray(); // numberic
-			$Data1SetlabelX = $Data1->pluck($var1)->unique()->values()->toArray(); //string
+			$Data1Setlabelw = DB::table($tablename)->select($var1)->distinct($var1)->orderBy($var1)->get();
+			$Data1SetlabelX = $Data1Setlabelw->pluck($var1)->unique()->values()->toArray();
 			$totalData1 = $Data1->pluck($var1)->unique()->values()->count(); //string
-			$Data2 = DB::table($tablename)->select($firstColumn, $var2)->distinct($firstColumn)->get();
+
+
+			$Data2 = DB::table($tablename)->select($firstColumn, $var2)->distinct($firstColumn)->orderBy($var2)->get();
 			$Data2SetlabelY = $Data2->countBy($var2)->values()->toArray(); // numberic
-			$Data2SetlabelX = $Data2->pluck($var2)->unique()->values()->toArray(); //string
+			$Data2Setlabela = DB::table($tablename)->select($var2)->distinct($var2)->orderBy($var2)->get();
+			$Data2SetlabelX = $Data2Setlabela->pluck($var2)->unique()->values()->toArray();
 			$totalData2 = $Data2->pluck($var2)->unique()->values()->count(); //string
 
 			$xData1 = [];
@@ -258,7 +282,8 @@ public function postData(Request $request)
 			$rData1 = [];
 			$gDataArray1 = [];
 			$gDataArray2 = [];
-
+			$sortedDesc = [];
+			$Data3Setlabela = "";
 			//get x and y values
 			foreach ($Data1SetlabelX as $array1) {
 				foreach ($Data2SetlabelX as $array2) {
@@ -273,21 +298,41 @@ public function postData(Request $request)
 
 			$XYData1Chunked = array_chunk($XYData1, $totalData2);
 			$rData1Chunked = array_chunk($rData1, $totalData2);
-		
+			$sorted = $Data1->pluck($var1)->unique()->values()->toArray();  //string
+			// dd($XYData1Chunked);
 		}
 
 		else if ($var1 != null && $var2 != null && $var3 != null)
 		{
-			$Data1 =DB::table($tablename)->select($firstColumn, $var1)->distinct($firstColumn)->get();
+			// $all3Data = DB::table($tablename)->select($var1 , $var2, $var3)->count(distinct($firstColumn,$var1 , $var2, $var3))->groupBy($var1 , $var2, $var3);
+			// $all3Data = DB::select( DB::raw("SELECT ".$var1.",".$var2.",".$var3.", count(distinct ".$firstColumn.",".$var1.",".$var2.",".$var3.") from ".$tablename." where ".$var1." is not null group by ".$var1.",".$var2.",".$var3.";"));
+			// return $all3Data;
+
+
+
+
+
+			$PnDChartData1 = DB::table($tablename)->select($firstColumn, $var1)->distinct($firstColumn)->count();
+			$PnDChartData2 = DB::table($tablename)->select($firstColumn, $var2)->distinct($firstColumn)->count();
+			$PnDChartData3 = DB::table($tablename)->select($firstColumn, $var3)->distinct($firstColumn)->count();
+
+			$Data1 = DB::table($tablename)->select($firstColumn, $var1)->distinct($firstColumn)->orderBy($var1)->get();
 			$Data1SetlabelY = $Data1->countBy($var1)->values()->toArray(); // numberic
-			$Data1SetlabelX = $Data1->pluck($var1)->unique()->values()->toArray(); //string
-			$Data2 =DB::table($tablename)->select($firstColumn, $var2)->distinct($firstColumn)->get();
+			$Data1Setlabelw = DB::table($tablename)->select($var1)->distinct($var1)->orderBy($var1)->get();
+			$Data1SetlabelX = $Data1Setlabelw->pluck($var1)->unique()->values()->toArray();
+			$totalData1 = $Data1->pluck($var1)->unique()->values()->count(); //string
+
+
+			$Data2 = DB::table($tablename)->select($firstColumn, $var2)->distinct($firstColumn)->orderBy($var2)->get();
 			$Data2SetlabelY = $Data2->countBy($var2)->values()->toArray(); // numberic
-			$Data2SetlabelX = $Data2->pluck($var2)->unique()->values()->toArray(); //string
+			$Data2Setlabela = DB::table($tablename)->select($var2)->distinct($var2)->orderBy($var2)->get();
+			$Data2SetlabelX = $Data2Setlabela->pluck($var2)->unique()->values()->toArray();
 			$totalData2 = $Data2->pluck($var2)->unique()->values()->count(); //string
-			$Data3 =DB::table($tablename)->select($firstColumn, $var3)->distinct($firstColumn)->get();
+
+			$Data3 = DB::table($tablename)->select($firstColumn, $var3)->distinct($firstColumn)->orderBy($var3)->get();
 			$Data3SetlabelY = $Data3->countBy($var3)->values()->toArray(); // numberic
-			$Data3SetlabelX = $Data3->pluck($var3)->unique()->values()->toArray(); //string
+			$Data3Setlabela = DB::table($tablename)->select($var3)->distinct($var3)->orderBy($var3)->get();
+			$Data3SetlabelX = $Data3Setlabela->pluck($var3)->unique()->values()->toArray();
 			$totalData3 = $Data3->pluck($var3)->unique()->values()->count(); //string
 
 
@@ -296,46 +341,52 @@ public function postData(Request $request)
 			$XYData1 = [];
 			$rData1 = [];
 
-			$xData2 = [];
+			$xData3 = [];
 			$yData2 = [];
 			$XYData2 = [];
 			$rData2 = [];
+			$example2 = [];
+			$t = 0;
 
+			$rData1Chunked = [];
 
 			//get x and y values
 			foreach ($Data1SetlabelX as $array1) {
 				foreach ($Data2SetlabelX as $array2) {
+					foreach ($Data3SetlabelX as $i => $array3) {
+						array_push($xData1, $array1); 
+						array_push($yData1, $array2); 
+						array_push($XYData1, [$array1. ' ' .$array2]); 
+						array_push($XYData2, [$array2. ' ' .$array3]); 
+						array_push($xData3, [$array1. ' ' .$array2 .' '.$array3]);
 
-					array_push($xData1, $array1); 
-					array_push($yData1, $array2); 
-					array_push($XYData1, [$array1. ' ' .$array2]); 
 
-					$example =DB::table($tablename)->select($firstColumn, $var1, $var2)->distinct($firstColumn)
-					->where($var1, $array1)->where($var2, $array2)->get()->count();
-					array_push($rData1, $example);
+						$example1 =DB::table($tablename)->select($firstColumn, $var1 , $var2, $var3)->distinct($firstColumn)
+						->where($var1, $array1)->where($var2, $array2)->where($var3, $array3)->get()->count();
+						
+
+
+						array_push($rData2, $example1);
+
+						if(strpos($array1, $Data1SetlabelX[0]) !== false){
+							$t++;
+							array_push($example2, $array1);
+						}
+					}
 				}
 			}	
 
-			foreach ($Data1SetlabelX as $array3) {
-				foreach ($Data3SetlabelX as $array4) {
+			// $totalDatatoChunked = count($Data3SetlabelX);
+			$XYData2Chunked = array_chunk($XYData2, $t); //140 data 7 Array in array(20 data in 1 array)
+			$rData2Chunked = array_chunk($rData2, $t); //140 data 7 Array in array(20 data in 1 array)
+			$totalDatatoChunked = count($rData2Chunked);
 
-					array_push($xData2, $array3); 
-					array_push($yData2, $array4); 
-					array_push($XYData2, [$array3. ' ' .$array4]); 
+			// dd($xData3);
 
-					$example1 =DB::table($tablename)->select($firstColumn, $var1, $var3)->distinct($firstColumn)
-					->where($var1, $array3)->where($var3, $array4)->get()->count();
-					array_push($rData2, $example1);
-				}
-			}
-
-			$XYData1Chunked = array_chunk($XYData1, $totalData2);
-			$rData1Chunked = array_chunk($rData1, $totalData2);
-			$XYData2Chunked = array_chunk($XYData2, $totalData3);
-			$rData2Chunked = array_chunk($rData2, $totalData3);
+			// return $rData2Chunked;
 		}
 	}
 
-	return view('analysis_tools', compact('Data1SetlabelY' , 'Data1SetlabelX', 'Data2SetlabelY', 'Data2SetlabelX', 'Data3SetlabelY', 'Data3SetlabelX', 'allColumnsname', 'checkboxLine1', 'checkboxLine2', 'checkboxLine3', 'checkboxLine4', 'checkboxLine5', 'checkboxLine6', 'checkboxLine7', 'checkboxLine8','var1', 'var2', 'var3', 'xData1', 'yData1', 'XYData1', 'rData1', 'data2', 'xData2', 'yData2', 'XYData2', 'rData2', 'data', 'tables', 'tablename', 'XYData1Chunked', 'XYData2Chunked', 'rData1Chunked', 'rData2Chunked'));
+	return view('analysis_tools', compact('PnDChartData1','PnDChartData2', 'totalData','Data1SetlabelY' , 'Data1SetlabelX', 'Data2SetlabelY', 'Data2SetlabelX', 'Data3SetlabelY', 'Data3SetlabelX', 'allColumnsname', 'checkboxLine1', 'checkboxLine2', 'checkboxLine3', 'checkboxLine4', 'checkboxLine5', 'checkboxLine6', 'checkboxLine7', 'checkboxLine8','var1', 'var2', 'var3', 'xData1', 'yData1', 'XYData1', 'rData1', 'data2', 'xData2', 'yData2', 'XYData2', 'rData2', 'data', 'tables', 'tablename', 'XYData1Chunked', 'XYData2Chunked', 'rData1Chunked', 'rData2Chunked', 'Data3Setlabela' ,'totalDatatoChunked', 'totalData2', 'totalData3'));
 }
 }

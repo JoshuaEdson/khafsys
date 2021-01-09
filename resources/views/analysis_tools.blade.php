@@ -54,6 +54,8 @@
 <!-- Add jQuery lib here -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
 <div>
 	<h1 style="font-weight: bold;">GRAPH ANALYSIS</h1>
 </div>
@@ -143,7 +145,7 @@
 								<div style="padding-top: 5%;">
 									
 									<input class="btn" id="submitbtn" type="submit" name="submit" onsubmit="return validateMyForm()">
-									<input class="btn" id="resetbtn" type="reset" name="reset"> 
+									<input class="btn" id="resetbtn" type="reset" name="reset" value="Reset"> 
 									<script>
 										$(function () {
 											$("#resetbtn").on("click", function () {
@@ -154,7 +156,8 @@
 												$('input:checkbox').prop('checked', false);
 											});
 										});
-
+									</script>
+									<script>
 										$(function () {
 											$("#submitbtn").on("click", function () {
 												const DDBox1 = document.getElementsByName("allColumnsname1")[0].value;
@@ -181,56 +184,90 @@
 		<div class="col-sm-12 my-3">
 			<h3 style="font-weight: bold; ">DATA TABLE :</h3>
 			<div class="col-sm-12 border">
-				<table id="table" class="table table-striped table-bordered" width="100%">
-					<thead>
-						<tr> <?php
+				<?php
+				if($Data3Setlabela == ""){
+					?>
+					<table id="table" class="table table-striped table-bordered" width="100%">
+						<?php
 						if ($Data2SetlabelX == null) {?>
-							<th></th>
-				  <?php foreach ($Data1SetlabelX as $key) {?>
-								<th class="th-sm" value="{{ $key }} "> {{ $key }} </th>
-							<?php }
-						} else if ($Data2SetlabelX != null) { ?>
-							<th></th>
-							@foreach($Data2SetlabelX ?? '' as $acn)
-								<th class="th-sm" value="{{ $acn }} "> {{ $acn }} </th>
-							@endforeach
-						<?php } ?>
-						</tr>
-					</thead>
-				<tbody>
+							<thead>
+								<tr> 
+									<th></th>
+									<?php foreach ($Data1SetlabelX as $key) {?>
+										<th class="th-sm" value="{{ $key }} "> {{ $key }} </th>
+									<?php }
+								} else if ($Data2SetlabelX != null) { ?>
+									<th></th>
+									@foreach($Data2SetlabelX ?? '' as $acn)
+									<th class="th-sm" value="{{ $acn }} "> {{ $acn }} </th>
+									@endforeach
+								<?php } ?>
+							</tr>
+						</thead>
+						<tbody>
+							<?php 
+							if ($rData1Chunked == null){?>
+								<td style="font-weight: bold;">Respondents</td>
+								@foreach($Data1SetlabelY as $index => $data)
+								<td scope="row">{{$data}}({{number_format((($data * 100) / $totalData),2)}} %)</td>
+								@endforeach
+							<?php } 
+							else if($rData1Chunked != null){?>
+								@foreach($rData1Chunked as $index => $data)
+								<tr>
+									<td scope="row" style="font-weight: bold;">{{$Data1SetlabelX[$index]}}</td>
+									@foreach($Data2SetlabelX ?? '' as $acn => $val)
+									<td >{{ $data[$acn] }}({{number_format((($data[$acn] * 100) / $totalData),2)}} %)</td>
+									@endforeach
+								</tr>
+								@endforeach
+							<?php } ?>		
+						</tbody>
+					</table>
 					<?php 
-					if ($rData1Chunked == null){?>
-						<td style="font-weight: bold;">Respondents</td>
-						@foreach($Data1SetlabelY as $index => $data)
-							<td scope="row">Total data: {{$data}} <br> Percentage: {{number_format((($data * 100) / 1076),2)}} %</td>
-						@endforeach
-					<?php } 
-					else if($rData1Chunked != null){?>
-						@foreach($rData1Chunked as $index => $data)
-						<tr>
-							<td scope="row" style="font-weight: bold;">{{$Data1SetlabelX[$index]}}</td>
-							@foreach($Data2SetlabelX ?? '' as $acn => $val)
-							<td >Total data:{{ $data[$acn] }} <br> Percentage: {{number_format((($data[$acn] * 100) / 1076),2)}} %</td>
+				} else if($Data3Setlabela != ""){?>
+					@foreach($Data1SetlabelX as $j => $data1)
+					@foreach($rData2Chunked as $r => $rdata)
+					<h5 style="padding-top: 2%;"><strong>{{$Data1SetlabelX[$r]}}</strong></h5>
+					<table id="table" class="table table-striped table-bordered" width="100%">
+						<thead>
+							<tr> 
+								<th></th>
+								@foreach($Data3SetlabelX ?? '' as $acn)
+								<th class="th-sm" value="{{ $acn }} "> {{ $acn }} </th>
+								@endforeach
+							</tr>
+						</thead>
+						<tbody>
+							<?php $t = $totalData3; ?>
+							@foreach($rData2Chunked as $index => $data3)
+								@foreach($data3 as $indData => $allData3)
+									@foreach($Data2SetlabelX as $d => $d3)
+										<tr>
+											<td scope="row" style="font-weight: bold;">{{$d3}}</td>
+											@foreach($Data3SetlabelX ?? '' as $acn => $val)
+											<?php if($d == 0) { ?>
+												<td >{{ $rdata[$acn] }}({{number_format((($rdata[$acn] * 100) / $totalData),2)}} %)</td>
+											<?php } else { 
+												?>
+												<td >{{ $rdata[$t] }}({{number_format((($rdata[$t] * 100) / $totalData),2)}} %)</td>
+											<?php $t++;
+											} ?>
+											@endforeach
+										</tr>
+									@endforeach
+								<?php break; ?>
+								@endforeach
+								<?php break; ?>
 							@endforeach
-						</tr>
-						@endforeach
-					<?php } ?>		
-
-				</tbody>
-					<!-- <thead name="allColumnsname" id="allColumnsname" width="100%">
-						<tr> 
-							@foreach($Data1SetlabelX ?? '' as $acn)
-							<th class="th-sm" value="{{ $acn }} "> {{ $acn }} </th>
-							@endforeach
-						</tr>
-					</thead>
-					<tbody name="data" id="data">
-					
-					</tbody> -->
-				</table>
-				
+						</tbody>
+					</table>
+					@endforeach
+					<?php break; ?>
+					@endforeach
+				<?php } ?>
 			</div>
-			
+
 		</div>
 		<div class="col-sm-12 my-3">
 			<div class="col-sm-12 m-1" style="padding-top: 3%; padding-bottom: 10%; float: left;">
@@ -294,7 +331,7 @@
 	//Function to Retrieve Data 
 
 	
-
+	console.log({{$totalData}});
 
 	var obj1 = <?php echo json_encode($Data1SetlabelY ?? '', true) ?>;
 	var obj2 = <?php echo json_encode($Data1SetlabelX ?? '', true) ?>;
@@ -382,7 +419,7 @@
 							display: true,
 							type:'category',
 							// position: 'bottom',
-							labels: xData1,
+							labels: xCategoryVal,
 							scaleLabel: {
 								display: true,
 								labelString: var1
@@ -412,11 +449,21 @@
 								fill: false,
 							}]
 						}
+
+						datalabels= {
+							formatter: function(value, context) {
+								return (((value.y *100) / {{$totalData}}).toFixed(2)) + "%";
+							},
+							anchor: 'end',
+							align: 'end',
+							offset: 0.01
+						}
+
 						labels = 'LINE GRAPH FOR ' + var1.toUpperCase();
 						label= function (tooltipItems, data) {
 							const labels = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].label;
 							const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].y;
-							var percentRes = ((dataVal * 100) / 1076);
+							var percentRes = ((dataVal * 100) / {{$totalData}});
 							percentRes = percentRes.toFixed(2);
 							return label = labels + ": " + dataVal + " Respondent(s) : "  + percentRes + "%";
 						}
@@ -472,16 +519,28 @@
 								// type:'category',
 								// labels: yCategoryVal,
 							}]
+
 							labels = 'RELATIONSHIP BETWEEN ' + var1.toUpperCase() + ' AND ' + var2.toUpperCase();
+
 							label= function (tooltipItems, data) {
 								const labels = data.datasets[tooltipItems.datasetIndex].label;
 								const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index];
-								var percentRes = ((dataVal * 100) / 1076);
+								var percentRes = ((dataVal * 100) / {{$totalData}});
 								percentRes = percentRes.toFixed(2);
 								return label = labels + ": " + dataVal + " Respondent(s) : "  + percentRes + "%";
 							}
+
 							title= function(tooltipItem, data){
 								return "Impacts To " + var1 +" and " + var2;
+							}
+
+							datalabels= {
+								formatter: function(value, context) {
+									return (((value *100) / {{$totalData}}).toFixed(2)) + "%";
+								},
+								anchor: 'end',
+								align: 'end',
+								offset: 0.01
 							}
 						} 
 						else if(yCategoryVal != "" && y2CategoryVal !="")  
@@ -575,7 +634,7 @@
 							label= function (tooltipItems, data) {
 								const labels = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].labels;
 								const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].r;
-								var percentRes = ((dataVal * 100) / 1076);
+								var percentRes = ((dataVal * 100) / {{$totalData}});
 								percentRes = percentRes.toFixed(2);
 								return label = labels + ": " + dataVal + " Respondent(s) : "  + percentRes + "%";
 							}
@@ -588,6 +647,9 @@
 							type: graphType1,
 							data: data, 
 							options:{
+								plugins: {
+									datalabels: datalabels
+								},
 								title: {
 									display: true,
 									text: labels
@@ -636,7 +698,7 @@
 						{	
 							datas= {
 								datasets: [{
-									labels: obj2,
+									labels: xCategoryVal,
 									label: var1,
 									data: obj1,
 									backgroundColor: 'rgb(0,35,102)',
@@ -664,11 +726,6 @@
 						}]
 
 						yAxes= [{
-							// ticks: {
-							// 	max: 1200,
-							// 	min: 0,
-							// 	stepSize: 100,
-							// },
 							scaleLabel: {
 								display: true,
 								labelString: 'Respondents'
@@ -680,7 +737,7 @@
 							for (i = 0; i < l; i++) {
 								IndivData =  data.datasets[i].labels[tooltipItems.index];
 								IndivDataNum = data.datasets[i].data[tooltipItems.index];
-								DataPercent = (IndivDataNum * 100) / 1076;
+								DataPercent = (IndivDataNum * 100) / {{$totalData}};
 								DataPercent = DataPercent.toFixed(2);
 								label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
 							}
@@ -691,6 +748,16 @@
 							dataTitle = document.getElementById("")
 							return "Impacts To " + var1;
 						}
+
+						datalabels= {
+							formatter: function(value, context) {
+								return (((value *100) / {{$totalData}}).toFixed(2)) + "%";
+							},
+							anchor: 'end',
+							align: 'end',
+							offset: 0.01
+						}
+
 					} if(yCategoryVal != "" && y2CategoryVal =="")  
 					{		
 						var datas = {
@@ -707,28 +774,6 @@
 						  },<?php endforeach ?>
 						  ]
 						};
-					// 	datas= {
-					// 		datasets: [{
-					// 			labels: obj2,
-					// 			label: var1,
-					// 			data: obj1,
-					// 			backgroundColor: 'rgb(0,35,102)',
-					// 			borderColor: 'rgb(0,35,102)',
-					// 			borderWidth: 3,
-					// 			fill: false,
-					// 		// xAxisID: "x-prime",
-					// 	},
-					// 	{
-					// 		labels: obj4,
-					// 		label: var2,
-					// 		data: obj3,
-					// 		backgroundColor: 'rgb(227,38,54)',
-					// 		borderColor: 'rgb(227,38,54)',
-					// 		borderWidth: 3,
-					// 		fill: false,
-					// 		// xAxisID: "x-sec",
-					// 	}],
-					// }
 					//Axes
 					xAxes = [{
 						ticks: {
@@ -740,16 +785,11 @@
 						labels: yCategoryVal,
 						scaleLabel: {
 							display: true,
-							labelString: var1 + ' and ' + var2
+							labelString: var2
 						}
 					}]
 
 					yAxes= [{
-						// ticks: {
-						// 	max: 1200,
-						// 	min: 0,
-						// 	stepSize: 100
-						// },
 						scaleLabel: {
 							display: true,
 							labelString: 'Respondents'
@@ -761,13 +801,21 @@
 					labels= function (tooltipItems, data) {
 						const labels = data.datasets[tooltipItems.datasetIndex].label;
 						const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index];
-						var percentRes = ((dataVal * 100) / 1076);
+						var percentRes = ((dataVal * 100) / {{$totalData}});
 						percentRes = percentRes.toFixed(2);
 						return label = labels + ": " + dataVal + " Respondent(s) : "  + percentRes + "%";
 					}
 
 					title = function(tooltipItem, data){
 						return "Impacts To " + var1 +" and " + var2;
+					}
+					datalabels= {
+						formatter: function(value, context) {
+							return (((value *100) / {{$totalData}}).toFixed(2)) + "%";
+						},
+						anchor: 'end',
+						align: 'end',
+						offset: 0.01
 					}
 				} 
 				else if(yCategoryVal != "" && y2CategoryVal !="")  
@@ -828,7 +876,7 @@
 						var i, label = [], l = data.datasets.length;
 						for (i = 0; i < l; i++) {
 							IndivData = data.datasets[i].data[tooltipItems.index];
-							IndivData1 = (IndivData * 100) / 1076;
+							IndivData1 = (IndivData * 100) / {{$totalData}};
 							IndivData1 = IndivData1.toFixed(2);
 							label[i] = data.datasets[i].label + ": " + data.datasets[i].labels[tooltipItems.index] + ' : ' + IndivData1 + '% ; Total Respondents = ' + IndivData;
 						}
@@ -845,6 +893,10 @@
                     // The data for our dataset
                     data: datas,
                     options: {
+                    	plugins: {
+                    		datalabels: datalabels
+
+                    	},
                     	title: {
                     		display: true,
                     		text: label
@@ -916,7 +968,7 @@
                     	for (i = 0; i < l; i++) {
                     		IndivData =  data.datasets[i].labels[tooltipItems.index];
                     		IndivDataNum = data.datasets[i].data[tooltipItems.index];
-                    		DataPercent = (IndivDataNum * 100) / 1076;
+                    		DataPercent = (IndivDataNum * 100) / {{$totalData}};
                     		DataPercent = DataPercent.toFixed(2);
                     		label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
                     	}
@@ -933,6 +985,13 @@
                     // The data for our dataset
                     data: datas,
                     options: {
+                    	plugins: {
+                    		datalabels: {
+                    			anchor: 'end',
+                    			align: 'end',
+                    			offset: 0.01
+                    		}
+                    	},
                     	scale: {
                     		angleLines: {
                     			display: false
@@ -959,7 +1018,7 @@
             		return "rgb(" + r + "," + g + "," + b +","+ 0.8 +")";
             	};
 
-            	for (var i in rData1Chunked) {
+            	for (var i in obj2) {
             		coloR.push(dynamicColors());
             	}
 
@@ -992,62 +1051,28 @@
 						labels= function (tooltipItems, data) {
 							const labels = data.datasets[tooltipItems.datasetIndex].label;
 							const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index];
-							var percentRes = ((dataVal * 100) / 1076);
+							var percentRes = ((dataVal * 100) / {{$totalData}});
 							percentRes = percentRes.toFixed(2);
 							return label = labels + ": " + dataVal + " Respondent(s) : "  + percentRes + "%";
 						}
 
-				//Data Sets
-					// datas= {
-					// 	labels: [obj2,obj4],
-					// 	datasets: [{
-					// 		labels: obj2,
-					// 		label: var1,
-					// 		data: obj1,
-					// 		backgroundColor: coloR,
-					// 		borderColor: coloR,
-					// 		borderWidth: 3,
-					// 		fill: false,
-					// 	},
-					// 	{
-					// 		labels : obj4,
-					// 		label: var2,
-					// 		data: obj3,
-					// 		backgroundColor: coloR,
-					// 		borderColor: coloR,
-					// 		borderWidth: 3,
-					// 		fill: false,
-					// 	}],
-					// }
-
-					// labels = function (tooltipItems, data) {
-					// 	var i, label = [], l = data.datasets.length;
-					// 	for (i = 0; i < l; i++) {
-					// 		IndivData = data.datasets[i].data[tooltipItems.index];
-					// 		IndivData1 = (IndivData * 100) / 1076;
-					// 		IndivData1 = IndivData1.toFixed(2);
-					// 		label[i] = data.datasets[i].label + ": " + data.datasets[i].labels[tooltipItems.index] + ' : ' + IndivData1 + '% ; Total Respondents = ' + IndivData;
-					// 	}
-					// 	return label;
-					// }
-
-					title = function(tooltipItem, data){
-						return "Impacts To " + var1 +" and " + var2;
-					}
-				} 
-				else if(yCategoryVal == "")
-				{	
-					datas= {
-						labels: obj2,
-						datasets: [{
+						title = function(tooltipItem, data){
+							return "Impacts To " + var1 +" and " + var2;
+						}
+					} 
+					else if(yCategoryVal == "")
+					{	
+						datas= {
 							labels: obj2,
-							label: var1,
-							data: obj1,
-							backgroundColor: coloR,
-							borderColor: coloR,
-							fill: false,
-						}]
-					}
+							datasets: [{
+								labels: obj2,
+								label: var1,
+								data: obj1,
+								backgroundColor: coloR,
+								borderColor: coloR,
+								fill: false,
+							}]
+						}
 
 						//Axes
 						xAxes = [{
@@ -1082,7 +1107,7 @@
 							for (i = 0; i < l; i++) {
 								IndivData =  data.datasets[i].labels[tooltipItems.index];
 								IndivDataNum = data.datasets[i].data[tooltipItems.index];
-								DataPercent = (IndivDataNum * 100) / 1076;
+								DataPercent = (IndivDataNum * 100) / {{$totalData}};
 								DataPercent = DataPercent.toFixed(2);
 								label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
 							}
@@ -1100,14 +1125,24 @@
                     // The data for our dataset
                     data: datas,
                     options: {
-                    	tooltips: {
-                    		callbacks: {
-                    			label: labels,
-                    			title: title
-                    		}
-                    	}
-                    }
-                });
+                    	plugins: {
+                    		datalabels: {
+                    			formatter: function(value) {
+                    				return ((value *100) / {{$totalData}}).toFixed(2) + "%";
+                    			},
+            					// anchor: 'end',
+            					// align: 'end',
+            					offset: 0.01
+            				}
+            			},
+            			tooltips: {
+            				callbacks: {
+            					label: labels,
+            					title: title
+            				}
+            			}
+            		}
+            	});
 				}  
 
 				if (graphType5 == 'pie'){
@@ -1118,10 +1153,10 @@
 						var r = Math.floor(Math.random() * 255);
 						var g = Math.floor(Math.random() * 255);
 						var b = Math.floor(Math.random() * 255);
-						return "rgb(" + r + "," + g + "," + b + ")";
+						return "rgb(" + r + "," + g + "," + b + ","+ 0.8 + ")";
 					};
 
-					for (var i in obj2) {
+					for (var i in obj1) {
 						coloR.push(dynamicColors());
 					}
 
@@ -1135,160 +1170,160 @@
 
 					if(yCategoryVal != "")
 				{	//Data Sets
-					datas= {
-						labels: [obj2,obj4],
-						datasets: [{
-							labels: obj2,
-							label: var1,
-							data: obj1,
-							backgroundColor: coloR,
-							borderColor: coloR,
-							borderWidth: 3,
-							fill: false,
-						},
-						{
-							labels : obj4,
-							label: var2,
-							data: obj3,
-							backgroundColor: coloR,
-							borderColor: coloR,
-							borderWidth: 3,
-							fill: false,
-						}],
-					}
+					var datas = {
+						labels: <?php echo json_encode($Data2SetlabelX ?? '', true) ?>,
+						datasets: [
+						<?php foreach ($Data1SetlabelX as $allDataIndex => $allDataValue): ?>{
 
-					labels = function (tooltipItems, data) {
-						var i, label = [], l = data.datasets.length;
-						for (i = 0; i < l; i++) {
-							IndivData = data.datasets[i].data[tooltipItems.index];
-							IndivData1 = (IndivData * 100) / 1076;
-							IndivData1 = IndivData1.toFixed(2);
-							label[i] = data.datasets[i].label + ": " + data.datasets[i].labels[tooltipItems.index] + ' : ' + IndivData1 + '% ; Total Respondents = ' + IndivData;
+							label: "{{$allDataValue}}",
+							data: rData1Chunked[{{$allDataIndex}}],
+							backgroundColor: coloR,
+							borderColor: coloR,
+								// fill: false,
+						      // notice the gap in the data and the spanGaps: true
+						  },<?php endforeach ?>
+						  ]
+						};
+
+						labels= function (tooltipItems, data) {
+							const labels = data.datasets[tooltipItems.datasetIndex].label;
+							const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index];
+							var percentRes = ((dataVal * 100) / {{$totalData}});
+							percentRes = percentRes.toFixed(2);
+							return label = labels + ": " + dataVal + " Respondent(s) : "  + percentRes + "%";
 						}
-						return label;
-					}
 
-					title = function(tooltipItem, data){
-						return "Impacts To " + var1 +" and " + var2;
-					}
-				} 
-				else if(yCategoryVal == "")
-				{	
-					datas= {
-						labels: obj2,
-						datasets: [{
+						title = function(tooltipItem, data){
+							return "Impacts To " + var1 +" and " + var2;
+						}
+					} 
+					else if(yCategoryVal == "")
+					{	
+						datas= {
 							labels: obj2,
-							label: var1,
-							data: obj1,
-							backgroundColor: coloR,
-							borderColor: coloR,
-							fill: false,
+							datasets: [{
+								labels: obj2,
+								label: var1,
+								data: obj1,
+								backgroundColor: coloR,
+								borderColor: coloR,
+								fill: false,
+							}]
+						}
+						xAxes = [{
+							ticks: {
+								autoSkip: false,
+							},
+							display: true,
+							type:'category',
+							position: 'bottom',
+							id:'x-prime',
+							labels: obj2,
+							scaleLabel: {
+								display: true,
+								labelString: var1
+							}
 						}]
-					}
-					xAxes = [{
-						ticks: {
-							autoSkip: false,
-						},
-						display: true,
-						type:'category',
-						position: 'bottom',
-						id:'x-prime',
-						labels: obj2,
-						scaleLabel: {
-							display: true,
-							labelString: var1
-						}
-					}]
 
-					yAxes= [{
-						ticks: {
-							max: 1200,
-							min: 0,
-							stepSize: 100,
-						},
-						scaleLabel: {
-							display: true,
-							labelString: 'Respondents'
-						}
-					}]
+						yAxes= [{
+							ticks: {
+								max: 1200,
+								min: 0,
+								stepSize: 100,
+							},
+							scaleLabel: {
+								display: true,
+								labelString: 'Respondents'
+							}
+						}]
 
-					labels = function (tooltipItems, data) {
-						var i, label = [], l = data.datasets.length;
-						for (i = 0; i < l; i++) {
-							IndivData =  data.datasets[i].labels[tooltipItems.index];
-							IndivDataNum = data.datasets[i].data[tooltipItems.index];
-							DataPercent = (IndivDataNum * 100) / 1076;
-							DataPercent = DataPercent.toFixed(2);
-							label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
+						labels = function (tooltipItems, data) {
+							var i, label = [], l = data.datasets.length;
+							for (i = 0; i < l; i++) {
+								IndivData =  data.datasets[i].labels[tooltipItems.index];
+								IndivDataNum = data.datasets[i].data[tooltipItems.index];
+								DataPercent = (IndivDataNum * 100) / {{$totalData}};
+								DataPercent = DataPercent.toFixed(2);
+								label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
+							}
+							return label;
 						}
-						return label;
+
+						title = function(tooltipItem, data){
+							dataTitle = document.getElementById("")
+							return "Impacts To " + var1;
+						}
 					}
 
-					title = function(tooltipItem, data){
-						dataTitle = document.getElementById("")
-						return "Impacts To " + var1;
-					}
-				}
 
-
-				var pieChart = new Chart(ctx, {
-					type: graphType5,
+					var pieChart = new Chart(ctx, {
+						type: graphType5,
                     // The data for our dataset
                     data: datas,
                     options: {
-                    	title: {
-                    		display: true,
-                    		text: 'PIE GRAPH FOR ' + var1.toUpperCase()
-                    	},
-                    	tooltips: {
-                    		callbacks: {
-                    			label: labels,
-                    			title:title
-                    		}
-                    	}
-                    }
-                });
-			} 
-
-			if (graphType6 == 'polarArea'){
-				const ctx = document.getElementById('myChart').getContext('2d');
-				var coloR = [];
-
-				var dynamicColors = function() {
-					var r = Math.floor(Math.random() * 255);
-					var g = Math.floor(Math.random() * 255);
-					var b = Math.floor(Math.random() * 255);
-					return "rgb(" + r + "," + g + "," + b + "," + 0.4 +")";
-				};
-
-				for (var i in obj2) {
-					coloR.push(dynamicColors());
-				}
-				xCategoryVal = obj2;
-				yCategoryVal = obj4;
-				xAxes = [];
-				yAxes =[];
-				labels = [];
-				title = [];
-				datas = [];
-				console.log(obj1,obj2,obj3,obj4)
-
-				if(yCategoryVal != "")
-				{	
-					document.getElementsByName("allColumnsname1").selectedIndex = 0;
-					document.getElementsByName("allColumnsname2").selectedIndex = 0;
-					document.getElementsByName("allColumnsname3").selectedIndex = 0;
-					document.getElementsByName("allColumnsname4").selectedIndex = 0;
-					alert("Polar Area Graph only supports 1 Data at a time!");
-					polarAreaChart.destroy();
+                    	plugins: {
+                    		datalabels: {
+                    			formatter: function(value) {
+                    				return ((value *100) / {{$totalData}}).toFixed(2) + "%";
+                    			},
+            					// anchor: 'end',
+            					// align: 'end',
+            					offset: 0.01
+            				}
+            			},
+            			title: {
+            				display: true,
+            				text: 'PIE GRAPH FOR ' + var1.toUpperCase()
+            			},
+            			tooltips: {
+            				callbacks: {
+            					label: labels,
+            					title:title
+            				}
+            			}
+            		}
+            	});
 				} 
 
-				else if(yCategoryVal == "")
-				{	
-					datas= {
-						labels: obj2,
-						datasets: [{
-							label: 'RADAR GRAPH FOR ' + var1.toUpperCase(), 
+				if (graphType6 == 'polarArea'){
+					const ctx = document.getElementById('myChart').getContext('2d');
+					var coloR = [];
+
+					var dynamicColors = function() {
+						var r = Math.floor(Math.random() * 255);
+						var g = Math.floor(Math.random() * 255);
+						var b = Math.floor(Math.random() * 255);
+						return "rgb(" + r + "," + g + "," + b + "," + 0.4 +")";
+					};
+
+					for (var i in obj2) {
+						coloR.push(dynamicColors());
+					}
+					xCategoryVal = obj2;
+					yCategoryVal = obj4;
+					xAxes = [];
+					yAxes =[];
+					labels = [];
+					title = [];
+					datas = [];
+					console.log(obj1,obj2,obj3,obj4)
+
+					if(yCategoryVal != "")
+					{	
+						document.getElementsByName("allColumnsname1").selectedIndex = 0;
+						document.getElementsByName("allColumnsname2").selectedIndex = 0;
+						document.getElementsByName("allColumnsname3").selectedIndex = 0;
+						document.getElementsByName("allColumnsname4").selectedIndex = 0;
+						alert("Polar Area Graph only supports 1 Data at a time!");
+						polarAreaChart.destroy();
+					} 
+
+					else if(yCategoryVal == "")
+					{	
+						datas= {
+							labels: obj2,
+							datasets: [{
+								label: 'RADAR GRAPH FOR ' + var1.toUpperCase(), 
                     		// fill: true,
                     		labels: obj2,
                     		backgroundColor: coloR,
@@ -1302,7 +1337,7 @@
                     	for (i = 0; i < l; i++) {
                     		IndivData =  data.datasets[i].labels[tooltipItems.index];
                     		IndivDataNum = data.datasets[i].data[tooltipItems.index];
-                    		DataPercent = (IndivDataNum * 100) / 1076;
+                    		DataPercent = (IndivDataNum * 100) / {{$totalData}};
                     		DataPercent = DataPercent.toFixed(2);
                     		label[i] = IndivData + ": " + IndivDataNum + " Respondent(s)." + "\n" +"Total Percentage: " + DataPercent + "%";
                     	}
@@ -1319,34 +1354,34 @@
                     // The data for our dataset
                     data: datas,
                     options: {
-                    	scale: {
-                    		angleLines: {
-                    			display: false
-                    		}
-                    	},
-                    	tooltips: {
-                    		callbacks: {
-                    			label: labels,
-                    			title: title
-                    		}
-                    	}
-                    }
-                });
+                    	plugins: {
+                    		datalabels: {
+                    			formatter: function(value) {
+                    				return ((value *100) / {{$totalData}}).toFixed(2) + "%";
+                    			},
+            					// anchor: 'end',
+            					// align: 'end',
+            					offset: 0.01
+            				}
+            			},
+            			scale: {
+            				angleLines: {
+            					display: false
+            				}
+            			},
+            			tooltips: {
+            				callbacks: {
+            					label: labels,
+            					title: title
+            				}
+            			}
+            		}
+            	});
             }
             if (graphType7 == 'bubble')
             {
             	const ctx = document.getElementById('myChart').getContext('2d');
             	var coloR = [];
-            	var dynamicColors = function() {
-            		var r = Math.floor(Math.random() * 255);
-            		var g = Math.floor(Math.random() * 255);
-            		var b = Math.floor(Math.random() * 255);
-            		return "rgb(" + r + "," + g + "," + b + "," + 0.5 + ")";
-            	};
-
-            	for (var i in rData1) {
-            		coloR.push(dynamicColors());
-            	}
 
             	xCategoryVal = obj2;
             	yCategoryVal = obj4;
@@ -1363,21 +1398,50 @@
             		myChart.destroy();
             	} else if(yCategoryVal != ""  && y2CategoryVal != "")
             	{
-            		document.getElementsByName("allColumnsname1").selectedIndex = 0;
-            		document.getElementsByName("allColumnsname2").selectedIndex = 0;
-            		document.getElementsByName("allColumnsname3").selectedIndex = 0;
-            		document.getElementsByName("allColumnsname4").selectedIndex = 0;
-            		alert("Bubble Graph only supports 2 Data!");
-            		myChart.destroy();
+            		var dynamicColors = function() {
+            			var r = Math.floor(Math.random() * 255);
+            			var g = Math.floor(Math.random() * 255);
+            			var b = Math.floor(Math.random() * 255);
+            			return "rgb(" + r + "," + g + "," + b + "," + 0.5 + ")";
+            		};
+
+            		for (var i in y2CategoryVal) {
+            			coloR.push(dynamicColors());
+            		}
+
+            		data = xData1.map((x, i) => {
+            			return {
+            				x: x,
+            				y: yData1[i],
+            				r: (((rData1[i] * 100) / {{$totalData}}).toFixed(2)),
+            				label: XYData1[i]
+            			};
+            		});
+
+            		
+
+
             	} else {
             		data = xData1.map((x, i) => {
             			return {
             				x: x,
             				y: yData1[i],
-            				r: (((rData1[i] * 100) / 1076).toFixed(2)),
+            				r: (((rData1[i] * 100) / {{$totalData}}).toFixed(2)),
             				label: XYData1[i]
             			};
             		});
+
+            		var dynamicColors = function() {
+            			var r = Math.floor(Math.random() * 255);
+            			var g = Math.floor(Math.random() * 255);
+            			var b = Math.floor(Math.random() * 255);
+            			return "rgb(" + r + "," + g + "," + b + "," + 0.5 + ")";
+            		};
+
+            		for (var i in rData1) {
+            			coloR.push(dynamicColors());
+            		}
+
             	}
 
             	var myChart = new Chart(ctx, {
@@ -1391,6 +1455,16 @@
             			}]
             		}, 
             		options:{
+            			plugins: {
+            				datalabels: {
+            					formatter: function(value) {
+            						return value.r + '%';
+            					},
+            					anchor: 'end',
+            					align: 'end',
+            					offset: 0.01
+            				}
+            			},
             			title: {
             				display: true,
             				text: 'BUBBLE GRAPH FOR ' + var1.toUpperCase() + ' AND ' + var2.toUpperCase()
@@ -1435,7 +1509,7 @@
             					label: function (tooltipItems, data) {
             						const labels = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].label;
             						const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].r;
-            						
+
             						// dataVal1 = Math.round(dataVal1);
             						return label = labels + ": " + dataVal  + "% of Respondent(s).";
             					},
@@ -1493,7 +1567,6 @@
 							},
 							display: true,
 							type:'category',
-							// position: 'bottom',
 							labels: xData1,
 							scaleLabel: {
 								display: true,
@@ -1531,12 +1604,21 @@
 						label= function (tooltipItems, data) {
 							const labels = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].label;
 							const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].y;
-							var percentRes = ((dataVal * 100) / 1076);
+							var percentRes = ((dataVal * 100) / {{$totalData}});
 							percentRes = percentRes.toFixed(2);
 							return label = labels + ": " + dataVal + " Respondent(s) : "  + percentRes + "%";
 						}
 						title= function(tooltipItem, data){
 							return "Impacts To " + var1;
+						}
+
+						datalabels= {
+							formatter: function(value, context) {
+								return (((value.y *100) / {{$totalData}}).toFixed(2)) + "%";
+							},
+							anchor: 'end',
+							align: 'end',
+							offset: 0.01
 						}
 
 					} else if(yCategoryVal != "" && y2CategoryVal =="")  
@@ -1550,12 +1632,10 @@
 								backgroundColor: coloR[{{$allDataIndex}}],
 								borderColor: coloR[{{$allDataIndex}}],
 								fill: false,
-						      // notice the gap in the data and the spanGaps: true
-						      
-						  },<?php endforeach ?>
-						  ]
+
+							},<?php endforeach ?>
+							]
 						};
-						// console.log(rData1[0]);
 						xAxes= [{
 							scaleLabel: {
 								display: true,
@@ -1592,12 +1672,20 @@
 							label= function (tooltipItems, data) {
 								const labels = data.datasets[tooltipItems.datasetIndex].label;
 								const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index];
-								var percentRes = ((dataVal * 100) / 1076);
+								var percentRes = ((dataVal * 100) / {{$totalData}});
 								percentRes = percentRes.toFixed(2);
 								return label = labels + ": " + dataVal + " Respondent(s) : "  + percentRes + "%";
 							}
 							title= function(tooltipItem, data){
 								return "Impacts To " + var1 +" and " + var2;
+							}
+							datalabels= {
+								formatter: function(value, context) {
+									return (((value *100) / {{$totalData}}).toFixed(2)) + "%";
+								},
+								anchor: 'end',
+								align: 'end',
+								offset: 0.01
 							}
 
 						} 
@@ -1701,7 +1789,7 @@
 							label= function (tooltipItems, data) {
 								const labels = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].labels;
 								const dataVal = data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index].r;
-								var percentRes = ((dataVal * 100) / 1076);
+								var percentRes = ((dataVal * 100) / {{$totalData}});
 								percentRes = percentRes.toFixed(2);
 								return label = labels + ": " + dataVal + " Respondent(s) : "  + percentRes + "%";
 							}
@@ -1714,6 +1802,9 @@
 							type: graphType8,
 							data: data, 
 							options:{
+								plugins: {
+									datalabels: datalabels
+								},
 								title: {
 									display: true,
 									text: labels

@@ -5,6 +5,7 @@
 
 <!-- Header for the dashboard. -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
 <h1 style="text-align: center; color: rgb(0,0,150); margin: 2%;">DATA ANALYTICS TOOL</h1>
 <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}">
 <style>
@@ -52,7 +53,7 @@
             var r = Math.floor(Math.random() * 255);
             var g = Math.floor(Math.random() * 255);
             var b = Math.floor(Math.random() * 255);
-            return "rgb(" + r + "," + g + "," + b + ")";
+            return "rgb(" + r + "," + g + "," + b + ","+ 0.6+ ")";
         };
 
         for (var i in allData) {
@@ -67,11 +68,20 @@
                     label: 'Current Data: {{$value}}',
                     backgroundColor: dataColor,
                     Color: dataColor,
+                    borderColor: dataColor,
                     data: <?php echo json_encode($allDataCount[$acn], true) ?>
                 }]
             },
-            options: {}
-        });
+            options: {
+               plugins: {
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
+                    offset: 0.1
+                }
+            },
+        }
+    });
     <?php } ?>
 </script>
 @endsection
