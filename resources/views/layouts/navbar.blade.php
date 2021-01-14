@@ -25,7 +25,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<a class=" navbar-brand" href="/home/masterdata">
+<a class=" navbar-brand" href="/DataIVI/web/home/masterdata">
   <img src="{{ asset('resources/views/pictures/IIR4.0.png') }}" class="logoimg">
   <img src="{{ asset('resources/views/pictures/UKMLogo.png') }}" class="ukmlogo">
 </a><br>
@@ -45,7 +45,7 @@
      <li class="nav-item">
        <strong> <a class="nav-link" href="/DataIVI/web/analysis_tools/masterdata" style="color: white;">ANALYSIS TOOL</a></strong>
      </li>
-<!--         <li class="nav-item dropdown">/DataIVI/web/
+<!--         <li class="nav-item dropdown">/DataIVI/web
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Profile
         </a>

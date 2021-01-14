@@ -93,6 +93,7 @@ class DataController extends Controller
 		$Data2SetlabelX = [];
 		$Data3SetlabelY = [];
 		$rData1Chunked = [];
+		$rData2Chunked = [];
 		$allColumnsname = Schema::getColumnListing($tablename);
 		// $data = DB::table($tablename)->paginate(15);
 		// //get all column name
@@ -104,7 +105,7 @@ class DataController extends Controller
 		$PnDChartData1 = "";
 		$PnDChartData2 = "";
 		$Data3Setlabela = "";
-		return view('analysis_tools', compact('Data3Setlabela','PnDChartData1', 'PnDChartData2', 'totalData','allColumnsname', 'var1', 'var2', 'var3', 'data', 'tables', 'tablename', 'Data2SetlabelX', 'Data1SetlabelX', 'rData1Chunked', 'Data1SetlabelY'));
+		return view('analysis_tools', compact('Data3Setlabela','PnDChartData1', 'PnDChartData2', 'totalData','allColumnsname', 'var1', 'var2', 'var3', 'data', 'tables', 'tablename', 'Data2SetlabelX', 'Data1SetlabelX', 'rData1Chunked', 'Data1SetlabelY','rData2Chunked'));
 	}
 
 	public function uploadData(Request $request)
@@ -340,7 +341,7 @@ public function postData(Request $request)
 			$yData1 = [];
 			$XYData1 = [];
 			$rData1 = [];
-
+			$yData3 = [];
 			$xData3 = [];
 			$yData2 = [];
 			$XYData2 = [];
@@ -356,6 +357,7 @@ public function postData(Request $request)
 					foreach ($Data3SetlabelX as $i => $array3) {
 						array_push($xData1, $array1); 
 						array_push($yData1, $array2); 
+						array_push($yData3, $array3); 
 						array_push($XYData1, [$array1. ' ' .$array2]); 
 						array_push($XYData2, [$array2. ' ' .$array3]); 
 						array_push($xData3, [$array1. ' ' .$array2 .' '.$array3]);
@@ -379,6 +381,7 @@ public function postData(Request $request)
 			// $totalDatatoChunked = count($Data3SetlabelX);
 			$XYData2Chunked = array_chunk($XYData2, $t); //140 data 7 Array in array(20 data in 1 array)
 			$rData2Chunked = array_chunk($rData2, $t); //140 data 7 Array in array(20 data in 1 array)
+			$xData1Chunked = array_chunk($xData1, $t);
 			$totalDatatoChunked = count($rData2Chunked);
 
 			// dd($xData3);
@@ -387,6 +390,6 @@ public function postData(Request $request)
 		}
 	}
 
-	return view('analysis_tools', compact('PnDChartData1','PnDChartData2', 'totalData','Data1SetlabelY' , 'Data1SetlabelX', 'Data2SetlabelY', 'Data2SetlabelX', 'Data3SetlabelY', 'Data3SetlabelX', 'allColumnsname', 'checkboxLine1', 'checkboxLine2', 'checkboxLine3', 'checkboxLine4', 'checkboxLine5', 'checkboxLine6', 'checkboxLine7', 'checkboxLine8','var1', 'var2', 'var3', 'xData1', 'yData1', 'XYData1', 'rData1', 'data2', 'xData2', 'yData2', 'XYData2', 'rData2', 'data', 'tables', 'tablename', 'XYData1Chunked', 'XYData2Chunked', 'rData1Chunked', 'rData2Chunked', 'Data3Setlabela' ,'totalDatatoChunked', 'totalData2', 'totalData3'));
+	return view('analysis_tools', compact('PnDChartData1','PnDChartData2', 'totalData','Data1SetlabelY' , 'Data1SetlabelX', 'Data2SetlabelY', 'Data2SetlabelX', 'Data3SetlabelY', 'Data3SetlabelX', 'allColumnsname', 'checkboxLine1', 'checkboxLine2', 'checkboxLine3', 'checkboxLine4', 'checkboxLine5', 'checkboxLine6', 'checkboxLine7', 'checkboxLine8','var1', 'var2', 'var3', 'xData1', 'yData1', 'XYData1', 'rData1', 'data2', 'xData2', 'yData2', 'XYData2', 'rData2', 'data', 'tables', 'tablename', 'XYData1Chunked', 'XYData2Chunked', 'rData1Chunked', 'rData2Chunked', 'Data3Setlabela' ,'totalDatatoChunked', 'totalData2', 'totalData3', 'yData3', 'xData1Chunked'));
 }
 }
