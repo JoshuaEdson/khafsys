@@ -20,11 +20,4 @@ Route::post('/analysis/', 'DataController@uploadData')->name('analysis.uploadDat
 Route::get('/analysis/{table}', 'DataController@analysis')->name('analysis');
 Route::get('/analysis_tools/{table}', 'DataController@analysis_tools')->name('analysis.tools');
 
-//datatables
-// Route::get ( '/analysis', function () {
-//     $data = Questionnaire::paginate(50);
-//     $allColumnsname = Schema::getColumnListing('masterdata');
-//     // return $allColumnsname;
-//     return view ( 'analysis', compact('allColumnsname', 'data') ); //->withData ($data);
-// } );
 ?>

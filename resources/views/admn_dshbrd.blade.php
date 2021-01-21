@@ -10,7 +10,6 @@
 <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}">
 <style>
     canvas{
-        /*margin: 0.1%;*/
         margin-bottom: 10%;
     }
 </style>
@@ -27,7 +26,6 @@
         </select>
         <button  name="dataTable" id="submit" type="submit" value="Go">Change</button>
     </div>
-
 
     <!-- Project -->
     <div class="col-sm-12 text-center" style="padding-top: 3%;">

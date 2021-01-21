@@ -24,7 +24,6 @@
 <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
 <style>
 	form{
-		/*margin: 0.5%;*/
 		padding-bottom: 5%;
 	}
 	h1	{
@@ -43,12 +42,9 @@
 	}
 	input[type=file]{
 		padding:10px;
-		/*background:#2d2d2d;*/
 	}
 	.combobox {
 		height: 35px;
-		/*padding: 16px 32px;*/
-		/*text-decoration: all;*/
 		margin: 4px 2px;
 	}
 
@@ -78,33 +74,28 @@ class="<?php if(!empty($type)) { echo $type . " display-block"; } ?>">
 <div id="response" class="<?php if(!empty($type)) { echo $type . " display-block"; } ?>">
 	<?php if(!empty($message)) { echo $message; } ?>
 </div>
-	<script>
-		allColumnsname = <?php echo json_encode($allColumnsname ?? '', true) ?>;
-		data = <?php echo json_encode($data ?? '' , true) ?>;
-		tables = <?php echo json_encode($tables ?? '' , true) ?>;
-		tablename = <?php echo json_encode($tablename ?? '' , true) ?>;
-		console.log(tables);
-	</script>
+<script>
+	allColumnsname = <?php echo json_encode($allColumnsname ?? '', true) ?>;
+	data = <?php echo json_encode($data ?? '' , true) ?>;
+	tables = <?php echo json_encode($tables ?? '' , true) ?>;
+	tablename = <?php echo json_encode($tablename ?? '' , true) ?>;
+	console.log(tables);
+</script>
 <form id="dataManagement" action="{{ route('analysis.uploadData', $tablename)}}" name="uploadData" method="post" enctype="multipart/form-data">
 	@csrf
 	<div class="container-fluid bg-2 text-center border border-light" id="who" style="text-align: left; width: 25%;" >
 		
 		<div class="input-row">
 			<input type="file" name="file" id="file" accept=".csv"><br>
-			Dataset Name:  <input type="text" name="datasetName"><br>
-			<input class="btn" name="upload" id="submit" type="submit" value="UPLOAD"/>
+			Dataset Name:  <input type="text" name="datasetName" id="datasetName"><br>
+			<input class="btn" name="upload" id="submit" type="submit" value="Upload"/>
 			<input class="btn" type="reset" onclick="reset();" value="Reset"> 
 			<br/>
 		</div>
-		<!-- </form> -->
 	</div>
 
 	<div class="text-left p-3 m-1 border border-light">
-		<!-- {{ csrf_token() }} -->
-
-	<p class="h4 mb-4 ">DATA</p>
-	<!-- <div style="padding-bottom: 1px;"> -->
-
+		<p class="h4 mb-4 ">DATA</p>
 		<label for="tableUsed">Datasets:</label>
 		<select class="combobox" name="tableList" id="tableUsed" style="width:250px; height: 25px;">
 			<option value="No Datasets Selected" selected>Select</option>
@@ -140,5 +131,5 @@ class="<?php if(!empty($type)) { echo $type . " display-block"; } ?>">
 	function reset() { 
 		document.getElementById("uploadData").reset(); 
 	} 
-	</script>
-	@endsection
+</script>
+@endsection
