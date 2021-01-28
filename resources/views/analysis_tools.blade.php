@@ -331,6 +331,8 @@
 				<ul>
 					<li>GRAPHS THAT SUPPORTS 3 DATA:</li>
 					<ol>
+						<li>LINE GRAPH</li>
+						<li>BAR GRAPH</li>
 						<li>BUBBLE GRAPH</li>
 					</ol>
 				</ul>
