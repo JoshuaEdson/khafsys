@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
-require 'vendor/autoload.php';
+// require 'vendor/autoload.php';
 use Illuminate\Http\Request;
 use App\Questionnaire;
 use DB;
@@ -33,6 +33,7 @@ class DataController extends Controller
 				$allColumnsCount++;
 			}
 		}
+		// S $allColumnsNew;
 		foreach ($allColumns as $column1) {
 			$firstColumn .= $column1;
 			break;
@@ -68,6 +69,8 @@ class DataController extends Controller
 		$tables = array_map('current',$tables); //display all database in array. 
 		$data = DB::table($tablename)->paginate(15);
 		$allColumnsname = Schema::getColumnListing($tablename);
+
+
     	return view ('analysis', compact('allColumnsname', 'data', 'tablename', 'tables'));//->withData ($data);
     }
 
@@ -114,11 +117,13 @@ class DataController extends Controller
 			$datasetName = $request->input("datasetName");
 		//save file to server first
 			$files = $request->file('file');
-			$filePath = 'uploads/' . $datasetName;
-			Storage::disk('s3')->put($filePath, file_get_contents($files));
+			$filePath = '/public_html/uploadfiletemp/' . $datasetName;
+			Storage::put($filePath, file_get_contents($files));
+			// Storage::disk('s3')->put($filePath, file_get_contents($files));
 
 		// read file at the server
-			$file = Storage::disk('s3')->files('uploads');
+			$file = Storage::get($filePath);
+			// $file = Storage::disk('s3')->files('datauploadtemporary');
 			$fileName = $_FILES["file"]["tmp_name"];
 		// get structure from csv and insert db
 			ini_set('auto_detect_line_endings',TRUE);
@@ -150,8 +155,8 @@ class DataController extends Controller
 				DB::select($sql);
 			}
 			fclose($handle);
-
-			Storage::disk('s3')->delete($filePath);
+			Storage::delete($filePath);
+			// Storage::disk('s3')->delete($filePath);
 
 			$tablename = $request->input("tableList");
 			$tables = DB::select('SHOW TABLES');
